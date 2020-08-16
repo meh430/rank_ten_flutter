@@ -16,7 +16,7 @@ class RankApi {
           headers: getHeaders(bearerToken: bearerToken));
       jsonResponse = parseResponse(res);
     } on SocketException {
-      throw DefaultError('No network connection');
+      return DefaultError('No network connection');
     }
 
     return jsonResponse;
@@ -24,7 +24,7 @@ class RankApi {
 
   Future<dynamic> post(
       {String endpoint,
-      Map<String, dynamic> data,
+      Map<String, dynamic> data = const {},
       String bearerToken = ""}) async {
     var jsonResponse;
 
@@ -34,14 +34,16 @@ class RankApi {
           headers: getHeaders(bearerToken: bearerToken));
       jsonResponse = parseResponse(res);
     } on SocketException {
-      throw DefaultError('No network connection');
+      return DefaultError('No network connection');
     }
 
     return jsonResponse;
   }
 
   Map<String, dynamic> getHeaders({String bearerToken}) {
-    return {'Authorization': 'Bearer $bearerToken'};
+    return bearerToken == ""
+        ? Map<String, dynamic>()
+        : {'Authorization': 'Bearer $bearerToken'};
   }
 
   dynamic parseResponse(http.Response res) {
@@ -49,13 +51,13 @@ class RankApi {
       case 200:
         return json.decode(res.body.toString());
       case 400:
-        throw SchemaValidationError(res.body.toString());
+        return SchemaValidationError(res.body.toString());
       case 401:
-        throw AuthenticationError(res.body.toString());
+        return AuthenticationError(res.body.toString());
       case 403:
-        throw UnauthorizedError(res.body.toString());
+        return UnauthorizedError(res.body.toString());
       default:
-        throw DefaultError(res.body.toString());
+        return DefaultError(res.body.toString());
     }
   }
 }
