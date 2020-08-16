@@ -36,6 +36,8 @@ class RankApi {
     } on SocketException {
       throw DefaultError('No network connection');
     }
+
+    return jsonResponse;
   }
 
   Map<String, dynamic> getHeaders({String bearerToken}) {

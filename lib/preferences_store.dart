@@ -22,21 +22,21 @@ class PreferencesStore {
 
   Future<bool> isDark() async {
     var prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(DARK_THEME);
+    return prefs.getBool(DARK_THEME) ?? false;
   }
 
   Future<String> getToken() async {
     var prefs = await SharedPreferences.getInstance();
-    return prefs.getString(JWT_TOKEN);
+    return prefs.getString(JWT_TOKEN) ?? "";
   }
 
   Future<String> getUserName() async {
     var prefs = await SharedPreferences.getInstance();
-    return prefs.getString(USER_NAME_KEY);
+    return prefs.getString(USER_NAME_KEY) ?? "";
   }
 
   Future<String> getPwd() async {
     var prefs = await SharedPreferences.getInstance();
-    return prefs.getString(PASSWORD_KEY);
+    return prefs.getString(PASSWORD_KEY) ?? "";
   }
 }
