@@ -4,7 +4,8 @@ import 'package:rank_ten/app_theme.dart';
 class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      return Row(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
           decoration: BoxDecoration(color: hanPurple),
