@@ -16,7 +16,13 @@ const darkCard = Color(0xff4D4D4D);
 
 class AppTheme {
   static getTextTheme(bool isDark, TextTheme base) {
-    return base.copyWith(headline1: GoogleFonts.nunito(color: darkSienna));
+    return base.copyWith(
+        headline1: GoogleFonts.nunito(color: darkSienna),
+        headline2: GoogleFonts.nunito(color: darkSienna),
+        headline3: GoogleFonts.nunito(color: darkSienna),
+        headline4: GoogleFonts.nunito(color: darkSienna),
+        headline5: GoogleFonts.nunito(color: darkSienna),
+        headline6: GoogleFonts.nunito(color: darkSienna));
   }
 
   static getAppTheme(bool isDark) {

@@ -1,19 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:rank_ten/app_theme.dart';
 
+const bRadius = Radius.circular(15.0);
+const rankScale = 0.62;
+const tenScale = 0.38;
+
 class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(color: hanPurple),
-          width: 100,
-          height: 60,
-          child: Text("Rank"),
+    final totalWidth = MediaQuery.of(context).size.width / 1.5;
+    final height = totalWidth / 2.7;
+
+    return Center(
+      child: Container(
+        width: totalWidth,
+        height: height,
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              right: 5.0,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: palePurple,
+                    borderRadius: BorderRadius.only(
+                        topRight: bRadius, bottomRight: bRadius)),
+                width: totalWidth * tenScale,
+                height: height,
+                child: Center(
+                  child: Text("10",
+                      style: Theme.of(context).primaryTextTheme.headline3),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 5.0,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: hanPurple, borderRadius: BorderRadius.all(bRadius)),
+                width: totalWidth * rankScale,
+                height: height,
+                child: Center(
+                    child: Text("Rank",
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .headline3
+                            .copyWith(color: white))),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
