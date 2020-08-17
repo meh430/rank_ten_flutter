@@ -12,19 +12,23 @@ const hanPurple = Color(0xff6320EE);
 const paraPink = Color(0xffEF476F);
 const secondText = Color(0xff666666);
 const lightCard = Color(0xffF2F2F2);
-const darkCard = Color(0xff4D4D4D);
+const darkCard = Color(0xff222222);
 
 class AppTheme {
+  static getTextColor(bool isDark) {
+    return isDark ? palePurple : darkSienna;
+  }
+
   static getTextTheme(bool isDark, TextTheme base) {
     return base.copyWith(
-      headline1: GoogleFonts.nunito(color: darkSienna),
-      headline2: GoogleFonts.nunito(color: darkSienna),
-      headline3: GoogleFonts.nunito(color: darkSienna),
-      headline4: GoogleFonts.nunito(color: darkSienna),
-      headline5: GoogleFonts.nunito(color: darkSienna),
-      headline6: GoogleFonts.nunito(color: darkSienna),
-      caption: GoogleFonts.nunito(color: darkSienna),
-      bodyText1: GoogleFonts.nunito(color: darkSienna),
+      headline1: GoogleFonts.nunito(color: getTextColor(isDark)),
+      headline2: GoogleFonts.nunito(color: getTextColor(isDark)),
+      headline3: GoogleFonts.nunito(color: getTextColor(isDark)),
+      headline4: GoogleFonts.nunito(color: getTextColor(isDark)),
+      headline5: GoogleFonts.nunito(color: getTextColor(isDark)),
+      headline6: GoogleFonts.nunito(color: getTextColor(isDark)),
+      caption: GoogleFonts.nunito(color: getTextColor(isDark)),
+      bodyText1: GoogleFonts.nunito(color: getTextColor(isDark)),
     );
   }
 
@@ -36,6 +40,8 @@ class AppTheme {
         primaryTextTheme: getTextTheme(isDark, base.primaryTextTheme),
         accentTextTheme: getTextTheme(isDark, base.accentTextTheme),
         primaryColor: lavender,
+        scaffoldBackgroundColor: isDark ? darkBackground : white,
+        canvasColor: isDark ? darkBackground : white,
         backgroundColor: isDark ? darkBackground : white,
         cardColor: isDark ? darkCard : lightCard);
   }

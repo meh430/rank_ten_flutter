@@ -26,7 +26,10 @@ class Logo extends StatelessWidget {
               height: height,
               child: Center(
                 child: Text("10",
-                    style: Theme.of(context).primaryTextTheme.headline3),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .headline3
+                        .copyWith(color: darkSienna)),
               ),
             ),
           ),

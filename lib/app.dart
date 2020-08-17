@@ -21,6 +21,7 @@ class _AppState extends State<App> {
 
   getCurrentTheme() async {
     themeProvider.isDark = await themeProvider.store.isDark();
+    themeProvider.isDark = false;
   }
 
   @override

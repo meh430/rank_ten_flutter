@@ -6,15 +6,15 @@ import 'package:http/http.dart' as http;
 import 'package:rank_ten/api/rank_exceptions.dart';
 
 class RankApi {
-  final baseUrl = 'http://192.168.0.22:5000';
+  final _baseUrl = 'http://192.168.0.22:5000';
 
   Future<dynamic> get({String endpoint, String bearerToken = ""}) async {
     var jsonResponse;
 
     try {
-      final res = await http.get(baseUrl + endpoint,
-          headers: getHeaders(bearerToken: bearerToken));
-      jsonResponse = parseResponse(res);
+      final res = await http.get(_baseUrl + endpoint,
+          headers: _getHeaders(bearerToken: bearerToken));
+      jsonResponse = _parseResponse(res);
     } on SocketException {
       return DefaultError('No network connection');
     }
@@ -29,10 +29,10 @@ class RankApi {
     var jsonResponse;
 
     try {
-      final res = await http.post(baseUrl + endpoint,
+      final res = await http.post(_baseUrl + endpoint,
           body: jsonEncode(data),
-          headers: getHeaders(bearerToken: bearerToken));
-      jsonResponse = parseResponse(res);
+          headers: _getHeaders(bearerToken: bearerToken));
+      jsonResponse = _parseResponse(res);
     } on SocketException {
       return DefaultError('No network connection');
     }
@@ -40,13 +40,13 @@ class RankApi {
     return jsonResponse;
   }
 
-  Map<String, dynamic> getHeaders({String bearerToken}) {
+  Map<String, dynamic> _getHeaders({String bearerToken}) {
     return bearerToken == ""
         ? Map<String, String>()
         : <String, String>{'Authorization': 'Bearer $bearerToken'};
   }
 
-  dynamic parseResponse(http.Response res) {
+  dynamic _parseResponse(http.Response res) {
     switch (res.statusCode) {
       case 200:
         return json.decode(res.body.toString());
