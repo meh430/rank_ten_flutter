@@ -9,6 +9,7 @@ class User {
   int rankPoints;
   int numComments;
   int listNum;
+  String jwtToken;
 
   User(
       {this.id,
@@ -20,12 +21,13 @@ class User {
       this.numFollowing,
       this.rankPoints,
       this.numComments,
-      this.listNum});
+      this.listNum,
+      this.jwtToken});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['_id'] != null ? json['_id'][r'$oid'] : null;
     dateCreated =
-        json['date_created'] != null ? json['date_created'][r'$date'] : null;
+    json['date_created'] != null ? json['date_created'][r'$date'] : null;
     userName = json['user_name'];
     bio = json['bio'];
     profPic = json['prof_pic'];
@@ -34,6 +36,7 @@ class User {
     numFollowers = json['num_followers'];
     numFollowing = json['num_following'];
     listNum = json['list_num'];
+    jwtToken = json['jwt_token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,5 +54,10 @@ class User {
     //data['list_num'] = this.listNum;
 
     return data;
+  }
+
+  @override
+  String toString() {
+    return "Name: $userName";
   }
 }

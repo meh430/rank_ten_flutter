@@ -8,12 +8,12 @@ class PreferencesStore {
   static const USER_NAME_KEY = "USERNAME";
   static const PASSWORD_KEY = "PASSWORD";
 
-  saveDarkTheme(bool val) async {
+  void saveDarkTheme(bool val) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool(DARK_THEME, val);
   }
 
-  saveCred(String token, String un, String pwd) async {
+  void saveCred(String token, String un, String pwd) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString(JWT_TOKEN, token);
     prefs.setString(USER_NAME_KEY, un);

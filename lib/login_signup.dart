@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:rank_ten/api/auth.dart';
 import 'package:rank_ten/login.dart';
 import 'package:rank_ten/logo.dart';
-import 'package:rank_ten/preferences_store.dart';
 import 'package:rank_ten/signup.dart';
 
 import 'api/rank_exceptions.dart';
@@ -21,12 +20,12 @@ class _LoginSignupState extends State<LoginSignup> {
   var _bController = TextEditingController();
   bool _isLogin = true;
   bool _isLoading = false;
-  var _prefStore = PreferencesStore();
 
   void _handleLogin(String uName, String pwd) async {
     setState(() {
       _isLoading = true;
     });
+
     var userData =
         await Authorization.loginUser(userName: uName, password: pwd);
 
@@ -40,7 +39,6 @@ class _LoginSignupState extends State<LoginSignup> {
         content: Text('Incorrect username or password'),
       ));
     } else {
-      await _prefStore.saveCred(userData['jwt_token'], uName, pwd);
       print(userData);
       setState(() {
         _isLoading = false;
@@ -66,7 +64,6 @@ class _LoginSignupState extends State<LoginSignup> {
         content: Text('Username already exists'),
       ));
     } else {
-      await _prefStore.saveCred(userData['jwt_token'], uName, pwd);
       print(userData);
       setState(() {
         _isLoading = false;

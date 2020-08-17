@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rank_ten/api/auth.dart';
 import 'package:rank_ten/api/rank_exceptions.dart';
+import 'package:rank_ten/app.dart';
 import 'package:rank_ten/logo.dart';
 import 'package:rank_ten/preferences_store.dart';
 
@@ -15,22 +16,25 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startUpFlow();
-    Future.delayed(Duration(milliseconds: 2000),
-        () => Navigator.pushNamed(context, '/login_signup'));
+    //Future.delayed(Duration(milliseconds: 2000),
+    //    () => Navigator.pushNamed(context, '/login_signup'));
   }
 
   void startUpFlow() async {
     var store = PreferencesStore();
     var token = await store.getToken();
+    //check if token present
     if (token != "") {
       var userData = await Authorization.tokenValid(token);
+
+      //ensure token validity
       if (userData is RankExceptions) {
         checkForPwd(store);
       } else {
         print(userData);
+        mainUser = userData;
         //TODO: push home route
       }
     } else {
@@ -41,6 +45,8 @@ class _SplashState extends State<Splash> {
   void checkForPwd(PreferencesStore store) async {
     var userName = await store.getUserName();
     var password = await store.getPwd();
+
+    //check if credentials present
     if (userName != "" && password != "") {
       var userData =
           await Authorization.loginUser(userName: userName, password: password);
@@ -48,9 +54,11 @@ class _SplashState extends State<Splash> {
         Navigator.pushNamed(context, '/login_signup');
       } else {
         print(userData);
-        //TODO: store token
+        mainUser = userData;
         //TODO: push home route
       }
+    } else {
+      Navigator.pushNamed(context, '/login_signup');
     }
   }
 

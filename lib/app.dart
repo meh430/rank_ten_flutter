@@ -5,6 +5,10 @@ import 'package:rank_ten/dark_theme_provider.dart';
 import 'package:rank_ten/login_signup.dart';
 import 'package:rank_ten/splash.dart';
 
+import 'models/user.dart';
+
+User mainUser;
+
 class App extends StatefulWidget {
   @override
   _AppState createState() => _AppState();
