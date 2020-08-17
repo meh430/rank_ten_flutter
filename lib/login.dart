@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rank_ten/app_theme.dart';
 
 const inputStyle = OutlineInputBorder(
@@ -49,9 +50,10 @@ String validateUsername(String value) {
 }
 
 class Login extends StatefulWidget {
-  SubmitLogin handleLogin;
+  final SubmitLogin handleLogin;
+  final bool isLoading;
 
-  Login({this.handleLogin});
+  Login({this.handleLogin, this.isLoading});
 
   @override
   _LoginState createState() => _LoginState();
@@ -63,15 +65,16 @@ class _LoginState extends State<Login> {
     return Container(
       child: LoginForm(
         handleLogin: widget.handleLogin,
-      ),
+          isLoading: widget.isLoading),
     );
   }
 }
 
 class LoginForm extends StatefulWidget {
   final SubmitLogin handleLogin;
+  final bool isLoading;
 
-  LoginForm({this.handleLogin});
+  LoginForm({this.handleLogin, this.isLoading});
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -86,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
     if (_fKey.currentState.validate()) {
       final password = _pController.text;
       final username = _uController.text;
-      print(username + password);
+      print(username + ", " + password);
       widget.handleLogin(username.toString(), password.toString());
     }
   }
@@ -128,7 +131,12 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           SizedBox(height: 80),
-          getSubmitButton(context, true, submitForm)
+          !widget.isLoading
+              ? getSubmitButton(context, true, submitForm)
+              : SpinKitCubeGrid(
+            color: hanPurple,
+            size: 50.0,
+          )
         ],
       ),
     );

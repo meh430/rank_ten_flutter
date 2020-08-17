@@ -14,16 +14,26 @@ class _LoginSignupState extends State<LoginSignup> {
   final GlobalKey<ScaffoldState> _logSignScaffKey = GlobalKey<ScaffoldState>();
 
   bool isLogin = true;
+  bool isLoading = false;
   var prefStore = PreferencesStore();
 
   void handleLogin(String uName, String pwd) async {
+    setState(() {
+      isLoading = true;
+    });
     var userData =
         await Authorization.loginUser(userName: uName, password: pwd);
     if (userData is Map<String, dynamic>) {
       await prefStore.saveCred(userData['jwt_token'], uName, pwd);
       print(userData);
+      setState(() {
+        isLoading = false;
+      });
       //TODO: push new route
     } else {
+      setState(() {
+        isLoading = false;
+      });
       _logSignScaffKey.currentState.hideCurrentSnackBar();
       _logSignScaffKey.currentState.showSnackBar(SnackBar(
         content: Text('Incorrect username or password'),
@@ -60,17 +70,21 @@ class _LoginSignupState extends State<LoginSignup> {
             Flexible(child: SizedBox(height: 60), fit: FlexFit.tight, flex: 1),
             Logo(),
             Flexible(child: SizedBox(height: 100), fit: FlexFit.tight, flex: 1),
-            Login(handleLogin: handleLogin),
+            Login(handleLogin: handleLogin, isLoading: isLoading),
             Flexible(child: SizedBox(height: 70), fit: FlexFit.tight, flex: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text("Don't have an account? ",
-                    style: Theme.of(context).primaryTextTheme.headline6),
+                    style: Theme
+                        .of(context)
+                        .primaryTextTheme
+                        .headline6),
                 GestureDetector(
                   onTap: () => setState(() => isLogin = !isLogin),
                   child: Text("Sign up!",
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .primaryTextTheme
                           .headline6
                           .copyWith(
