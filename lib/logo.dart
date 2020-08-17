@@ -8,7 +8,7 @@ const tenScale = 0.38;
 class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final totalWidth = MediaQuery.of(context).size.width / 1.5;
+    final totalWidth = 304.8;
     final height = totalWidth / 2.7;
     return Container(
       width: totalWidth,
