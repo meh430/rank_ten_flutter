@@ -26,38 +26,47 @@ class _SplashState extends State<Splash> {
     var store = PreferencesStore();
     var token = await store.getToken();
     //check if token present
+    print("Checking if token present...");
     if (token != "") {
+      print("Token present. Checking validity...");
       var userData = await Authorization.tokenValid(token);
-
       //ensure token validity
       if (userData is RankExceptions) {
+        print("Token invalid...");
         checkForPwd(store);
       } else {
+        print("Token valid. Parsed user data");
         print(userData);
         mainUser = userData;
         //TODO: push home route
       }
     } else {
+      print("Token not present...");
       checkForPwd(store);
     }
   }
 
   void checkForPwd(PreferencesStore store) async {
+    print("Checking if credentials present...");
     var userName = await store.getUserName();
     var password = await store.getPwd();
 
     //check if credentials present
     if (userName != "" && password != "") {
+      print("Credentials present. Checking validity...");
       var userData =
           await Authorization.loginUser(userName: userName, password: password);
       if (userData is RankExceptions) {
+        print("Credentials invalid. Starting login/signup flow");
         Navigator.pushNamed(context, '/login_signup');
       } else {
+        print("Credentials valid. Parsed user data");
         print(userData);
         mainUser = userData;
         //TODO: push home route
       }
     } else {
+      print("Credentials not present. Starting login/signup flow");
       Navigator.pushNamed(context, '/login_signup');
     }
   }
