@@ -17,12 +17,15 @@ const darkCard = Color(0xff4D4D4D);
 class AppTheme {
   static getTextTheme(bool isDark, TextTheme base) {
     return base.copyWith(
-        headline1: GoogleFonts.nunito(color: darkSienna),
-        headline2: GoogleFonts.nunito(color: darkSienna),
-        headline3: GoogleFonts.nunito(color: darkSienna),
-        headline4: GoogleFonts.nunito(color: darkSienna),
-        headline5: GoogleFonts.nunito(color: darkSienna),
-        headline6: GoogleFonts.nunito(color: darkSienna));
+      headline1: GoogleFonts.nunito(color: darkSienna),
+      headline2: GoogleFonts.nunito(color: darkSienna),
+      headline3: GoogleFonts.nunito(color: darkSienna),
+      headline4: GoogleFonts.nunito(color: darkSienna),
+      headline5: GoogleFonts.nunito(color: darkSienna),
+      headline6: GoogleFonts.nunito(color: darkSienna),
+      caption: GoogleFonts.nunito(color: darkSienna),
+      bodyText1: GoogleFonts.nunito(color: darkSienna),
+    );
   }
 
   static getAppTheme(bool isDark) {
@@ -32,6 +35,7 @@ class AppTheme {
         textTheme: getTextTheme(isDark, base.textTheme),
         primaryTextTheme: getTextTheme(isDark, base.primaryTextTheme),
         accentTextTheme: getTextTheme(isDark, base.accentTextTheme),
+        primaryColor: lavender,
         backgroundColor: isDark ? darkBackground : white,
         cardColor: isDark ? darkCard : lightCard);
   }
