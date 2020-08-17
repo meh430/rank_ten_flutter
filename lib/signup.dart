@@ -19,24 +19,30 @@ String validateBio(String value) {
 class Signup extends StatelessWidget {
   final SubmitSignup submitSignup;
   final bool isLoading;
-  final _uController = TextEditingController();
-  final _pController = TextEditingController();
-  final _pConfirmController = TextEditingController();
-  final _bController = TextEditingController();
+  final uController;
+  final pController;
+  final pConfirmController;
+  final bController;
   final _fKey = GlobalKey<FormState>();
 
-  Signup({this.submitSignup, this.isLoading});
+  Signup(
+      {this.submitSignup,
+      this.isLoading,
+      this.pController,
+      this.uController,
+      this.pConfirmController,
+      this.bController});
 
   submitForm(BuildContext context) {
-    if (_pController.text != _pConfirmController.text) {
+    if (pController.text != pConfirmController.text) {
       print("BRUH");
       Scaffold.of(context).showSnackBar(SnackBar(
           content: Text("Please confirm password"),
           behavior: SnackBarBehavior.floating));
     } else if (_fKey.currentState.validate()) {
-      final password = _pController.text;
-      final username = _uController.text;
-      final bio = _bController.text;
+      final password = pController.text;
+      final username = uController.text;
+      final bio = bController.text;
       print(username + ", " + password + ", " + bio);
       submitSignup(username, password, bio);
     }
@@ -50,21 +56,21 @@ class Signup extends StatelessWidget {
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          getNameField(_uController, labelStyle, context),
+          getNameField(uController, labelStyle, context),
           SizedBox(height: 20.0),
           PasswordField(
-              pController: _pController,
+              pController: pController,
               labelStyle: labelStyle,
               fieldValidator: validatePwd),
           SizedBox(height: 20.0),
           PasswordField(
-            pController: _pConfirmController,
+            pController: pConfirmController,
             labelStyle: labelStyle,
             fieldValidator: validatePwd,
             confirm: true,
           ),
           SizedBox(height: 20.0),
-          getBioField(_bController, labelStyle, context)
+          getBioField(bController, labelStyle, context)
         ]);
 
     return Form(

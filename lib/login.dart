@@ -24,7 +24,7 @@ OutlineInputBorder getInputStyle(bool isDark) {
 dynamic getSubmitButton(
     {BuildContext context, bool isLogin, bool isLoading, dynamic submitData}) {
   return isLoading
-      ? SpinKitCubeGrid(
+      ? SpinKitDoubleBounce(
           color: hanPurple,
           size: 50.0,
         )
@@ -66,16 +66,16 @@ String validateUsername(String value) {
 class Login extends StatelessWidget {
   final SubmitLogin submitLogin;
   final bool isLoading;
-  final _uController = TextEditingController();
-  final _pController = TextEditingController();
+  var uController; //= TextEditingController();
+  var pController; //= TextEditingController();
   final _fKey = GlobalKey<FormState>();
 
-  Login({this.submitLogin, this.isLoading});
+  Login({this.submitLogin, this.isLoading, this.uController, this.pController});
 
   submitForm(BuildContext context) {
     if (_fKey.currentState.validate()) {
-      final password = _pController.text;
-      final username = _uController.text;
+      final password = pController.text;
+      final username = uController.text;
       print(username + ", " + password);
       submitLogin(username, password);
     }
@@ -93,10 +93,10 @@ class Login extends StatelessWidget {
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          getNameField(_uController, labelStyle, context),
+          getNameField(uController, labelStyle, context),
           SizedBox(height: 20.0),
           PasswordField(
-              pController: _pController,
+              pController: pController,
               labelStyle: labelStyle,
               fieldValidator: validatePwd)
         ]);
@@ -124,8 +124,10 @@ class PasswordField extends StatefulWidget {
   final fieldValidator;
   final bool confirm;
 
-  PasswordField(
-      {this.pController, this.labelStyle, this.fieldValidator, this.confirm = false});
+  PasswordField({this.pController,
+    this.labelStyle,
+    this.fieldValidator,
+    this.confirm = false});
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();

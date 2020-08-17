@@ -15,7 +15,10 @@ class LoginSignup extends StatefulWidget {
 
 class _LoginSignupState extends State<LoginSignup> {
   final GlobalKey<ScaffoldState> _logSignScaffKey = GlobalKey<ScaffoldState>();
-
+  var _pController = TextEditingController();
+  var _pConfirmController = TextEditingController();
+  var _uController = TextEditingController();
+  var _bController = TextEditingController();
   bool _isLogin = true;
   bool _isLoading = false;
   var _prefStore = PreferencesStore();
@@ -86,8 +89,20 @@ class _LoginSignupState extends State<LoginSignup> {
             Logo(),
             Flexible(child: SizedBox(height: 100), fit: FlexFit.tight, flex: 1),
             _isLogin
-                ? Login(submitLogin: _handleLogin, isLoading: _isLoading)
-                : Signup(submitSignup: _handleSignup, isLoading: _isLoading),
+                ? Login(
+                submitLogin: _handleLogin,
+                isLoading: _isLoading,
+                pController: _pController,
+                uController: _uController
+            )
+                : Signup(
+                submitSignup: _handleSignup,
+                isLoading: _isLoading,
+                pController: _pController,
+                uController: _uController,
+                bController: _bController,
+                pConfirmController: _pConfirmController
+            ),
             Flexible(child: SizedBox(height: 70), fit: FlexFit.tight, flex: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
