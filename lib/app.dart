@@ -36,7 +36,7 @@ class _AppState extends State<App> {
         initialRoute: '/splash',
         routes: {
           '/splash': (context) => Splash(),
-          '/login_signin': (context) => LoginSignup()
+          '/login_signup': (context) => LoginSignup()
         },
       ),
     );

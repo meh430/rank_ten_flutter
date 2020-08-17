@@ -45,7 +45,7 @@ class _LoginSignupState extends State<LoginSignup> {
       setState(() {
         _isLoading = false;
       });
-      //TODO: push new route
+      //TODO: push home route
     }
   }
 
@@ -71,7 +71,7 @@ class _LoginSignupState extends State<LoginSignup> {
       setState(() {
         _isLoading = false;
       });
-      //TODO: push new route
+      //TODO: push home route
     }
   }
 
