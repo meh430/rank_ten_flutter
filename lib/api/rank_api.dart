@@ -42,8 +42,8 @@ class RankApi {
 
   Map<String, dynamic> getHeaders({String bearerToken}) {
     return bearerToken == ""
-        ? Map<String, dynamic>()
-        : {'Authorization': 'Bearer $bearerToken'};
+        ? Map<String, String>()
+        : <String, String>{'Authorization': 'Bearer $bearerToken'};
   }
 
   dynamic parseResponse(http.Response res) {

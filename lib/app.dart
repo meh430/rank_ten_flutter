@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/dark_theme_provider.dart';
-import 'package:rank_ten/login_signin.dart';
+import 'package:rank_ten/login_signup.dart';
 import 'package:rank_ten/splash.dart';
 
 class App extends StatefulWidget {
@@ -35,7 +35,7 @@ class _AppState extends State<App> {
         initialRoute: '/splash',
         routes: {
           '/splash': (context) => Splash(),
-          '/login_signin': (context) => LoginSignin()
+          '/login_signin': (context) => LoginSignup()
         },
       ),
     );
