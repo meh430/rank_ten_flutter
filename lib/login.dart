@@ -29,7 +29,7 @@ class _LoginState extends State<Login> {
         RaisedButton(
           padding:
               EdgeInsets.only(left: 25.0, right: 25.0, top: 5.0, bottom: 5.0),
-          color: palePurple,
+          color: paraPink,
           onPressed: () {
             print("pressed");
           },
@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
               style: Theme.of(context)
                   .primaryTextTheme
                   .headline3
-                  .copyWith(color: paraPink)),
+                  .copyWith(color: palePurple)),
         )
       ],
     );
@@ -53,11 +53,30 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final _usernameFNode = FocusNode();
+  final _passwordFNode = FocusNode();
   final _fKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _usernameFNode.addListener(() {
+      setState(() {
+        //Redraw so that the username label reflects the focus state
+      });
+    });
+    _passwordFNode.addListener(() {
+      setState(() {
+        //Redraw so that the password label reflects the focus state
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final labelStyle = Theme.of(context)
+    final labelStyle = Theme
+        .of(context)
         .primaryTextTheme
         .headline6
         .copyWith(fontSize: 16)
@@ -70,8 +89,11 @@ class _LoginFormState extends State<LoginForm> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             TextFormField(
+                focusNode: _usernameFNode,
                 decoration: InputDecoration(
                     labelText: 'Username',
+                    filled: true,
+                    fillColor: _usernameFNode.hasFocus ? palePurple : white,
                     contentPadding: EdgeInsets.all(20.0),
                     labelStyle: labelStyle,
                     border: inputStyle,
@@ -79,8 +101,11 @@ class _LoginFormState extends State<LoginForm> {
                     focusedBorder: inputStyle)),
             SizedBox(height: 20.0),
             TextFormField(
+                focusNode: _passwordFNode,
                 obscureText: true,
                 decoration: InputDecoration(
+                    filled: true,
+                    fillColor: _passwordFNode.hasFocus ? palePurple : white,
                     contentPadding: EdgeInsets.all(20.0),
                     labelText: 'Password',
                     border: inputStyle,

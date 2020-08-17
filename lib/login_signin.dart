@@ -11,19 +11,18 @@ class LoginSignin extends StatefulWidget {
 class _LoginSigninState extends State<LoginSignin> {
   @override
   Widget build(BuildContext context) {
-    //TODO:
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Flexible(child: SizedBox(height: 60), fit: FlexFit.loose, flex: 1),
+            Flexible(child: SizedBox(height: 60), fit: FlexFit.tight, flex: 1),
             Logo(),
-            Flexible(child: SizedBox(height: 100), fit: FlexFit.loose, flex: 2),
+            Flexible(child: SizedBox(height: 100), fit: FlexFit.tight, flex: 1),
             Login(),
-            Flexible(child: SizedBox(height: 70), fit: FlexFit.loose, flex: 1),
+            Flexible(child: SizedBox(height: 70), fit: FlexFit.tight, flex: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -40,6 +39,9 @@ class _LoginSigninState extends State<LoginSignin> {
                               fontWeight: FontWeight.bold)),
                 )
               ],
+            ),
+            SizedBox(
+              height: 20,
             )
           ],
         ),
