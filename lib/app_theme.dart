@@ -39,6 +39,12 @@ class AppTheme {
         textTheme: getTextTheme(isDark, base.textTheme),
         primaryTextTheme: getTextTheme(isDark, base.primaryTextTheme),
         accentTextTheme: getTextTheme(isDark, base.accentTextTheme),
+        iconTheme:
+            base.iconTheme.copyWith(color: isDark ? palePurple : Colors.black),
+        accentIconTheme:
+            base.iconTheme.copyWith(color: isDark ? palePurple : Colors.black),
+        primaryIconTheme:
+            base.iconTheme.copyWith(color: isDark ? palePurple : Colors.black),
         accentColor: lavender,
         primaryColor: lavender,
         scaffoldBackgroundColor: isDark ? darkBackground : white,

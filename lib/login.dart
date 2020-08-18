@@ -121,10 +121,11 @@ class PasswordField extends StatefulWidget {
   final fieldValidator;
   final bool confirm;
 
-  PasswordField({this.pController,
-    this.labelStyle,
-    this.fieldValidator,
-    this.confirm = false});
+  PasswordField(
+      {this.pController,
+      this.labelStyle,
+      this.fieldValidator,
+      this.confirm = false});
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -149,6 +150,7 @@ class _PasswordFieldState extends State<PasswordField> {
                 });
               },
               child: Icon(obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: themeChange.isDark ? palePurple : Colors.black,
                   semanticLabel:
                   obscureText ? 'Show password' : 'Hide password'),
             ),
