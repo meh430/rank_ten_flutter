@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Color getTabItemColor(int index) {
-    return index == _currIndex ? hanPurple : palePurple;
+    return index == _currIndex ? hanPurple : lavender;
   }
 
   AppBar getAppBar(int index) {
@@ -57,12 +57,12 @@ class _MainScreenState extends State<MainScreen> {
         onPressed: () {},
         backgroundColor: paraPink,
         tooltip: 'Add',
-        child: Icon(Icons.add),
-        elevation: 6.0,
+        child: Icon(Icons.add, size: 35),
+        elevation: 4.0,
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 20.0,
-        notchMargin: 8.0,
+        notchMargin: 12.0,
         shape: CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
         child: Row(
