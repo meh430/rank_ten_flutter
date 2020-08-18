@@ -10,10 +10,6 @@ import 'dark_theme_provider.dart';
 
 typedef SubmitLogin = void Function(String, String);
 
-const inputStyle = OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.black, width: 2.0),
-    borderRadius: BorderRadius.all(Radius.circular(20.0)));
-
 OutlineInputBorder getInputStyle(bool isDark) {
   return OutlineInputBorder(
       borderSide:
@@ -66,8 +62,8 @@ String validateUsername(String value) {
 class Login extends StatelessWidget {
   final SubmitLogin submitLogin;
   final bool isLoading;
-  var uController; //= TextEditingController();
-  var pController; //= TextEditingController();
+  final uController;
+  final pController;
   final _fKey = GlobalKey<FormState>();
 
   Login({this.submitLogin, this.isLoading, this.uController, this.pController});
@@ -84,11 +80,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelStyle =
-    Theme
-        .of(context)
-        .primaryTextTheme
-        .headline6
-        .copyWith(fontSize: 16);
+        Theme.of(context).primaryTextTheme.headline6.copyWith(fontSize: 16);
 
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

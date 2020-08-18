@@ -19,8 +19,6 @@ class _SplashState extends State<Splash> {
     super.initState();
 
     startUpFlow();
-    //Future.delayed(Duration(milliseconds: 2000),
-    //    () => Navigator.pushNamed(context, '/login_signup'));
   }
 
   void startUpFlow() async {

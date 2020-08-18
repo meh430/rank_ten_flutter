@@ -35,7 +35,6 @@ class Signup extends StatelessWidget {
 
   submitForm(BuildContext context) {
     if (pController.text != pConfirmController.text) {
-      print("BRUH");
       Scaffold.of(context).showSnackBar(SnackBar(
           content: Text("Please confirm password"),
           behavior: SnackBarBehavior.floating));

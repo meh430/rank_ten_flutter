@@ -30,11 +30,11 @@ class RankApi {
       data = Map<String, String>();
     }
     var jsonResponse;
+
     try {
       final res = await http.post(_baseUrl + endpoint,
           body: json.encode(data),
           headers: _getHeaders(bearerToken: bearerToken));
-      print(res);
       jsonResponse = _parseResponse(res);
     } on SocketException {
       return DefaultError('No network connection');
@@ -46,14 +46,14 @@ class RankApi {
   Map<String, dynamic> _getHeaders({String bearerToken}) {
     return bearerToken == ""
         ? <String, String>{
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
         : <String, String>{
-      'Authorization': 'Bearer $bearerToken',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
+            'Authorization': 'Bearer $bearerToken',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          };
   }
 
   dynamic _parseResponse(http.Response res) {

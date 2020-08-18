@@ -15,23 +15,23 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  var themeProvider = DarkThemeProvider();
+  var _themeProvider = DarkThemeProvider();
 
   @override
   void initState() {
     super.initState();
-    getCurrentTheme();
+    _getCurrentTheme();
   }
 
-  getCurrentTheme() async {
-    themeProvider.isDark = await themeProvider.store.isDark();
-    themeProvider.isDark = false;
+  _getCurrentTheme() async {
+    _themeProvider.isDark = await _themeProvider.store.isDark();
+    _themeProvider.isDark = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => themeProvider,
+      create: (_) => _themeProvider,
       child: MaterialApp(
         title: "RankTen",
         theme: AppTheme.getAppTheme(false),
