@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rank_ten/app.dart';
 import 'package:rank_ten/app_theme.dart';
 
-var _appBarTitles = ["Feed", "Discover", "Search", "Profile"];
+var _appBarTitles = [
+  "Feed",
+  "Discover",
+  "Search",
+  mainUser?.userName ?? "Mehul"
+];
 
 Center getTempDest(int index) {
   return Center(
@@ -44,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(0),
+      appBar: getAppBar(_currIndex),
       body: _destinations[_currIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
