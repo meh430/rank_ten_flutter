@@ -5,7 +5,7 @@ import 'package:rank_ten/preferences_store.dart';
 
 class Authorization {
   static RankApi _api = RankApi();
-  static PreferencesStore store = PreferencesStore();
+  static PreferencesStore _store = PreferencesStore();
 
   static Future<dynamic> tokenValid(String token) async {
     var response =
@@ -22,10 +22,9 @@ class Authorization {
     var response = await _api.post(
         endpoint: '/login',
         data: {'user_name': userName, 'password': password});
-
     if (!(response is RankExceptions)) {
       var user = User.fromJson(response);
-      store.saveCred(user.jwtToken, userName, password);
+      _store.saveCred(user.jwtToken, userName, password);
       return user;
     }
 
@@ -36,11 +35,12 @@ class Authorization {
       {String userName, String password, String bio}) async {
     var response = await _api.post(
         endpoint: '/signup',
-        data: {'user_name': userName, 'password': password});
+        data: {'user_name': userName, 'password': password, 'bio': bio});
 
+    print(response);
     if (!(response is RankExceptions)) {
       var user = User.fromJson(response);
-      store.saveCred(user.jwtToken, userName, password);
+      _store.saveCred(user.jwtToken, userName, password);
       return user;
     }
 

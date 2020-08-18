@@ -39,4 +39,13 @@ class PreferencesStore {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getString(PASSWORD_KEY) ?? "";
   }
+
+  void clearAll() async {
+    var prefs = await SharedPreferences.getInstance();
+    await Future.wait([
+      prefs.remove(JWT_TOKEN),
+      prefs.remove(USER_NAME_KEY),
+      prefs.remove(PASSWORD_KEY)
+    ]);
+  }
 }
