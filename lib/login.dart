@@ -17,27 +17,35 @@ OutlineInputBorder getInputStyle(bool isDark) {
       borderRadius: BorderRadius.all(Radius.circular(20.0)));
 }
 
-dynamic getSubmitButton(
-    {BuildContext context, bool isLogin, bool isLoading, dynamic submitData}) {
-  return isLoading
-      ? SpinKitDoubleBounce(
-          color: hanPurple,
-          size: 50.0,
-        )
-      : RaisedButton(
-          padding:
-              EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
-          color: paraPink,
-          onPressed: () => submitData(context),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-          child: Text(isLogin ? "Login" : "Sign Up",
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .headline3
-                  .copyWith(color: palePurple)),
-        );
+class SubmitButton extends StatelessWidget {
+  final submitData;
+  final bool isLoading;
+  final bool isLogin;
+
+  SubmitButton({this.submitData, this.isLoading, this.isLogin});
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? SpinKitDoubleBounce(
+            color: hanPurple,
+            size: 50.0,
+          )
+        : RaisedButton(
+            padding:
+                EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
+            color: paraPink,
+            onPressed: () => submitData(context),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40.0),
+            ),
+            child: Text(isLogin ? "Login" : "Sign Up",
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline3
+                    .copyWith(color: palePurple)),
+          );
+  }
 }
 
 String validatePwd(String value) {
@@ -85,7 +93,7 @@ class Login extends StatelessWidget {
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          getNameField(uController, labelStyle, context),
+          NameField(uController: uController, labelStyle: labelStyle),
           SizedBox(height: 20.0),
           PasswordField(
               pController: pController,
@@ -97,13 +105,10 @@ class Login extends StatelessWidget {
       key: _fKey,
       child: Column(
         children: <Widget>[
-          getFormWrapper(textFields),
+          FormWrapper(textFields: textFields),
           SizedBox(height: 80),
-          getSubmitButton(
-              context: context,
-              isLoading: isLoading,
-              isLogin: true,
-              submitData: submitForm)
+          SubmitButton(
+              isLoading: isLoading, isLogin: true, submitData: submitForm)
         ],
       ),
     );
@@ -156,34 +161,50 @@ class _PasswordFieldState extends State<PasswordField> {
   }
 }
 
-TextFormField getNameField(TextEditingController uController,
-    TextStyle labelStyle, BuildContext context) {
-  final themeChange = Provider.of<DarkThemeProvider>(context);
-  return TextFormField(
-      controller: uController,
-      validator: validateUsername,
-      decoration: InputDecoration(
-          labelText: 'Username',
-          contentPadding: EdgeInsets.all(20.0),
-          labelStyle: labelStyle,
-          border: getInputStyle(themeChange.isDark),
-          enabledBorder: getInputStyle(themeChange.isDark),
-          focusedBorder: getInputStyle(themeChange.isDark)));
+class NameField extends StatelessWidget {
+  final uController;
+  final labelStyle;
+
+  NameField({this.uController, this.labelStyle});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Provider
+        .of<DarkThemeProvider>(context)
+        .isDark;
+    return TextFormField(
+        controller: uController,
+        validator: validateUsername,
+        decoration: InputDecoration(
+            labelText: 'Username',
+            contentPadding: EdgeInsets.all(20.0),
+            labelStyle: labelStyle,
+            border: getInputStyle(isDark),
+            enabledBorder: getInputStyle(isDark),
+            focusedBorder: getInputStyle(isDark)));
+  }
 }
 
-Card getFormWrapper(dynamic textFields) {
-  return Card(
-    elevation: 8.0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30.0),
-    ),
-    margin: EdgeInsets.only(left: 40, right: 40, bottom: 10.0),
-    child: Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Container(
-        margin: EdgeInsets.all(15.0),
-        child: textFields,
+class FormWrapper extends StatelessWidget {
+  final textFields;
+
+  FormWrapper({this.textFields});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 8.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0),
       ),
-    ),
-  );
+      margin: EdgeInsets.only(left: 40, right: 40, bottom: 10.0),
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Container(
+          margin: EdgeInsets.all(15.0),
+          child: textFields,
+        ),
+      ),
+    );
+  }
 }

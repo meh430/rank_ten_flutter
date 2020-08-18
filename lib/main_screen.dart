@@ -40,6 +40,12 @@ class _MainScreenState extends State<MainScreen> {
       toolbarHeight: 70,
       elevation: 0.0,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      actions: [
+        IconButton(
+          icon: Icon(Icons.brightness_5),
+          onPressed: () => print(""),
+        )
+      ],
       title: Padding(
           padding: EdgeInsets.only(left: 12.0, top: 12.0),
           child: Text(_appBarTitles[index],

@@ -18,3 +18,10 @@ Widget getRoundedImage(String url) {
           image: new DecorationImage(
               fit: BoxFit.fill, image: new NetworkImage(url))));
 }
+
+Widget getUserStats(
+    {int rankPoints, int numFollowers, int numFollowing, int numLists}) {
+  return Row(
+    children: [],
+  );
+}

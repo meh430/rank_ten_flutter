@@ -87,38 +87,32 @@ class _LoginSignupState extends State<LoginSignup> {
             Flexible(child: SizedBox(height: 100), fit: FlexFit.tight, flex: 1),
             _isLogin
                 ? Login(
-                submitLogin: _handleLogin,
-                isLoading: _isLoading,
-                pController: _pController,
-                uController: _uController
-            )
+                    submitLogin: _handleLogin,
+                    isLoading: _isLoading,
+                    pController: _pController,
+                    uController: _uController)
                 : Signup(
-                submitSignup: _handleSignup,
-                isLoading: _isLoading,
-                pController: _pController,
-                uController: _uController,
-                bController: _bController,
-                pConfirmController: _pConfirmController
-            ),
+                    submitSignup: _handleSignup,
+                    isLoading: _isLoading,
+                    pController: _pController,
+                    uController: _uController,
+                    bController: _bController,
+                    pConfirmController: _pConfirmController),
             Flexible(child: SizedBox(height: 70), fit: FlexFit.tight, flex: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(_isLogin ? "Don't have an account? " : "Have an account? ",
-                    style: Theme
-                        .of(context)
-                        .primaryTextTheme
-                        .headline6),
+                    style: Theme.of(context).primaryTextTheme.headline6),
                 GestureDetector(
                   onTap: () => setState(() => _isLogin = !_isLogin),
                   child: Text(_isLogin ? "Sign up!" : "Log in!",
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .primaryTextTheme
                           .headline6
                           .copyWith(
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.bold)),
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold)),
                 )
               ],
             ),

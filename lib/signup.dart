@@ -55,7 +55,7 @@ class Signup extends StatelessWidget {
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          getNameField(uController, labelStyle, context),
+          NameField(uController: uController, labelStyle: labelStyle),
           SizedBox(height: 20.0),
           PasswordField(
               pController: pController,
@@ -76,13 +76,10 @@ class Signup extends StatelessWidget {
       key: _fKey,
       child: Column(
         children: <Widget>[
-          getFormWrapper(textFields),
+          FormWrapper(textFields: textFields),
           SizedBox(height: 20),
-          getSubmitButton(
-              context: context,
-              isLoading: isLoading,
-              isLogin: false,
-              submitData: submitForm)
+          SubmitButton(
+              isLoading: isLoading, isLogin: false, submitData: submitForm)
         ],
       ),
     );
