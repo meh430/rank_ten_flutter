@@ -39,6 +39,7 @@ class AppTheme {
         textTheme: getTextTheme(isDark, base.textTheme),
         primaryTextTheme: getTextTheme(isDark, base.primaryTextTheme),
         accentTextTheme: getTextTheme(isDark, base.accentTextTheme),
+        accentColor: lavender,
         primaryColor: lavender,
         scaffoldBackgroundColor: isDark ? darkBackground : white,
         canvasColor: isDark ? darkBackground : white,

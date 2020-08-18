@@ -44,7 +44,7 @@ class Logo extends StatelessWidget {
                   child: Text("Rank",
                       style: Theme.of(context)
                           .primaryTextTheme
-                          .headline3
+                          .headline2
                           .copyWith(color: white))),
             ),
           ),

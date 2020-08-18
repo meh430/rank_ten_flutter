@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/dark_theme_provider.dart';
 import 'package:rank_ten/login_signup.dart';
+import 'package:rank_ten/main_screen.dart';
 import 'package:rank_ten/splash.dart';
 
 import 'models/user.dart';
@@ -25,7 +26,7 @@ class _AppState extends State<App> {
 
   _getCurrentTheme() async {
     _themeProvider.isDark = await _themeProvider.store.isDark();
-    _themeProvider.isDark = false;
+    _themeProvider.isDark = true;
   }
 
   @override
@@ -35,12 +36,13 @@ class _AppState extends State<App> {
       child: MaterialApp(
         title: "RankTen",
         theme: AppTheme.getAppTheme(false),
-        darkTheme: AppTheme.getAppTheme(false),
+        darkTheme: AppTheme.getAppTheme(true),
         debugShowCheckedModeBanner: false,
         initialRoute: '/splash',
         routes: {
           '/splash': (context) => Splash(),
-          '/login_signup': (context) => LoginSignup()
+          '/login_signup': (context) => LoginSignup(),
+          '/main': (context) => MainScreen()
         },
       ),
     );

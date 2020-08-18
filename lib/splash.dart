@@ -17,8 +17,11 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-
-    startUpFlow();
+    Future.delayed(Duration(milliseconds: 3000), () {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/main');
+    });
+    //startUpFlow();
   }
 
   void startUpFlow() async {
@@ -78,12 +81,12 @@ class _SplashState extends State<Splash> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Logo(),
-                  SizedBox(height: 200, width: 50),
-                  SpinKitCubeGrid(
-                    color: hanPurple,
-                    size: 70.0,
-                  )
-                ])));
+          Logo(),
+          SizedBox(height: 200, width: 50),
+          SpinKitCubeGrid(
+            color: hanPurple,
+            size: 70.0,
+          )
+        ])));
   }
 }
