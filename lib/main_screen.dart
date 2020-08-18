@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rank_ten/app.dart';
 import 'package:rank_ten/app_theme.dart';
+import 'package:rank_ten/dark_theme_provider.dart';
 
 var _appBarTitles = [
   "Feed",
@@ -35,28 +37,14 @@ class _MainScreenState extends State<MainScreen> {
     return index == _currIndex ? hanPurple : lavender;
   }
 
-  AppBar getAppBar(int index) {
-    return AppBar(
-      toolbarHeight: 70,
-      elevation: 0.0,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.brightness_5),
-          onPressed: () => print(""),
-        )
-      ],
-      title: Padding(
-          padding: EdgeInsets.only(left: 12.0, top: 12.0),
-          child: Text(_appBarTitles[index],
-              style: Theme.of(context).primaryTextTheme.headline3)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(_currIndex),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(70.0),
+          child: MainAppBar(
+            index: _currIndex,
+          )),
       body: _destinations[_currIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
@@ -106,6 +94,43 @@ class _MainScreenState extends State<MainScreen> {
         ),
         color: Theme.of(context).cardColor,
       ),
+    );
+  }
+}
+
+class MainAppBar extends StatefulWidget {
+  final int index;
+
+  MainAppBar({this.index});
+
+  @override
+  _MainAppBarState createState() => _MainAppBarState();
+}
+
+class _MainAppBarState extends State<MainAppBar> {
+  bool isDark;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeChange = Provider.of<DarkThemeProvider>(context);
+    return AppBar(
+      toolbarHeight: 70,
+      elevation: 0.0,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      actions: [
+        IconButton(
+          icon: Icon(
+              themeChange.isDark ? Icons.brightness_5 : Icons.brightness_2,
+              color: themeChange.isDark ? lavender : Colors.yellow),
+          onPressed: () {
+            setState(() => themeChange.isDark = !themeChange.isDark);
+          },
+        )
+      ],
+      title: Padding(
+          padding: EdgeInsets.only(left: 12.0, top: 12.0),
+          child: Text(_appBarTitles[widget.index],
+              style: Theme.of(context).primaryTextTheme.headline3)),
     );
   }
 }

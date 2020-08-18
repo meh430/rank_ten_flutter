@@ -33,7 +33,7 @@ class AppTheme {
   }
 
   static getAppTheme(bool isDark) {
-    var base = isDark ? ThemeData.dark() : ThemeData.light();
+    var base = ThemeData.light();
 
     return base.copyWith(
         textTheme: getTextTheme(isDark, base.textTheme),

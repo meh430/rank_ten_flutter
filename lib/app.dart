@@ -16,35 +16,37 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  var _themeProvider = DarkThemeProvider();
+  var themeProvider = DarkThemeProvider();
 
   @override
   void initState() {
     super.initState();
-    _getCurrentTheme();
+    getCurrentTheme();
   }
 
-  _getCurrentTheme() async {
-    _themeProvider.isDark = await _themeProvider.store.isDark();
-    _themeProvider.isDark = true;
+  void getCurrentTheme() async {
+    themeProvider.isDark = await themeProvider.store.isDark();
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => _themeProvider,
-      child: MaterialApp(
-        title: "RankTen",
-        theme: AppTheme.getAppTheme(false),
-        darkTheme: AppTheme.getAppTheme(true),
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/splash',
-        routes: {
-          '/splash': (context) => Splash(),
-          '/login_signup': (context) => LoginSignup(),
-          '/main': (context) => MainScreen()
-        },
-      ),
+      create: (_) => themeProvider,
+      child: Consumer<DarkThemeProvider>(
+          builder: (BuildContext context, value, Widget child) {
+        return MaterialApp(
+          title: "RankTen",
+          theme: AppTheme.getAppTheme(themeProvider.isDark),
+          darkTheme: AppTheme.getAppTheme(themeProvider.isDark),
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/splash',
+          routes: {
+            '/splash': (context) => Splash(),
+            '/login_signup': (context) => LoginSignup(),
+            '/main': (context) => MainScreen()
+          },
+        );
+      }),
     );
   }
 }

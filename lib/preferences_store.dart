@@ -8,7 +8,7 @@ class PreferencesStore {
   static const USER_NAME_KEY = "USERNAME";
   static const PASSWORD_KEY = "PASSWORD";
 
-  void saveDarkTheme(bool val) async {
+  saveDarkTheme(bool val) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool(DARK_THEME, val);
   }
