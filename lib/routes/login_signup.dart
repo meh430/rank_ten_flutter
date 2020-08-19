@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rank_ten/api/auth.dart';
-import 'package:rank_ten/login.dart';
-import 'package:rank_ten/logo.dart';
-import 'package:rank_ten/signup.dart';
-
-import 'api/rank_exceptions.dart';
+import 'package:rank_ten/components/login.dart';
+import 'package:rank_ten/components/logo.dart';
+import 'package:rank_ten/components/signup.dart';
 
 class LoginSignup extends StatefulWidget {
   @override
@@ -26,10 +24,15 @@ class _LoginSignupState extends State<LoginSignup> {
       _isLoading = true;
     });
 
-    var userData =
-        await Authorization.loginUser(userName: uName, password: pwd);
-
-    if (userData is RankExceptions) {
+    try {
+      var userData =
+          await Authorization.loginUser(userName: uName, password: pwd);
+      print(userData);
+      setState(() {
+        _isLoading = false;
+      });
+      //TODO: push home route
+    } catch (e) {
       setState(() {
         _isLoading = false;
       });
@@ -38,12 +41,6 @@ class _LoginSignupState extends State<LoginSignup> {
         behavior: SnackBarBehavior.floating,
         content: Text('Incorrect username or password'),
       ));
-    } else {
-      print(userData);
-      setState(() {
-        _isLoading = false;
-      });
-      //TODO: push home route
     }
   }
 
@@ -51,10 +48,16 @@ class _LoginSignupState extends State<LoginSignup> {
     setState(() {
       _isLoading = true;
     });
-    var userData = await Authorization.signupUser(
-        userName: uName, password: pwd, bio: bio);
 
-    if (userData is RankExceptions) {
+    try {
+      var userData = await Authorization.signupUser(
+          userName: uName, password: pwd, bio: bio);
+      print(userData);
+      setState(() {
+        _isLoading = false;
+      });
+      //TODO: push home route
+    } catch (e) {
       setState(() {
         _isLoading = false;
       });
@@ -63,12 +66,6 @@ class _LoginSignupState extends State<LoginSignup> {
         behavior: SnackBarBehavior.floating,
         content: Text('Username already exists'),
       ));
-    } else {
-      print(userData);
-      setState(() {
-        _isLoading = false;
-      });
-      //TODO: push home route
     }
   }
 

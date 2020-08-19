@@ -43,6 +43,27 @@ class RankApi {
     return jsonResponse;
   }
 
+  Future<dynamic> put(
+      {String endpoint,
+      Map<String, dynamic> data,
+      String bearerToken = ""}) async {
+    if (data == null) {
+      data = Map<String, String>();
+    }
+    var jsonResponse;
+
+    try {
+      final res = await http.put(_baseUrl + endpoint,
+          body: json.encode(data),
+          headers: _getHeaders(bearerToken: bearerToken));
+      jsonResponse = _parseResponse(res);
+    } on SocketException {
+      return DefaultError('No network connection');
+    }
+
+    return jsonResponse;
+  }
+
   Map<String, dynamic> _getHeaders({String bearerToken}) {
     return bearerToken == ""
         ? <String, String>{
@@ -61,13 +82,13 @@ class RankApi {
       case 200:
         return json.decode(res.body.toString());
       case 400:
-        return SchemaValidationError(res.body.toString());
+        throw SchemaValidationError(res.body.toString());
       case 401:
-        return AuthenticationError(res.body.toString());
+        throw AuthenticationError(res.body.toString());
       case 403:
-        return UnauthorizedError(res.body.toString());
+        throw UnauthorizedError(res.body.toString());
       default:
-        return DefaultError(res.body.toString());
+        throw DefaultError(res.body.toString());
     }
   }
 }

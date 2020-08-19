@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/dark_theme_provider.dart';
-import 'package:rank_ten/login_signup.dart';
-import 'package:rank_ten/main_screen.dart';
-import 'package:rank_ten/splash.dart';
+import 'package:rank_ten/routes/login_signup.dart';
+import 'package:rank_ten/routes/main_screen.dart';
+import 'package:rank_ten/routes/splash.dart';
 
 import 'models/user.dart';
 

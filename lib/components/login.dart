@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
 
-import 'dark_theme_provider.dart';
+import '../dark_theme_provider.dart';
 
 typedef SubmitLogin = void Function(String, String);
 
