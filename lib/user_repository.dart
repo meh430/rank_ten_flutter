@@ -26,9 +26,14 @@ class UserRepository {
     return response;
   }
 
-  Future<dynamic> followUser() async {
-    final response =
-        await _api.post(endpoint: '/follow', bearerToken: mainUser.jwtToken);
-    return response;
+  Future<dynamic> followUser(String name) async {
+    final response = await _api.post(
+        endpoint: '/follow/$name', bearerToken: mainUser.jwtToken);
+
+    if (response['message'].contains("follow")) {
+      return "FOLLOW";
+    } else {
+      return "UNFOLLOW";
+    }
   }
 }
