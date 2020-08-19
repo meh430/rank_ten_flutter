@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/dark_theme_provider.dart';
+import 'package:rank_ten/main_user_provider.dart';
 import 'package:rank_ten/routes/login_signup.dart';
 import 'package:rank_ten/routes/main_screen.dart';
 import 'package:rank_ten/routes/splash.dart';
@@ -13,7 +14,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   var themeProvider = DarkThemeProvider();
-  var mainUserBloc;
+  var mainUserProvider = MainUserProvider();
 
   @override
   void initState() {
@@ -27,8 +28,11 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => themeProvider,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => themeProvider),
+        ChangeNotifierProvider(create: (context) => mainUserProvider)
+      ],
       child: Consumer<DarkThemeProvider>(
           builder: (BuildContext context, value, Widget child) {
         return MaterialApp(
