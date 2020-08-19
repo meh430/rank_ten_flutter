@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:rank_ten/preferences_store.dart';
 
 class DarkThemeProvider with ChangeNotifier {

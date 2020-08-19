@@ -14,7 +14,7 @@ class Authorization {
     return user;
   }
 
-  static Future<dynamic> loginUser({String userName, String password}) async {
+  static Future<User> loginUser({String userName, String password}) async {
     var response = await _api.post(
         endpoint: '/login',
         data: {'user_name': userName, 'password': password});
@@ -24,7 +24,7 @@ class Authorization {
     return user;
   }
 
-  static Future<dynamic> signupUser(
+  static Future<User> signupUser(
       {String userName, String password, String bio}) async {
     var response = await _api.post(
         endpoint: '/signup',

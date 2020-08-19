@@ -1,23 +1,21 @@
-abstract class UserEvent {
-  final String x = "!23";
-}
+abstract class UserEvent {}
 
 class UpdateBioEvent extends UserEvent {
-  final String bio;
+  final String bio, token;
 
-  UpdateBioEvent(this.bio);
+  UpdateBioEvent(this.bio, this.token);
 }
 
 class UpdateProfilePicEvent extends UserEvent {
-  final String profPic;
+  final String profPic, token;
 
-  UpdateProfilePicEvent(this.profPic);
+  UpdateProfilePicEvent(this.profPic, this.token);
 }
 
 class FollowEvent extends UserEvent {
-  final String name;
+  final String name, token;
 
-  FollowEvent(this.name);
+  FollowEvent(this.name, this.token);
 }
 
 class GetUserEvent extends UserEvent {

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rank_ten/app.dart';
 import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/dark_theme_provider.dart';
 
@@ -9,8 +8,7 @@ var _appBarTitles = [
   "Feed",
   "Discover",
   "Search",
-  mainUser?.userName ?? "Mehul"
-];
+  "Profile"];
 
 Center getTempDest(int index) {
   return Center(

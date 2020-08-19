@@ -6,10 +6,6 @@ import 'package:rank_ten/routes/login_signup.dart';
 import 'package:rank_ten/routes/main_screen.dart';
 import 'package:rank_ten/routes/splash.dart';
 
-import 'models/user.dart';
-
-User mainUser;
-
 class App extends StatefulWidget {
   @override
   _AppState createState() => _AppState();
@@ -17,6 +13,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   var themeProvider = DarkThemeProvider();
+  var mainUserBloc;
 
   @override
   void initState() {
