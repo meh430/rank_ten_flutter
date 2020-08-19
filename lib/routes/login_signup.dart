@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rank_ten/api/auth.dart';
 import 'package:rank_ten/components/login.dart';
 import 'package:rank_ten/components/logo.dart';
 import 'package:rank_ten/components/signup.dart';
+import 'package:rank_ten/main_user_provider.dart';
 
 class LoginSignup extends StatefulWidget {
   @override
@@ -18,6 +20,13 @@ class _LoginSignupState extends State<LoginSignup> {
   var _bController = TextEditingController();
   bool _isLogin = true;
   bool _isLoading = false;
+  MainUserProvider userProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<MainUserProvider>(context);
+  }
 
   void _handleLogin(String uName, String pwd) async {
     setState(() {
@@ -31,6 +40,9 @@ class _LoginSignupState extends State<LoginSignup> {
       setState(() {
         _isLoading = false;
       });
+
+      userProvider.jwtToken = userData.jwtToken;
+      userProvider.initMainUser(uName);
       //TODO: push home route
     } catch (e) {
       setState(() {
@@ -53,6 +65,8 @@ class _LoginSignupState extends State<LoginSignup> {
       var userData = await Authorization.signupUser(
           userName: uName, password: pwd, bio: bio);
       print(userData);
+      userProvider.jwtToken = userData.jwtToken;
+      userProvider.initMainUser(uName);
       setState(() {
         _isLoading = false;
       });

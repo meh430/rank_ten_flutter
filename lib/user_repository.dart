@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rank_ten/api/rank_api.dart';
 
 import 'models/user.dart';
@@ -22,7 +23,7 @@ class UserRepository {
     return response;
   }
 
-  Future<dynamic> followUser(String name, String token) async {
+  Future<String> followUser(String name, String token) async {
     final response =
         await _api.post(endpoint: '/follow/$name', bearerToken: token);
 
@@ -31,5 +32,10 @@ class UserRepository {
     } else {
       return "UNFOLLOW";
     }
+  }
+
+  Future<String> likeList(String listId, String token) async {
+    final response =
+        await _api.post(endpoint: '/like/$Icons.list', bearerToken: token);
   }
 }

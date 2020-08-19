@@ -8,6 +8,7 @@ import 'models/user.dart';
 class MainUserProvider with ChangeNotifier {
   User mainUser;
   UserBloc mainUserBloc;
+  String jwtToken;
 
   Stream<Response<User>> get mainUserState => mainUserBloc.userStateStream;
 
