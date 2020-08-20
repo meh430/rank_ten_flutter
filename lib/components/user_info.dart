@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:rank_ten/models/user.dart';
 
 class UserInfo extends StatelessWidget {
+  final User user;
+
+  UserInfo({this.user});
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(),
+      child: Row(
+        children: [
+          RoundedImage(imageUrl: user.profPic),
+          UserStatRow(user: user)
+        ],
+      ),
     );
   }
 }
@@ -40,10 +50,41 @@ class UserStat extends StatelessWidget {
   }
 }
 
-//inherited widget?
 class UserStatRow extends StatelessWidget {
+  final User user;
+
+  UserStatRow({this.user});
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Row(
+      children: <Widget>[
+        UserStat(statLabel: "Rank Points", statCount: user.rankPoints),
+        UserStat(statLabel: "Rank Lists", statCount: user.listNum),
+        UserStat(statLabel: "Following", statCount: user.numFollowing),
+        UserStat(statLabel: "Followers", statCount: user.numFollowers)
+      ],
+    );
+  }
+}
+
+//TODO: make editable?
+class UserBio extends StatelessWidget {
+  final User user;
+
+  UserBio({this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          const Text("Bio"),
+          Text(user.bio),
+          Text("Date Created"),
+          Text(user.dateCreated.toString())
+        ],
+      ),
+    );
   }
 }
