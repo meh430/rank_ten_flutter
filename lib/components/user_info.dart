@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/models/user.dart';
 
+import '../utils.dart';
+
 class UserInfo extends StatelessWidget {
   final User user;
 
@@ -68,10 +70,7 @@ class UserStat extends StatelessWidget {
         children: <Widget>[
           Text(
             statCount.toString(),
-            style: Theme
-                .of(context)
-                .primaryTextTheme
-                .headline6,
+            style: Theme.of(context).primaryTextTheme.headline6,
           ),
           Text(statLabel, style: Theme
               .of(context)
@@ -147,7 +146,7 @@ class UserBio extends StatelessWidget {
                     .of(context)
                     .primaryTextTheme
                     .headline5),
-            Text(user.dateCreated.toString(),
+            Text(Utils.getDate(user.dateCreated),
                 style: Theme
                     .of(context)
                     .primaryTextTheme

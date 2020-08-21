@@ -1,21 +1,5 @@
 import 'package:intl/intl.dart';
 
-const months = [
-  'PLACEHOLDER',
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
-
 class Utils {
   static String getTimeDiff(int timestamp) {
     var now = DateTime.now();
