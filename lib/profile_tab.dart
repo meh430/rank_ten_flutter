@@ -53,11 +53,10 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
             ],
           );
       }
-    } else {
-      return SpinKitFadingCube(
-        size: 50,
-      );
     }
+    return SpinKitFadingCube(
+      size: 50,
+    );
   }
 
   @override

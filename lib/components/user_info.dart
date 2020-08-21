@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/models/user.dart';
 
 class UserInfo extends StatelessWidget {
@@ -11,7 +14,7 @@ class UserInfo extends StatelessWidget {
     return Card(
       child: Row(
         children: [
-          RoundedImage(imageUrl: user.profPic),
+          RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
           UserStatRow(user: user)
         ],
       ),
@@ -21,18 +24,26 @@ class UserInfo extends StatelessWidget {
 
 class RoundedImage extends StatelessWidget {
   final String imageUrl;
+  final String uInitial;
 
-  RoundedImage({@required this.imageUrl});
+  RoundedImage({this.imageUrl, this.uInitial});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: 190.0,
-        height: 190.0,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                fit: BoxFit.fill, image: new NetworkImage(imageUrl))));
+    var image = imageUrl != ""
+        ? Container(
+            width: 100.0,
+            height: 100.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                image: DecorationImage(
+                    fit: BoxFit.fill, image: NetworkImage(imageUrl))))
+        : getProfilePic(uInitial, context);
+
+    return Padding(
+      child: image,
+      padding: EdgeInsets.all(12.0),
+    );
   }
 }
 
@@ -87,4 +98,30 @@ class UserBio extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget getProfilePic(String uInitial, BuildContext context) {
+  var colors = [
+    Colors.red,
+    Colors.green,
+    Colors.amber,
+    Colors.amberAccent,
+    Colors.purple,
+    hanPurple,
+    paraPink
+  ];
+  return Container(
+    width: 100.0,
+    height: 100.0,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        color: colors[Random().nextInt(colors.length)]),
+    child: Center(
+        child: Text(uInitial.toUpperCase(),
+            style: Theme
+                .of(context)
+                .primaryTextTheme
+                .headline2
+                .copyWith(color: Colors.black))),
+  );
 }
