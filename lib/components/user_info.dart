@@ -28,7 +28,7 @@ class UserInfo extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
-          const SizedBox(width: 20),
+          const SizedBox(width: 10),
           UserStatRow(user: user)
         ],
       ),
@@ -99,6 +99,7 @@ class UserStatRow extends StatelessWidget {
             UserStat(statLabel: "Rank Lists", statCount: user.listNum),
           ],
         ),
+        const SizedBox(width: 10),
         Column(
           children: [
             UserStat(statLabel: "Following", statCount: user.numFollowing),
@@ -132,12 +133,15 @@ class UserBio extends StatelessWidget {
             isMain ? BioEditWidget(bio: user.bio) : BioWidget(bio: user.bio),
             const SizedBox(height: 10),
             Text("Date Created",
-                style: Theme.of(context).primaryTextTheme.headline5),
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline5
+                    .copyWith(color: getTitleColor(context))),
             Text(Utils.getDate(user.dateCreated),
                 style: Theme.of(context)
                     .primaryTextTheme
                     .headline4
-                    .copyWith(fontSize: 16))
+                    .copyWith(fontSize: 18))
           ],
         ),
       ),
@@ -159,14 +163,15 @@ class BioWidget extends StatelessWidget {
           style: Theme
               .of(context)
               .primaryTextTheme
-              .headline5,
+              .headline5
+              .copyWith(color: getTitleColor(context)),
         ),
         Text(bio,
             style: Theme
                 .of(context)
                 .primaryTextTheme
                 .headline4
-                .copyWith(fontSize: 16))
+                .copyWith(fontSize: 18))
       ],
     );
   }
@@ -235,8 +240,10 @@ class _BioEditWidgetState extends State<BioEditWidget> {
               style: Theme
                   .of(context)
                   .primaryTextTheme
-                  .headline5,
+                  .headline5
+                  .copyWith(color: getTitleColor(context)),
             ),
+            const SizedBox(width: 10),
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () => setState(() => editing = !editing),
@@ -250,7 +257,7 @@ class _BioEditWidgetState extends State<BioEditWidget> {
                 .of(context)
                 .primaryTextTheme
                 .headline4
-                .copyWith(fontSize: 16))
+                .copyWith(fontSize: 18))
       ],
     );
   }
@@ -280,4 +287,10 @@ Widget getProfilePic(String uInitial, BuildContext context) {
                 .headline2
                 .copyWith(color: Colors.black))),
   );
+}
+
+Color getTitleColor(BuildContext context) {
+  return Provider
+      .of<DarkThemeProvider>(context)
+      .isDark ? lavender : hanPurple;
 }
