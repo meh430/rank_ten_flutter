@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:rank_ten/api/rank_api.dart';
 import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/preferences_store.dart';
@@ -14,7 +15,8 @@ class Authorization {
     return user;
   }
 
-  static Future<User> loginUser({String userName, String password}) async {
+  static Future<User> loginUser(
+      {@required String userName, @required String password}) async {
     var response = await _api.post(
         endpoint: '/login',
         data: {'user_name': userName, 'password': password});
@@ -25,7 +27,9 @@ class Authorization {
   }
 
   static Future<User> signupUser(
-      {String userName, String password, String bio}) async {
+      {@required String userName,
+      @required String password,
+      @required String bio}) async {
     var response = await _api.post(
         endpoint: '/signup',
         data: {'user_name': userName, 'password': password, 'bio': bio});

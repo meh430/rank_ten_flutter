@@ -56,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
         onPressed: () {},
         backgroundColor: paraPink,
         tooltip: 'Add',
-        child: Icon(Icons.add, size: 35),
+        child: const Icon(Icons.add, size: 35),
         elevation: 4.0,
       ),
       bottomNavigationBar: BottomAppBar(
@@ -68,32 +68,32 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: IconButton(
                     color: getTabItemColor(0),
                     onPressed: () => _onItemTapped(0),
-                    icon: Icon(Icons.list),
+                    icon: const Icon(Icons.list),
                     iconSize: 35)),
             Padding(
-                padding: EdgeInsets.only(right: 40, top: 10, bottom: 10),
+                padding: const EdgeInsets.only(right: 40, top: 10, bottom: 10),
                 child: IconButton(
                     color: getTabItemColor(1),
                     onPressed: () => _onItemTapped(1),
-                    icon: Icon(Icons.navigation),
+                    icon: const Icon(Icons.navigation),
                     iconSize: 35)),
             Padding(
-                padding: EdgeInsets.only(left: 40, top: 10, bottom: 10),
+                padding: const EdgeInsets.only(left: 40, top: 10, bottom: 10),
                 child: IconButton(
                     color: getTabItemColor(2),
                     onPressed: () => _onItemTapped(2),
-                    icon: Icon(Icons.search),
+                    icon: const Icon(Icons.search),
                     iconSize: 35)),
             Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: IconButton(
                     color: getTabItemColor(3),
                     onPressed: () => _onItemTapped(3),
-                    icon: Icon(Icons.account_circle),
+                    icon: const Icon(Icons.account_circle),
                     iconSize: 35))
           ],
         ),
@@ -133,7 +133,7 @@ class _MainAppBarState extends State<MainAppBar> {
         )
       ],
       title: Padding(
-          padding: EdgeInsets.only(left: 12.0, top: 12.0),
+          padding: const EdgeInsets.only(left: 12.0, top: 12.0),
           child: Text(_appBarTitles[widget.index],
               style: Theme.of(context).primaryTextTheme.headline3)),
     );

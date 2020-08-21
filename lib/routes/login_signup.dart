@@ -37,13 +37,15 @@ class _LoginSignupState extends State<LoginSignup> {
       var userData =
           await Authorization.loginUser(userName: uName, password: pwd);
       print(userData);
+
+      userProvider.jwtToken = userData.jwtToken;
+      userProvider.initMainUser(userData);
+
       setState(() {
         _isLoading = false;
       });
 
-      userProvider.jwtToken = userData.jwtToken;
-      await userProvider.initMainUser(uName);
-      //TODO: push home route
+      //push home route
       Navigator.pop(context);
       Navigator.pushNamed(context, '/main');
     } catch (e) {
@@ -68,11 +70,12 @@ class _LoginSignupState extends State<LoginSignup> {
           userName: uName, password: pwd, bio: bio);
       print(userData);
       userProvider.jwtToken = userData.jwtToken;
-      await userProvider.initMainUser(uName);
+      userProvider.initMainUser(userData);
       setState(() {
         _isLoading = false;
       });
-      //TODO: push home route
+
+      //push home route
       Navigator.pop(context);
       Navigator.pushNamed(context, '/main');
     } catch (e) {
@@ -97,32 +100,41 @@ class _LoginSignupState extends State<LoginSignup> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Flexible(child: SizedBox(height: 60), fit: FlexFit.tight, flex: 1),
+            Flexible(
+                child: const SizedBox(height: 60), fit: FlexFit.tight, flex: 1),
             Logo(),
-            Flexible(child: SizedBox(height: 100), fit: FlexFit.tight, flex: 1),
+            Flexible(
+                child: const SizedBox(height: 100),
+                fit: FlexFit.tight,
+                flex: 1),
             _isLogin
                 ? Login(
-                    submitLogin: _handleLogin,
-                    isLoading: _isLoading,
-                    pController: _pController,
-                    uController: _uController)
+                submitLogin: _handleLogin,
+                isLoading: _isLoading,
+                pController: _pController,
+                uController: _uController)
                 : Signup(
-                    submitSignup: _handleSignup,
-                    isLoading: _isLoading,
-                    pController: _pController,
-                    uController: _uController,
-                    bController: _bController,
-                    pConfirmController: _pConfirmController),
-            Flexible(child: SizedBox(height: 70), fit: FlexFit.tight, flex: 1),
+                submitSignup: _handleSignup,
+                isLoading: _isLoading,
+                pController: _pController,
+                uController: _uController,
+                bController: _bController,
+                pConfirmController: _pConfirmController),
+            Flexible(
+                child: const SizedBox(height: 70), fit: FlexFit.tight, flex: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(_isLogin ? "Don't have an account? " : "Have an account? ",
-                    style: Theme.of(context).primaryTextTheme.headline6),
+                    style: Theme
+                        .of(context)
+                        .primaryTextTheme
+                        .headline6),
                 GestureDetector(
                   onTap: () => setState(() => _isLogin = !_isLogin),
                   child: Text(_isLogin ? "Sign up!" : "Log in!",
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .primaryTextTheme
                           .headline6
                           .copyWith(
@@ -131,7 +143,7 @@ class _LoginSignupState extends State<LoginSignup> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             )
           ],

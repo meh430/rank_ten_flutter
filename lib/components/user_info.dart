@@ -4,7 +4,7 @@ import 'package:rank_ten/models/user.dart';
 class UserInfo extends StatelessWidget {
   final User user;
 
-  UserInfo({this.user});
+  UserInfo({@required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +22,16 @@ class UserInfo extends StatelessWidget {
 class RoundedImage extends StatelessWidget {
   final String imageUrl;
 
-  RoundedImage({this.imageUrl});
+  RoundedImage({@required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         width: 190.0,
         height: 190.0,
-        decoration: new BoxDecoration(
+        decoration: BoxDecoration(
             shape: BoxShape.circle,
-            image: new DecorationImage(
+            image: DecorationImage(
                 fit: BoxFit.fill, image: new NetworkImage(imageUrl))));
   }
 }
@@ -40,7 +40,7 @@ class UserStat extends StatelessWidget {
   final int statCount;
   final String statLabel;
 
-  UserStat({this.statLabel, this.statCount});
+  UserStat({@required this.statLabel, @required this.statCount});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class UserStat extends StatelessWidget {
 class UserStatRow extends StatelessWidget {
   final User user;
 
-  UserStatRow({this.user});
+  UserStatRow({@required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class UserStatRow extends StatelessWidget {
 class UserBio extends StatelessWidget {
   final User user;
 
-  UserBio({this.user});
+  UserBio({@required this.user});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rank_ten/app_theme.dart';
 
-const bRadius = Radius.circular(15.0);
+const bRadius = const Radius.circular(15.0);
 const rankScale = 0.62;
 const tenScale = 0.38;
 
@@ -18,9 +18,9 @@ class Logo extends StatelessWidget {
           Positioned(
             right: 5.0,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: palePurple,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topRight: bRadius, bottomRight: bRadius)),
               width: totalWidth * tenScale,
               height: height,
@@ -36,7 +36,7 @@ class Logo extends StatelessWidget {
           Positioned(
             left: 5.0,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: hanPurple, borderRadius: BorderRadius.all(bRadius)),
               width: totalWidth * rankScale,
               height: height,

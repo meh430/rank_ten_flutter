@@ -41,8 +41,8 @@ class _SplashState extends State<Splash> {
         print("Token valid. Parsed user data");
         print(userData);
         mainUserProvider.jwtToken = token;
-        await mainUserProvider.initMainUser(userData.userName);
-
+        mainUserProvider.initMainUser(userData);
+        print("Token valid. Parsed user data");
         Navigator.pop(context);
         Navigator.pushNamed(context, '/main');
       } catch (e) {
@@ -68,10 +68,11 @@ class _SplashState extends State<Splash> {
       try {
         var userData = await Authorization.loginUser(
             userName: userName, password: password);
-        print("Credentials valid. Parsed user data");
         print(userData);
         userProvider.jwtToken = userData.jwtToken;
-        await userProvider.initMainUser(userData.userName);
+        userProvider.initMainUser(userData);
+        print("Credentials valid. Parsed user data");
+
         Navigator.pop(context);
         Navigator.pushNamed(context, '/main');
       } catch (e) {
@@ -92,8 +93,8 @@ class _SplashState extends State<Splash> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
           Logo(),
-          SizedBox(height: 200, width: 50),
-          SpinKitCubeGrid(
+          const SizedBox(height: 200, width: 50),
+          const SpinKitCubeGrid(
             color: hanPurple,
             size: 70.0,
           )

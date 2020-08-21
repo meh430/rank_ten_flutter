@@ -14,7 +14,7 @@ OutlineInputBorder getInputStyle(bool isDark) {
   return OutlineInputBorder(
       borderSide:
           BorderSide(color: isDark ? palePurple : Colors.black, width: 2.0),
-      borderRadius: BorderRadius.all(Radius.circular(20.0)));
+      borderRadius: BorderRadius.circular(40.0));
 }
 
 class SubmitButton extends StatelessWidget {
@@ -22,28 +22,31 @@ class SubmitButton extends StatelessWidget {
   final bool isLoading;
   final bool isLogin;
 
-  SubmitButton({this.submitData, this.isLoading, this.isLogin});
+  SubmitButton({@required this.submitData,
+    @required this.isLoading,
+    @required this.isLogin});
 
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? SpinKitDoubleBounce(
-            color: hanPurple,
-            size: 50.0,
-          )
+        ? const SpinKitDoubleBounce(
+      color: hanPurple,
+      size: 50.0,
+    )
         : RaisedButton(
-            padding:
-                EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
-            color: paraPink,
-            onPressed: () => submitData(context),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40.0),
-            ),
-            child: Text(isLogin ? "Login" : "Sign Up",
-                style: Theme.of(context)
-                    .primaryTextTheme
-                    .headline3
-                    .copyWith(color: palePurple)),
+      padding: const EdgeInsets.only(
+          left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
+      color: paraPink,
+      onPressed: () => submitData(context),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40.0),
+      ),
+      child: Text(isLogin ? "Login" : "Sign Up",
+          style: Theme
+              .of(context)
+              .primaryTextTheme
+              .headline3
+              .copyWith(color: palePurple)),
           );
   }
 }
@@ -74,7 +77,10 @@ class Login extends StatelessWidget {
   final pController;
   final _fKey = GlobalKey<FormState>();
 
-  Login({this.submitLogin, this.isLoading, this.uController, this.pController});
+  Login({@required this.submitLogin,
+    @required this.isLoading,
+    @required this.uController,
+    @required this.pController});
 
   submitForm(BuildContext context) {
     if (_fKey.currentState.validate()) {
@@ -94,7 +100,7 @@ class Login extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           NameField(uController: uController, labelStyle: labelStyle),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           PasswordField(
               pController: pController,
               labelStyle: labelStyle,
@@ -106,7 +112,7 @@ class Login extends StatelessWidget {
       child: Column(
         children: <Widget>[
           FormWrapper(textFields: textFields),
-          SizedBox(height: 80),
+          const SizedBox(height: 80),
           SubmitButton(
               isLoading: isLoading, isLogin: true, submitData: submitForm)
         ],
@@ -121,11 +127,10 @@ class PasswordField extends StatefulWidget {
   final fieldValidator;
   final bool confirm;
 
-  PasswordField(
-      {this.pController,
-      this.labelStyle,
-      this.fieldValidator,
-      this.confirm = false});
+  PasswordField({@required this.pController,
+    @required this.labelStyle,
+    @required this.fieldValidator,
+    this.confirm = false});
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -167,7 +172,7 @@ class NameField extends StatelessWidget {
   final uController;
   final labelStyle;
 
-  NameField({this.uController, this.labelStyle});
+  NameField({@required this.uController, @required this.labelStyle});
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +184,7 @@ class NameField extends StatelessWidget {
         validator: validateUsername,
         decoration: InputDecoration(
             labelText: 'Username',
-            contentPadding: EdgeInsets.all(20.0),
+            contentPadding: const EdgeInsets.all(20.0),
             labelStyle: labelStyle,
             border: getInputStyle(isDark),
             enabledBorder: getInputStyle(isDark),
@@ -190,7 +195,7 @@ class NameField extends StatelessWidget {
 class FormWrapper extends StatelessWidget {
   final textFields;
 
-  FormWrapper({this.textFields});
+  FormWrapper({@required this.textFields});
 
   @override
   Widget build(BuildContext context) {
@@ -199,11 +204,11 @@ class FormWrapper extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0),
       ),
-      margin: EdgeInsets.only(left: 40, right: 40, bottom: 10.0),
+      margin: const EdgeInsets.only(left: 40, right: 40, bottom: 10.0),
       child: Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         child: Container(
-          margin: EdgeInsets.all(15.0),
+          margin: const EdgeInsets.all(15.0),
           child: textFields,
         ),
       ),

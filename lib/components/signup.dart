@@ -26,12 +26,12 @@ class Signup extends StatelessWidget {
   final _fKey = GlobalKey<FormState>();
 
   Signup(
-      {this.submitSignup,
-      this.isLoading,
-      this.pController,
-      this.uController,
-      this.pConfirmController,
-      this.bController});
+      {@required this.submitSignup,
+      @required this.isLoading,
+      @required this.pController,
+      @required this.uController,
+      @required this.pConfirmController,
+      @required this.bController});
 
   submitForm(BuildContext context) {
     if (pController.text != pConfirmController.text) {
@@ -56,19 +56,19 @@ class Signup extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           NameField(uController: uController, labelStyle: labelStyle),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           PasswordField(
               pController: pController,
               labelStyle: labelStyle,
               fieldValidator: validatePwd),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           PasswordField(
             pController: pConfirmController,
             labelStyle: labelStyle,
             fieldValidator: validatePwd,
             confirm: true,
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           getBioField(bController, labelStyle, context)
         ]);
 
@@ -77,7 +77,7 @@ class Signup extends StatelessWidget {
       child: Column(
         children: <Widget>[
           FormWrapper(textFields: textFields),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           SubmitButton(
               isLoading: isLoading, isLogin: false, submitData: submitForm)
         ],
@@ -96,7 +96,7 @@ TextFormField getBioField(TextEditingController bController,
       maxLines: 3,
       decoration: InputDecoration(
           labelText: 'Bio',
-          contentPadding: EdgeInsets.all(20.0),
+          contentPadding: const EdgeInsets.all(20.0),
           labelStyle: labelStyle,
           border: getInputStyle(themeChange.isDark),
           enabledBorder: getInputStyle(themeChange.isDark),

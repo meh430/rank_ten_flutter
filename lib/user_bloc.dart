@@ -23,14 +23,22 @@ class UserBloc {
 
   StreamSink<UserEvent> get userEventSink => _userEventController.sink;
 
-  UserBloc(String name) {
+  UserBloc({String name, bool isMain = false, User mainUser}) {
     _userRepository = UserRepository();
-    _userStateController = StreamController<Response<User>>.broadcast();
+    if (isMain) {
+      _userStateController = StreamController<Response<User>>.broadcast();
+    } else {
+      _userStateController = StreamController<Response<User>>();
+    }
+
     _userEventController = StreamController<UserEvent>();
 
     _userEventController.stream.listen(_eventToState);
-
-    userEventSink.add(GetUserEvent(name));
+    if (isMain) {
+      _user = mainUser;
+    } else {
+      userEventSink.add(GetUserEvent(name));
+    }
   }
 
   //update main user on relevant events

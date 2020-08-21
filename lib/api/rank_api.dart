@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rank_ten/api/rank_exceptions.dart';
 
 class RankApi {
   final _baseUrl = 'http://192.168.0.22:5000';
 
-  Future<dynamic> get({String endpoint, String bearerToken = ""}) async {
+  Future<dynamic> get(
+      {@required String endpoint, String bearerToken = ""}) async {
     var jsonResponse;
 
     try {
@@ -23,7 +25,7 @@ class RankApi {
   }
 
   Future<dynamic> post(
-      {String endpoint,
+      {@required String endpoint,
       Map<String, dynamic> data,
       String bearerToken = ""}) async {
     if (data == null) {
@@ -43,10 +45,9 @@ class RankApi {
     return jsonResponse;
   }
 
-  Future<dynamic> put(
-      {String endpoint,
-      Map<String, dynamic> data,
-      String bearerToken = ""}) async {
+  Future<dynamic> put({@required String endpoint,
+    Map<String, dynamic> data,
+    String bearerToken = ""}) async {
     if (data == null) {
       data = Map<String, String>();
     }
