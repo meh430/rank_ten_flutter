@@ -41,7 +41,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     if (snapshot.hasData) {
       switch (snapshot.data.status) {
         case Status.LOADING:
-          return SpinKitCircle(
+          return SpinKitRipple(
             size: 50,
             color: hanPurple,
           );

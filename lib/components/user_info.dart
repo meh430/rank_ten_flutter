@@ -45,13 +45,9 @@ class RoundedImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var image = imageUrl != ""
-        ? Container(
-            width: 120.0,
-            height: 120.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                image: DecorationImage(
-                    fit: BoxFit.fill, image: NetworkImage(imageUrl))))
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.network(imageUrl, height: 130, width: 130))
         : getProfilePic(uInitial, context);
 
     return Padding(
