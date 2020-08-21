@@ -1,10 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
+import 'package:rank_ten/dark_theme_provider.dart';
+import 'package:rank_ten/main_user_provider.dart';
 import 'package:rank_ten/models/user.dart';
+import 'package:rank_ten/user_events.dart';
 
 import '../utils.dart';
+import 'login.dart';
 
 class UserInfo extends StatelessWidget {
   final User user;
@@ -72,10 +77,7 @@ class UserStat extends StatelessWidget {
             statCount.toString(),
             style: Theme.of(context).primaryTextTheme.headline6,
           ),
-          Text(statLabel, style: Theme
-              .of(context)
-              .primaryTextTheme
-              .headline6)
+          Text(statLabel, style: Theme.of(context).primaryTextTheme.headline6)
         ],
       ),
     );
@@ -108,11 +110,11 @@ class UserStatRow extends StatelessWidget {
   }
 }
 
-//TODO: make editable?
 class UserBio extends StatelessWidget {
   final User user;
+  final bool isMain;
 
-  UserBio({@required this.user});
+  UserBio({@required this.user, this.isMain = false});
 
   @override
   Widget build(BuildContext context) {
@@ -127,19 +129,7 @@ class UserBio extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Bio",
-              style: Theme
-                  .of(context)
-                  .primaryTextTheme
-                  .headline5,
-            ),
-            Text(user.bio,
-                style: Theme
-                    .of(context)
-                    .primaryTextTheme
-                    .headline4
-                    .copyWith(fontSize: 16)),
+            isMain ? BioEditWidget(bio: user.bio) : BioWidget(bio: user.bio),
             const SizedBox(height: 10),
             Text("Date Created",
                 style: Theme
@@ -155,6 +145,116 @@ class UserBio extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BioWidget extends StatelessWidget {
+  final String bio;
+
+  BioWidget({@required this.bio});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          "Bio",
+          style: Theme
+              .of(context)
+              .primaryTextTheme
+              .headline5,
+        ),
+        Text(bio,
+            style: Theme
+                .of(context)
+                .primaryTextTheme
+                .headline4
+                .copyWith(fontSize: 16))
+      ],
+    );
+  }
+}
+
+class BioEditWidget extends StatefulWidget {
+  final String bio;
+
+  BioEditWidget({@required this.bio});
+
+  @override
+  _BioEditWidgetState createState() => _BioEditWidgetState();
+}
+
+class _BioEditWidgetState extends State<BioEditWidget> {
+  String _currBio;
+  bool editing = false;
+  TextEditingController bController;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() => _currBio = widget.bio);
+    bController = TextEditingController(text: widget.bio);
+  }
+
+  Widget getBioEditField() {
+    final userProvider = Provider.of<MainUserProvider>(context);
+    final themeChange = Provider.of<DarkThemeProvider>(context);
+    final labelStyle =
+    Theme
+        .of(context)
+        .primaryTextTheme
+        .headline6
+        .copyWith(fontSize: 16);
+    return TextField(
+      onSubmitted: (String value) {
+        if (value.isEmpty) {
+          Scaffold.of(context).showSnackBar(Utils.getSB('Bio cannot be empty'));
+        } else {
+          editing = false;
+          userProvider.mainUserBloc.userEventSink
+              .add(UpdateBioEvent(value, userProvider.jwtToken));
+        }
+      },
+      textInputAction: TextInputAction.done,
+      controller: bController,
+      decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(20.0),
+          labelStyle: labelStyle,
+          border: getInputStyle(themeChange.isDark),
+          enabledBorder: getInputStyle(themeChange.isDark),
+          focusedBorder: getInputStyle(themeChange.isDark)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              "Bio",
+              style: Theme
+                  .of(context)
+                  .primaryTextTheme
+                  .headline5,
+            ),
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => setState(() => editing = !editing),
+            )
+          ],
+        ),
+        editing
+            ? getBioEditField()
+            : Text(_currBio,
+            style: Theme
+                .of(context)
+                .primaryTextTheme
+                .headline4
+                .copyWith(fontSize: 16))
+      ],
     );
   }
 }

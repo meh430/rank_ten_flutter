@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -31,5 +32,9 @@ class Utils {
   static String getDate(int timestamp) {
     return DateFormat('MMM dd, yyyy')
         .format(DateTime.fromMillisecondsSinceEpoch(timestamp));
+  }
+
+  static SnackBar getSB(String text) {
+    return SnackBar(content: Text(text), behavior: SnackBarBehavior.floating);
   }
 }

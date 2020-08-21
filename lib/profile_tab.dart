@@ -7,6 +7,7 @@ import 'package:rank_ten/components/user_lists.dart';
 import 'package:rank_ten/main_user_provider.dart';
 import 'package:rank_ten/user_bloc.dart';
 import 'package:rank_ten/user_events.dart';
+import 'package:rank_ten/utils.dart';
 
 import 'api/response.dart';
 import 'models/user.dart';
@@ -47,15 +48,14 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
           );
           break;
         case Status.ERROR:
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text("Error loading user info"),
-          ));
+          Scaffold.of(context)
+              .showSnackBar(Utils.getSB('Error getting user data'));
           break;
         case Status.COMPLETED:
           return Column(
             children: [
               UserInfo(user: snapshot.data.value),
-              UserBio(user: snapshot.data.value)
+              UserBio(user: snapshot.data.value, isMain: true)
             ],
           );
       }
