@@ -18,16 +18,16 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 3000), () {
+    /*Future.delayed(Duration(milliseconds: 3000), () {
       Navigator.pop(context);
       Navigator.pushNamed(context, '/main');
-    });
-    //startUpFlow();
+    });*/
+    startUpFlow();
   }
 
   void startUpFlow() async {
     final MainUserProvider mainUserProvider =
-        Provider.of<MainUserProvider>(context);
+        Provider.of<MainUserProvider>(context, listen: false);
     var store = PreferencesStore();
     //store.clearAll();
     var token = await store.getToken();
@@ -41,9 +41,10 @@ class _SplashState extends State<Splash> {
         print("Token valid. Parsed user data");
         print(userData);
         mainUserProvider.jwtToken = token;
-        mainUserProvider.initMainUser(userData.userName);
+        await mainUserProvider.initMainUser(userData.userName);
 
-        //TODO: push home route
+        Navigator.pop(context);
+        Navigator.pushNamed(context, '/main');
       } catch (e) {
         print("Token invalid...");
         checkForPwd(store, mainUserProvider);
@@ -70,8 +71,9 @@ class _SplashState extends State<Splash> {
         print("Credentials valid. Parsed user data");
         print(userData);
         userProvider.jwtToken = userData.jwtToken;
-        userProvider.initMainUser(userData.userName);
-        //TODO: push home route
+        await userProvider.initMainUser(userData.userName);
+        Navigator.pop(context);
+        Navigator.pushNamed(context, '/main');
       } catch (e) {
         print("Credentials invalid. Starting login/signup flow");
         Navigator.pushNamed(context, '/login_signup');

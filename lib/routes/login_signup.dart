@@ -25,7 +25,7 @@ class _LoginSignupState extends State<LoginSignup> {
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<MainUserProvider>(context);
+    userProvider = Provider.of<MainUserProvider>(context, listen: false);
   }
 
   void _handleLogin(String uName, String pwd) async {
@@ -42,8 +42,10 @@ class _LoginSignupState extends State<LoginSignup> {
       });
 
       userProvider.jwtToken = userData.jwtToken;
-      userProvider.initMainUser(uName);
+      await userProvider.initMainUser(uName);
       //TODO: push home route
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/main');
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -66,11 +68,13 @@ class _LoginSignupState extends State<LoginSignup> {
           userName: uName, password: pwd, bio: bio);
       print(userData);
       userProvider.jwtToken = userData.jwtToken;
-      userProvider.initMainUser(uName);
+      await userProvider.initMainUser(uName);
       setState(() {
         _isLoading = false;
       });
       //TODO: push home route
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/main');
     } catch (e) {
       setState(() {
         _isLoading = false;

@@ -81,7 +81,7 @@ class UserBio extends StatelessWidget {
         children: [
           const Text("Bio"),
           Text(user.bio),
-          Text("Date Created"),
+          const Text("Date Created"),
           Text(user.dateCreated.toString())
         ],
       ),

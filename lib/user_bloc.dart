@@ -21,18 +21,20 @@ class UserBloc {
   //add events
   StreamController _userEventController;
 
-  StreamSink<UserEvent> get userEventSink => _userStateController.sink;
+  StreamSink<UserEvent> get userEventSink => _userEventController.sink;
 
   UserBloc(String name) {
     _userRepository = UserRepository();
-    _userStateController = StreamController<Response<User>>();
+    _userStateController = StreamController<Response<User>>.broadcast();
     _userEventController = StreamController<UserEvent>();
 
     _userEventController.stream.listen(_eventToState);
+
+    userEventSink.add(GetUserEvent(name));
   }
 
   //update main user on relevant events
-  void _eventToState(UserEvent event) async {
+  void _eventToState(dynamic event) async {
     try {
       if (event is GetUserEvent) {
         _userStateSink.add(Response.loading("Loading user"));

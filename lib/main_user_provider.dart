@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/user_bloc.dart';
 import 'package:rank_ten/user_events.dart';
+import 'package:rank_ten/user_repository.dart';
 
 import 'models/user.dart';
 
@@ -16,6 +17,8 @@ class MainUserProvider with ChangeNotifier {
 
   void initMainUser(String name) async {
     mainUserBloc = UserBloc(name);
+    mainUser = await UserRepository().getUser(name);
+    print(mainUser.userName);
     mainUserState.listen((Response response) {
       currentStatus = response.status;
       if (response.status == Status.COMPLETED) {

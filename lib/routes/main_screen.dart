@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/dark_theme_provider.dart';
+import 'package:rank_ten/main_user_provider.dart';
+import 'package:rank_ten/profile_tab.dart';
 
-var _appBarTitles = [
-  "Feed",
-  "Discover",
-  "Search",
-  "Profile"];
+var _appBarTitles = ["Feed", "Discover", "Search"];
 
 Center getTempDest(int index) {
   return Center(
@@ -23,7 +21,16 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currIndex = 0;
-  static final _destinations = List.generate(4, (index) => getTempDest(index));
+  List<Widget> _destinations = List.generate(3, (index) => getTempDest(index));
+
+  @override
+  void initState() {
+    super.initState();
+    _appBarTitles.add(Provider.of<MainUserProvider>(context, listen: false)
+        .mainUser
+        .userName);
+    _destinations.add(ProfileTab());
+  }
 
   void _onItemTapped(int index) {
     setState(() {
