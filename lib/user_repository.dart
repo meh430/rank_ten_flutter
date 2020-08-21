@@ -27,15 +27,28 @@ class UserRepository {
     final response =
         await _api.post(endpoint: '/follow/$name', bearerToken: token);
 
-    if (response['message'].contains("follow")) {
-      return "FOLLOW";
-    } else {
+    if (response['message'].contains("unfollow")) {
       return "UNFOLLOW";
+    } else {
+      return "FOLLOW";
     }
   }
 
   Future<String> likeList(String listId, String token) async {
     final response =
         await _api.post(endpoint: '/like/$Icons.list', bearerToken: token);
+
+    if (response['message'].contains("unliked")) {
+      return "UNLIKED";
+    } else {
+      return "LIKED";
+    }
+  }
+
+  Future<Set<String>> getLikedListIds(String name, String token) async {
+    final response =
+        await _api.get(endpoint: '/likes/1?ids=True', bearerToken: token);
+    return Set.from(
+        List.generate(response.length, (index) => response[index].toString()));
   }
 }

@@ -38,7 +38,6 @@ class _SplashState extends State<Splash> {
       //ensure token validity
       try {
         var userData = (await Authorization.tokenValid(token)) as User;
-        print("Token valid. Parsed user data");
         print(userData);
         mainUserProvider.jwtToken = token;
         mainUserProvider.initMainUser(userData);

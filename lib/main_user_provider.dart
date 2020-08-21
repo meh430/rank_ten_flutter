@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/user_bloc.dart';
 import 'package:rank_ten/user_events.dart';
+import 'package:rank_ten/user_repository.dart';
 
 import 'models/user.dart';
 
@@ -14,9 +15,12 @@ class MainUserProvider with ChangeNotifier {
 
   Status currentStatus = Status.IDLE;
 
-  void initMainUser(User user) {
+  Future<void> initMainUser(User user) async {
     mainUserBloc = UserBloc(isMain: true, mainUser: user);
     mainUser = user;
+    mainUser.likedLists =
+        await UserRepository().getLikedListIds(mainUser.userName, jwtToken);
+    print(mainUser.likedLists);
     print(mainUser.userName);
     mainUserState.listen((Response response) {
       currentStatus = response.status;

@@ -10,6 +10,7 @@ class User {
   int numComments;
   int listNum;
   String jwtToken;
+  Set<String> likedLists;
 
   User(
       {this.id,
@@ -22,7 +23,8 @@ class User {
       this.rankPoints,
       this.numComments,
       this.listNum,
-      this.jwtToken});
+      this.jwtToken,
+      this.likedLists});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['_id'] != null ? json['_id'][r'$oid'] : null;
