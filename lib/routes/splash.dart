@@ -77,10 +77,12 @@ class _SplashState extends State<Splash> {
         Navigator.pushNamed(context, '/main');
       } catch (e) {
         print("Credentials invalid. Starting login/signup flow");
+        Navigator.pop(context);
         Navigator.pushNamed(context, '/login_signup');
       }
     } else {
       print("Credentials not present. Starting login/signup flow");
+      Navigator.pop(context);
       Navigator.pushNamed(context, '/login_signup');
     }
   }

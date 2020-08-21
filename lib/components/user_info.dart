@@ -132,13 +132,9 @@ class UserBio extends StatelessWidget {
             isMain ? BioEditWidget(bio: user.bio) : BioWidget(bio: user.bio),
             const SizedBox(height: 10),
             Text("Date Created",
-                style: Theme
-                    .of(context)
-                    .primaryTextTheme
-                    .headline5),
+                style: Theme.of(context).primaryTextTheme.headline5),
             Text(Utils.getDate(user.dateCreated),
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .primaryTextTheme
                     .headline4
                     .copyWith(fontSize: 16))
@@ -200,12 +196,7 @@ class _BioEditWidgetState extends State<BioEditWidget> {
   Widget getBioEditField() {
     final userProvider = Provider.of<MainUserProvider>(context);
     final themeChange = Provider.of<DarkThemeProvider>(context);
-    final labelStyle =
-    Theme
-        .of(context)
-        .primaryTextTheme
-        .headline6
-        .copyWith(fontSize: 16);
+
     return TextField(
       onSubmitted: (String value) {
         if (value.isEmpty) {
@@ -218,9 +209,15 @@ class _BioEditWidgetState extends State<BioEditWidget> {
       },
       textInputAction: TextInputAction.done,
       controller: bController,
+      maxLines: null,
+      style:
+      Theme
+          .of(context)
+          .primaryTextTheme
+          .headline4
+          .copyWith(fontSize: 16),
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(20.0),
-          labelStyle: labelStyle,
           border: getInputStyle(themeChange.isDark),
           enabledBorder: getInputStyle(themeChange.isDark),
           focusedBorder: getInputStyle(themeChange.isDark)),

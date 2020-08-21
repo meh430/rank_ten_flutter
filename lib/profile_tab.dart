@@ -5,6 +5,7 @@ import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/components/user_info.dart';
 import 'package:rank_ten/components/user_lists.dart';
 import 'package:rank_ten/main_user_provider.dart';
+import 'package:rank_ten/preferences_store.dart';
 import 'package:rank_ten/user_bloc.dart';
 import 'package:rank_ten/user_events.dart';
 import 'package:rank_ten/utils.dart';
@@ -15,9 +16,7 @@ import 'models/user.dart';
 class ProfileTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [UserInfoBuilder(), UserLists()],
-    );
+    return UserInfoBuilder();
   }
 }
 
@@ -53,9 +52,12 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
           break;
         case Status.COMPLETED:
           return Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
               UserInfo(user: snapshot.data.value),
-              UserBio(user: snapshot.data.value, isMain: true)
+              UserBio(user: snapshot.data.value, isMain: true),
+              UserLists(),
+              LogOutButton()
             ],
           );
       }
@@ -80,6 +82,31 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
             initialData: Response.completed(_userProvider.mainUser),
             builder: builderFunction),
       ),
+    );
+  }
+}
+
+class LogOutButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      padding:
+          const EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
+      color: paraPink,
+      onPressed: () {
+        PreferencesStore().clearAll();
+        Provider.of<MainUserProvider>(context, listen: false).logOut();
+        Navigator.pop(context);
+        Navigator.pushNamed(context, '/login_signup');
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40.0),
+      ),
+      child: Text("Log Out",
+          style: Theme.of(context)
+              .primaryTextTheme
+              .headline3
+              .copyWith(color: palePurple)),
     );
   }
 }

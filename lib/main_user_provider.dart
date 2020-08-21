@@ -32,4 +32,10 @@ class MainUserProvider with ChangeNotifier {
     mainUserBloc.userEventSink.add(event);
     notifyListeners();
   }
+
+  void logOut() {
+    mainUserBloc.dispose();
+    mainUser = null;
+    jwtToken = null;
+  }
 }
