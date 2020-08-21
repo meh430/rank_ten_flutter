@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/components/user_info.dart';
 import 'package:rank_ten/components/user_lists.dart';
 import 'package:rank_ten/main_user_provider.dart';
 import 'package:rank_ten/user_bloc.dart';
+import 'package:rank_ten/user_events.dart';
 
 import 'api/response.dart';
+import 'models/user.dart';
 
 class ProfileTab extends StatelessWidget {
   @override
@@ -38,7 +41,10 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     if (snapshot.hasData) {
       switch (snapshot.data.status) {
         case Status.LOADING:
-          return SpinKitFadingCube(size: 50);
+          return SpinKitCircle(
+            size: 50,
+            color: hanPurple,
+          );
           break;
         case Status.ERROR:
           Scaffold.of(context).showSnackBar(SnackBar(
@@ -61,9 +67,19 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: _mainUserBloc.userStateStream,
-        initialData: Response.completed(_userProvider.mainUser),
-        builder: builderFunction);
+    return RefreshIndicator(
+      onRefresh: () => Future.delayed(
+          Duration(milliseconds: 0),
+          () => _mainUserBloc.userEventSink
+              .add(GetUserEvent(_userProvider.mainUser.userName))),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: const AlwaysScrollableScrollPhysics()),
+        child: StreamBuilder<Response<User>>(
+            stream: _mainUserBloc.userStateStream,
+            initialData: Response.completed(_userProvider.mainUser),
+            builder: builderFunction),
+      ),
+    );
   }
 }
