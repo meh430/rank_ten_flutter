@@ -12,9 +12,16 @@ class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.all(10.0),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
       child: Row(
+        mainAxisSize: MainAxisSize.max,
         children: [
           RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
+          const SizedBox(width: 20),
           UserStatRow(user: user)
         ],
       ),
@@ -32,8 +39,8 @@ class RoundedImage extends StatelessWidget {
   Widget build(BuildContext context) {
     var image = imageUrl != ""
         ? Container(
-            width: 100.0,
-            height: 100.0,
+            width: 120.0,
+            height: 120.0,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 image: DecorationImage(
@@ -55,8 +62,23 @@ class UserStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[Text(statCount.toString()), Text(statLabel)],
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: <Widget>[
+          Text(
+            statCount.toString(),
+            style: Theme
+                .of(context)
+                .primaryTextTheme
+                .headline6,
+          ),
+          Text(statLabel, style: Theme
+              .of(context)
+              .primaryTextTheme
+              .headline6)
+        ],
+      ),
     );
   }
 }
@@ -70,10 +92,18 @@ class UserStatRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        UserStat(statLabel: "Rank Points", statCount: user.rankPoints),
-        UserStat(statLabel: "Rank Lists", statCount: user.listNum),
-        UserStat(statLabel: "Following", statCount: user.numFollowing),
-        UserStat(statLabel: "Followers", statCount: user.numFollowers)
+        Column(
+          children: [
+            UserStat(statLabel: "Rank Points", statCount: user.rankPoints),
+            UserStat(statLabel: "Rank Lists", statCount: user.listNum),
+          ],
+        ),
+        Column(
+          children: [
+            UserStat(statLabel: "Following", statCount: user.numFollowing),
+            UserStat(statLabel: "Followers", statCount: user.numFollowers)
+          ],
+        )
       ],
     );
   }
@@ -88,13 +118,43 @@ class UserBio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
-        children: [
-          const Text("Bio"),
-          Text(user.bio),
-          const Text("Date Created"),
-          Text(user.dateCreated.toString())
-        ],
+      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Bio",
+              style: Theme
+                  .of(context)
+                  .primaryTextTheme
+                  .headline5,
+            ),
+            Text(user.bio,
+                style: Theme
+                    .of(context)
+                    .primaryTextTheme
+                    .headline4
+                    .copyWith(fontSize: 16)),
+            const SizedBox(height: 10),
+            Text("Date Created",
+                style: Theme
+                    .of(context)
+                    .primaryTextTheme
+                    .headline5),
+            Text(user.dateCreated.toString(),
+                style: Theme
+                    .of(context)
+                    .primaryTextTheme
+                    .headline4
+                    .copyWith(fontSize: 16))
+          ],
+        ),
       ),
     );
   }
@@ -111,8 +171,8 @@ Widget getProfilePic(String uInitial, BuildContext context) {
     paraPink
   ];
   return Container(
-    width: 100.0,
-    height: 100.0,
+    width: 130.0,
+    height: 130.0,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(15.0)),
         color: colors[Random().nextInt(colors.length)]),
