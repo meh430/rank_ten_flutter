@@ -25,7 +25,13 @@ class UserInfo extends StatelessWidget {
     profilePic = isMain
         ? GestureDetector(
             child: profilePic,
-            onTap: () => showProfilePicker(context, user.profPic))
+            onTap: () =>
+                showProfilePicker(context, user.profPic, (String imageUrl) {
+                  final userProvider =
+                      Provider.of<MainUserProvider>(context, listen: false);
+                  userProvider.mainUserBloc.userEventSink.add(
+                      UpdateProfilePicEvent(imageUrl, userProvider.jwtToken));
+                }))
         : profilePic;
 
     return Card(
@@ -292,7 +298,7 @@ Widget getProfilePic(String uInitial, BuildContext context) {
         borderRadius: BorderRadius.all(Radius.circular(15.0)),
         color: colors[Random().nextInt(colors.length)]),
     child: Center(
-        child: Text(uInitial.toUpperCase(),
+        child: Text((uInitial ?? "I").toUpperCase(),
             style: Theme
                 .of(context)
                 .primaryTextTheme
