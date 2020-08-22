@@ -47,6 +47,7 @@ class AppTheme {
             base.iconTheme.copyWith(color: isDark ? palePurple : Colors.black),
         accentColor: lavender,
         primaryColor: lavender,
+        dialogBackgroundColor: isDark ? darkBackground : white,
         scaffoldBackgroundColor: isDark ? darkBackground : white,
         canvasColor: isDark ? darkBackground : white,
         backgroundColor: isDark ? darkBackground : white,

@@ -18,10 +18,31 @@ class RankApi {
           headers: _getHeaders(bearerToken: bearerToken));
       jsonResponse = _parseResponse(res);
     } on SocketException {
-      return DefaultError('No network connection');
+      throw DefaultError('No network connection');
     }
 
     return jsonResponse;
+  }
+
+  Future<String> validateImage(String imageUrl) async {
+    var isValid = false;
+    try {
+      final res = await http.get(imageUrl, headers: {'Accept': 'image/*'});
+      print(res.headers);
+      print(res.statusCode);
+
+      isValid = res.statusCode == 200 &&
+          res.headers['content-type'].contains("image");
+      print("Image is valid: $isValid");
+    } on SocketException {
+      throw DefaultError('No network connection');
+    }
+
+    if (isValid) {
+      return imageUrl;
+    } else {
+      throw Exception;
+    }
   }
 
   Future<dynamic> post(
@@ -39,7 +60,7 @@ class RankApi {
           headers: _getHeaders(bearerToken: bearerToken));
       jsonResponse = _parseResponse(res);
     } on SocketException {
-      return DefaultError('No network connection');
+      throw DefaultError('No network connection');
     }
 
     return jsonResponse;
@@ -59,7 +80,7 @@ class RankApi {
           headers: _getHeaders(bearerToken: bearerToken));
       jsonResponse = _parseResponse(res);
     } on SocketException {
-      return DefaultError('No network connection');
+      throw DefaultError('No network connection');
     }
 
     return jsonResponse;
