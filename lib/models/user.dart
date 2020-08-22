@@ -42,7 +42,7 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
 
     //if (this.dateCreated != null) {
     //data['date_created'][r'$date'] = dateCreated;

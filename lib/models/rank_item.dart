@@ -24,7 +24,7 @@ class RankItem {
   }
 
 Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['_id'] = this.id;
     data['description'] = this.description;
     data['item_name'] = this.itemName;

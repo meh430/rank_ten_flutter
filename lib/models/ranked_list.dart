@@ -34,7 +34,7 @@ class RankedList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     //data['user_name'] = this.userName;
     data['title'] = this.title;
     if (this.rankList != null) {

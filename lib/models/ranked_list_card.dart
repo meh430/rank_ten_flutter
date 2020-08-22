@@ -31,19 +31,19 @@ class RankedListCard {
     numLikes = json['num_likes'];
     numComments = json['num_comments'];
     commentPreview = json['comment_preview'] != null
-        ? new CommentPreview.fromJson(json['comment_preview'])
+        ? CommentPreview.fromJson(json['comment_preview'])
         : null;
     if (json['rank_list'] != null) {
-      rankList = new List<RankItemPreview>();
+      rankList = List<RankItemPreview>();
       json['rank_list'].forEach((v) {
-        rankList.add(new RankItemPreview.fromJson(v));
+        rankList.add(RankItemPreview.fromJson(v));
       });
     }
     picture = json['picture'];
   }
 
 /*Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['_id'] = this.sId;
     data['user_name'] = this.userName;
     data['prof_pic'] = this.profPic;
@@ -77,7 +77,7 @@ class CommentPreview {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['comment'] = this.comment;
     data['user_name'] = this.userName;
     return data;
@@ -96,7 +96,7 @@ class RankItemPreview {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['item_name'] = this.itemName;
     data['rank'] = this.rank;
     return data;
