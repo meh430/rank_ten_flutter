@@ -23,13 +23,13 @@ class RankItem {
     rank = json['rank'];
   }
 
-/*Map<String, dynamic> toJson() {
+Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-
+    data['_id'] = this.id;
     data['description'] = this.description;
     data['item_name'] = this.itemName;
     data['picture'] = this.picture;
     data['rank'] = this.rank;
     return data;
-  }*/
+  }
 }

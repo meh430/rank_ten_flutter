@@ -3,7 +3,7 @@ class RankedListCard {
   String userName;
   String profPic;
   String title;
-  String dateCreated;
+  int dateCreated;
   int numLikes;
   int numComments;
   CommentPreview commentPreview;
