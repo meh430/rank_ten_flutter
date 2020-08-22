@@ -54,7 +54,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
           return Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              UserInfo(user: snapshot.data.value),
+              UserInfo(user: snapshot.data.value, isMain: true),
               UserBio(user: snapshot.data.value, isMain: true),
               UserLists(),
               LogOutButton()

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/app_theme.dart';
+import 'package:rank_ten/components/choose_pic.dart';
 import 'package:rank_ten/dark_theme_provider.dart';
 import 'package:rank_ten/main_user_provider.dart';
 import 'package:rank_ten/models/user.dart';
@@ -13,11 +14,20 @@ import 'login.dart';
 
 class UserInfo extends StatelessWidget {
   final User user;
+  final bool isMain;
 
-  UserInfo({@required this.user});
+  UserInfo({@required this.user, this.isMain = false});
 
   @override
   Widget build(BuildContext context) {
+    Widget profilePic =
+        RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]);
+    profilePic = isMain
+        ? GestureDetector(
+            child: profilePic,
+            onTap: () => showProfilePicker(context, user.profPic))
+        : profilePic;
+
     return Card(
       margin: EdgeInsets.all(10.0),
       elevation: 4.0,
@@ -27,7 +37,8 @@ class UserInfo extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
+          //RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
+          profilePic,
           const SizedBox(width: 10),
           UserStatRow(user: user)
         ],
