@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +16,9 @@ class PicChooser extends StatefulWidget {
   final String prevImage;
   final SetImage setImage;
 
-  PicChooser(
-      {@required this.profilePicker,
-      @required this.prevImage,
-      @required this.setImage});
+  PicChooser({@required this.profilePicker,
+    @required this.prevImage,
+    @required this.setImage});
 
   @override
   _PicChooserState createState() => _PicChooserState();
@@ -44,12 +44,8 @@ class _PicChooserState extends State<PicChooser> {
 
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme
-        .of(context)
-        .primaryTextTheme;
-    var isDark = Provider
-        .of<DarkThemeProvider>(context)
-        .isDark;
+    var textTheme = Theme.of(context).primaryTextTheme;
+    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Padding(
@@ -84,6 +80,13 @@ class _PicChooserState extends State<PicChooser> {
                     controller: _urlController,
                     onChanged: (value) => setState(() => _currImage = value),
                     decoration: InputDecoration(
+                        suffixIcon: GestureDetector(
+                          dragStartBehavior: DragStartBehavior.down,
+                          onTap: () => _urlController.clear(),
+                          child: Icon(Icons.clear,
+                              color: isDark ? palePurple : Colors.black,
+                              semanticLabel: 'Clear URL'),
+                        ),
                         labelText: 'Image URL',
                         contentPadding: const EdgeInsets.all(20.0),
                         labelStyle: textTheme.headline6.copyWith(fontSize: 16),

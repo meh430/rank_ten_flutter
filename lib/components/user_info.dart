@@ -20,6 +20,7 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<MainUserProvider>(context);
     Widget profilePic =
         RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]);
     profilePic = isMain
@@ -27,8 +28,6 @@ class UserInfo extends StatelessWidget {
             child: profilePic,
             onTap: () =>
                 showProfilePicker(context, user.profPic, (String imageUrl) {
-                  final userProvider =
-                      Provider.of<MainUserProvider>(context, listen: false);
                   userProvider.mainUserBloc.userEventSink.add(
                       UpdateProfilePicEvent(imageUrl, userProvider.jwtToken));
                 }))
