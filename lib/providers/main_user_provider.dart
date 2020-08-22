@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rank_ten/api/response.dart';
-import 'package:rank_ten/user_bloc.dart';
-import 'package:rank_ten/user_events.dart';
-import 'package:rank_ten/user_repository.dart';
+import 'package:rank_ten/blocs/user_bloc.dart';
+import 'package:rank_ten/events/user_events.dart';
+import 'package:rank_ten/repos/user_repository.dart';
 
-import 'models/user.dart';
+import '../models/user.dart';
 
 class MainUserProvider with ChangeNotifier {
   User mainUser;

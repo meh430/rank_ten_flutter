@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rank_ten/app_theme.dart';
-import 'package:rank_ten/dark_theme_provider.dart';
-import 'package:rank_ten/main_user_provider.dart';
-import 'package:rank_ten/profile_tab.dart';
+import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
+import 'package:rank_ten/providers/main_user_provider.dart';
+import 'package:rank_ten/tabs/profile_tab.dart';
 
 var _appBarTitles = ["Feed", "Discover", "Search"];
 
@@ -119,10 +119,14 @@ class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
+    isDark = themeChange.isDark;
     return AppBar(
       toolbarHeight: 70,
       elevation: 0.0,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      brightness: isDark ? Brightness.dark : Brightness.light,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       actions: [
         IconButton(
           icon: Icon(

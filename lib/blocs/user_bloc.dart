@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:rank_ten/api/response.dart';
-import 'package:rank_ten/user_events.dart';
-import 'package:rank_ten/user_repository.dart';
-
-import 'models/user.dart';
+import 'package:rank_ten/events/user_events.dart';
+import 'package:rank_ten/models/user.dart';
+import 'package:rank_ten/repos/user_repository.dart';
 
 class UserBloc {
   User _user;

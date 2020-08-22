@@ -2,8 +2,8 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
 
-import '../dark_theme_provider.dart';
 import 'login.dart';
 
 typedef SubmitSignup = void Function(String, String, String);

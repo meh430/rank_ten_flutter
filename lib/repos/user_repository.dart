@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rank_ten/api/rank_api.dart';
 
-import 'models/user.dart';
+import '../models/user.dart';
 
 class UserRepository {
   RankApi _api = RankApi();

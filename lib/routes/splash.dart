@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/api/auth.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/components/logo.dart';
-import 'package:rank_ten/main_user_provider.dart';
 import 'package:rank_ten/models/user.dart';
-import 'package:rank_ten/preferences_store.dart';
+import 'package:rank_ten/providers/main_user_provider.dart';
 
-import '../app_theme.dart';
+import '../misc/app_theme.dart';
 
 class Splash extends StatefulWidget {
   @override

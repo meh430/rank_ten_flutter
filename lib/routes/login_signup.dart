@@ -5,7 +5,7 @@ import 'package:rank_ten/api/auth.dart';
 import 'package:rank_ten/components/login.dart';
 import 'package:rank_ten/components/logo.dart';
 import 'package:rank_ten/components/signup.dart';
-import 'package:rank_ten/main_user_provider.dart';
+import 'package:rank_ten/providers/main_user_provider.dart';
 
 class LoginSignup extends StatefulWidget {
   @override

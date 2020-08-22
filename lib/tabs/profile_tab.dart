@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:rank_ten/app_theme.dart';
+import 'package:rank_ten/api/preferences_store.dart';
+import 'package:rank_ten/api/response.dart';
+import 'package:rank_ten/blocs/user_bloc.dart';
 import 'package:rank_ten/components/user_info.dart';
 import 'package:rank_ten/components/user_lists.dart';
-import 'package:rank_ten/main_user_provider.dart';
-import 'package:rank_ten/preferences_store.dart';
-import 'package:rank_ten/user_bloc.dart';
-import 'package:rank_ten/user_events.dart';
-
-import 'api/response.dart';
-import 'models/user.dart';
+import 'package:rank_ten/events/user_events.dart';
+import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/models/user.dart';
+import 'package:rank_ten/providers/main_user_provider.dart';
 
 class ProfileTab extends StatelessWidget {
   @override

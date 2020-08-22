@@ -4,9 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:rank_ten/app_theme.dart';
-
-import '../dark_theme_provider.dart';
+import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
 
 typedef SubmitLogin = void Function(String, String);
 
@@ -47,7 +46,7 @@ class SubmitButton extends StatelessWidget {
               .primaryTextTheme
               .headline3
               .copyWith(color: palePurple)),
-          );
+    );
   }
 }
 

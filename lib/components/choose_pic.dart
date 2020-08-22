@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/api/rank_api.dart';
-import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/components/user_info.dart';
-import 'package:rank_ten/dark_theme_provider.dart';
+import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
 
 import 'login.dart';
 

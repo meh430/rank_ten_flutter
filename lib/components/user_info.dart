@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rank_ten/app_theme.dart';
 import 'package:rank_ten/components/choose_pic.dart';
-import 'package:rank_ten/dark_theme_provider.dart';
-import 'package:rank_ten/main_user_provider.dart';
+import 'package:rank_ten/events/user_events.dart';
+import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/user.dart';
-import 'package:rank_ten/user_events.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
+import 'package:rank_ten/providers/main_user_provider.dart';
 
-import '../utils.dart';
+import '../misc/utils.dart';
 import 'login.dart';
 
 class UserInfo extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rank_ten/app_theme.dart';
+import 'package:rank_ten/misc/app_theme.dart';
 
 const bRadius = const Radius.circular(15.0);
 const rankScale = 0.62;
