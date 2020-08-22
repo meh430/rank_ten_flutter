@@ -1,5 +1,5 @@
 class RankedListCard {
-  String sId;
+  String id;
   String userName;
   String profPic;
   String title;
@@ -11,7 +11,7 @@ class RankedListCard {
   String picture;
 
   RankedListCard(
-      {this.sId,
+      {this.id,
       this.userName,
       this.profPic,
       this.title,
@@ -23,7 +23,7 @@ class RankedListCard {
       this.picture});
 
   RankedListCard.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     userName = json['user_name'];
     profPic = json['prof_pic'];
     title = json['title'];
@@ -41,28 +41,6 @@ class RankedListCard {
     }
     picture = json['picture'];
   }
-
-/*Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['user_name'] = this.userName;
-    data['prof_pic'] = this.profPic;
-    data['title'] = this.title;
-
-    if (this.dateCreated != null) {
-      data['date_created'] = this.dateCreated.toJson();
-    }
-    data['num_likes'] = this.numLikes;
-    data['num_comments'] = this.numComments;
-    if (this.commentPreview != null) {
-      data['comment_preview'] = this.commentPreview.toJson();
-    }
-    if (this.rankList != null) {
-      data['rank_list'] = this.rankList.map((v) => v.toJson()).toList();
-    }
-    data['picture'] = this.picture;
-    return data;
-  }*/
 }
 
 class CommentPreview {
@@ -75,13 +53,6 @@ class CommentPreview {
     comment = json['comment'];
     userName = json['user_name'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['comment'] = this.comment;
-    data['user_name'] = this.userName;
-    return data;
-  }
 }
 
 class RankItemPreview {
@@ -93,12 +64,5 @@ class RankItemPreview {
   RankItemPreview.fromJson(Map<String, dynamic> json) {
     itemName = json['item_name'];
     rank = json['rank'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['item_name'] = this.itemName;
-    data['rank'] = this.rank;
-    return data;
   }
 }

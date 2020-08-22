@@ -10,6 +10,8 @@ class User {
   int numComments;
   int listNum;
   String jwtToken;
+  Set<String> followers;
+  Set<String> following;
   Set<String> likedLists;
 
   User(
@@ -24,7 +26,9 @@ class User {
       this.numComments,
       this.listNum,
       this.jwtToken,
-      this.likedLists});
+      this.likedLists,
+      this.followers,
+      this.following});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['_id'] != null ? json['_id'][r'$oid'] : null;
@@ -37,6 +41,17 @@ class User {
     numComments = json['num_comments'];
     numFollowers = json['num_followers'];
     numFollowing = json['num_following'];
+
+    if (json['following'] != null) {
+      following = Set<String>();
+      json['following'].forEach((v) => following.add(v[r'$oid']));
+    }
+
+    if (json['followers'] != null) {
+      followers = Set<String>();
+      json['followers'].forEach((v) => followers.add(v[r'$oid']));
+    }
+
     listNum = json['list_num'];
     jwtToken = json['jwt_token'];
   }
@@ -61,5 +76,19 @@ class User {
   @override
   String toString() {
     return "Name: $userName";
+  }
+}
+
+class UserPreview {
+  String userName;
+  String profPic;
+  String bio;
+
+  UserPreview({this.userName, this.profPic, this.bio});
+
+  UserPreview.fromJson(Map<String, dynamic> json) {
+    userName = json['user_name'];
+    profPic = json['prof_pic'];
+    bio = json['bio'];
   }
 }
