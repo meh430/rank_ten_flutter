@@ -10,7 +10,8 @@ import 'choose_pic.dart';
 class RankedListCardWidget extends StatelessWidget {
   final RankedListCard listCard;
 
-  const RankedListCardWidget({Key key, this.listCard}) : super(key: key);
+  const RankedListCardWidget({Key key, @required this.listCard})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

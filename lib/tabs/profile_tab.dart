@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/blocs/user_bloc.dart';
-import 'package:rank_ten/components/ranked_list_card_widget.dart';
 import 'package:rank_ten/components/user_info.dart';
 import 'package:rank_ten/components/user_lists.dart';
 import 'package:rank_ten/events/user_events.dart';
@@ -58,7 +57,6 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
               UserInfo(user: snapshot.data.value, isMain: true),
               UserBio(user: snapshot.data.value, isMain: true),
               UserLists(),
-              RankedListCardWidget(),
               LogOutButton()
             ],
           );
