@@ -9,21 +9,6 @@ import 'package:rank_ten/api/rank_exceptions.dart';
 class RankApi {
   final _baseUrl = 'http://192.168.0.22:5000';
 
-  Future<dynamic> get(
-      {@required String endpoint, String bearerToken = ""}) async {
-    var jsonResponse;
-
-    try {
-      final res = await http.get(_baseUrl + endpoint,
-          headers: _getHeaders(bearerToken: bearerToken));
-      jsonResponse = _parseResponse(res);
-    } on SocketException {
-      throw DefaultError('No network connection');
-    }
-
-    return jsonResponse;
-  }
-
   Future<bool> validateImage(String imageUrl) async {
     var isValid = false;
     try {
@@ -39,6 +24,21 @@ class RankApi {
     }
 
     return isValid;
+  }
+
+  Future<dynamic> get(
+      {@required String endpoint, String bearerToken = ""}) async {
+    var jsonResponse;
+
+    try {
+      final res = await http.get(_baseUrl + endpoint,
+          headers: _getHeaders(bearerToken: bearerToken));
+      jsonResponse = _parseResponse(res);
+    } on SocketException {
+      throw DefaultError('No network connection');
+    }
+
+    return jsonResponse;
   }
 
   Future<dynamic> post(

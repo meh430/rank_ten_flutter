@@ -5,6 +5,7 @@ class RankedListCard {
   String title;
   int dateCreated;
   int numLikes;
+  int numItems;
   int numComments;
   CommentPreview commentPreview;
   List<RankItemPreview> rankList;
@@ -17,6 +18,7 @@ class RankedListCard {
       this.title,
       this.dateCreated,
       this.numLikes,
+      this.numItems,
       this.numComments,
       this.commentPreview,
       this.rankList,
@@ -29,6 +31,7 @@ class RankedListCard {
     title = json['title'];
     dateCreated = json['date_created'][r'$date_created'];
     numLikes = json['num_likes'];
+    numItems = json['num_rank_items'];
     numComments = json['num_comments'];
     commentPreview = json['comment_preview'] != null
         ? CommentPreview.fromJson(json['comment_preview'])

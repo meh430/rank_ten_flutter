@@ -41,10 +41,9 @@ class SubmitButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(40.0),
       ),
       child: Text(isLogin ? "Login" : "Sign Up",
-          style: Theme
-              .of(context)
-              .primaryTextTheme
-              .headline3
+          style: Theme.of(context)
+                    .textTheme
+                    .headline3
               .copyWith(color: palePurple)),
     );
   }
@@ -93,7 +92,11 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelStyle =
-        Theme.of(context).primaryTextTheme.headline6.copyWith(fontSize: 16);
+    Theme
+        .of(context)
+        .textTheme
+        .headline6
+        .copyWith(fontSize: 16);
 
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -159,7 +162,7 @@ class _PasswordFieldState extends State<PasswordField> {
                   semanticLabel:
                   obscureText ? 'Show password' : 'Hide password'),
             ),
-            contentPadding: EdgeInsets.all(20.0),
+            contentPadding: const EdgeInsets.all(20.0),
             labelText: widget.confirm ? 'Confirm Password' : 'Password',
             border: getInputStyle(themeChange.isDark),
             labelStyle: widget.labelStyle,

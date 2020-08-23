@@ -50,12 +50,12 @@ class _PicChooserState extends State<PicChooser> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Padding(
-        padding: EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: Text(
                   widget.profilePicker
                       ? "Choose Profile Picture"
@@ -69,14 +69,10 @@ class _PicChooserState extends State<PicChooser> {
                   imageUrl: _currImage,
                   profilePicker: widget.profilePicker),
               Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: TextField(
                     textInputAction: TextInputAction.done,
-                    onSubmitted: (value) {
-                      setState(() {
-                        _currImage = value;
-                      });
-                    },
+                    onSubmitted: (value) => setState(() => _currImage = value),
                     style: textTheme.headline6.copyWith(fontSize: 16),
                     controller: _urlController,
                     onChanged: (value) => setState(() => _currImage = value),
@@ -95,7 +91,7 @@ class _PicChooserState extends State<PicChooser> {
                         enabledBorder: getInputStyle(isDark),
                         focusedBorder: getInputStyle(isDark))),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               RaisedButton(
                 child: Text("Set Image",
                     style: textTheme.headline6.copyWith(color: palePurple)),
@@ -119,11 +115,19 @@ class _PicChooserState extends State<PicChooser> {
   }
 }
 
-void showProfilePicker(BuildContext context, String url, SetImage setImage) {
+void showProfilePicker({BuildContext context, String url, SetImage setImage}) {
   showDialog(
       context: context,
       builder: (context) =>
           PicChooser(profilePicker: true, prevImage: url, setImage: setImage));
+}
+
+void showItemImagePicker(
+    {BuildContext context, String url, SetImage setImage}) {
+  showDialog(
+      context: context,
+      builder: (context) =>
+          PicChooser(profilePicker: false, prevImage: url, setImage: setImage));
 }
 
 class RankItemImage extends StatelessWidget {
@@ -134,7 +138,7 @@ class RankItemImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
         child: Image.network(imageUrl, fit: BoxFit.cover),
@@ -164,12 +168,11 @@ class _PreviewImageState extends State<PreviewImage> {
   Widget build(BuildContext context) {
     var inValid = Padding(
       child: Text("Image url is not valid",
-          style: Theme
-              .of(context)
-              .primaryTextTheme
+          style: Theme.of(context)
+              .textTheme
               .headline6
               .copyWith(color: Colors.red)),
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
     );
     return FutureBuilder(
       future: _api.validateImage(widget.imageUrl),

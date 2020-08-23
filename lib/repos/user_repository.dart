@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:rank_ten/api/rank_api.dart';
 
 import '../models/user.dart';
@@ -36,7 +35,18 @@ class UserRepository {
 
   Future<String> likeList({String listId, String token}) async {
     final response =
-    await _api.post(endpoint: '/like/$Icons.list', bearerToken: token);
+        await _api.post(endpoint: '/like/$listId', bearerToken: token);
+
+    if (response['message'].contains("unliked")) {
+      return "UNLIKED";
+    } else {
+      return "LIKED";
+    }
+  }
+
+  Future<String> likeComment({String commentId, String token}) async {
+    final response = await _api.post(
+        endpoint: '/like_comment/$commentId', bearerToken: token);
 
     if (response['message'].contains("unliked")) {
       return "UNLIKED";
@@ -47,7 +57,7 @@ class UserRepository {
 
   Future<Set<String>> getLikedListIds({String name, String token}) async {
     final response =
-    await _api.get(endpoint: '/likes/1?ids=True', bearerToken: token);
+        await _api.get(endpoint: '/likes/1?ids=True', bearerToken: token);
     return Set.from(
         List.generate(response.length, (index) => response[index].toString()));
   }

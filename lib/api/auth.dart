@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/api/rank_api.dart';
 import 'package:rank_ten/models/user.dart';
-
-import 'file:///C:/Users/Mehul%20Pillai/AndroidStudioProjects/rank_ten/lib/api/preferences_store.dart';
 
 class Authorization {
   static RankApi _api = RankApi();

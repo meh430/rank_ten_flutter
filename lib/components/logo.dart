@@ -27,7 +27,7 @@ class Logo extends StatelessWidget {
               child: Center(
                 child: Text("10",
                     style: Theme.of(context)
-                        .primaryTextTheme
+                        .textTheme
                         .headline3
                         .copyWith(color: darkSienna)),
               ),
@@ -42,8 +42,9 @@ class Logo extends StatelessWidget {
               height: height,
               child: Center(
                   child: Text("Rank",
-                      style: Theme.of(context)
-                          .primaryTextTheme
+                      style: Theme
+                          .of(context)
+                          .textTheme
                           .headline2
                           .copyWith(color: white))),
             ),

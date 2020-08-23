@@ -75,6 +75,22 @@ class UserBloc {
         }
 
         _userStateSink.add(Response.completed(_user));
+      } else if (event is LikeListEvent) {
+        _userStateSink.add(Response.loading("Liking list"));
+
+        await _userRepository.likeList(listId: event.id, token: event.token);
+
+        if (_user.likedLists.contains(event.id)) {
+          _user.likedLists.remove(event.id);
+        } else {
+          _user.likedLists.add(event.id);
+        }
+        _userStateSink.add(Response.completed(_user));
+      } else if (event is LikeCommentEvent) {
+        _userStateSink.add(Response.loading("Liking comment"));
+        await _userRepository.likeComment(
+            commentId: event.id, token: event.token);
+        _userStateSink.add(Response.completed(_user));
       }
     } catch (e) {
       _userStateSink.add(Response.error(e.toString()));
