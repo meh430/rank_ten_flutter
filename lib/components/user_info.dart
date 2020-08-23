@@ -27,7 +27,8 @@ class UserInfo extends StatelessWidget {
             onTap: () =>
                 showProfilePicker(context, user.profPic, (String imageUrl) {
                   userProvider.mainUserBloc.userEventSink.add(
-                      UpdateProfilePicEvent(imageUrl, userProvider.jwtToken));
+                      UpdateProfilePicEvent(
+                          profPic: imageUrl, token: userProvider.jwtToken));
                 }))
         : profilePic;
 
@@ -224,7 +225,7 @@ class _BioEditWidgetState extends State<BioEditWidget> {
         } else {
           editing = false;
           userProvider.mainUserBloc.userEventSink
-              .add(UpdateBioEvent(value, userProvider.jwtToken));
+              .add(UpdateBioEvent(bio: value, token: userProvider.jwtToken));
         }
       },
       textInputAction: TextInputAction.done,

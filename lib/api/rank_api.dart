@@ -24,7 +24,7 @@ class RankApi {
     return jsonResponse;
   }
 
-  Future<String> validateImage(String imageUrl) async {
+  Future<bool> validateImage(String imageUrl) async {
     var isValid = false;
     try {
       final res = await http.get(imageUrl, headers: {'Accept': 'image/*'});
@@ -38,11 +38,7 @@ class RankApi {
       throw DefaultError('No network connection');
     }
 
-    if (isValid) {
-      return imageUrl;
-    } else {
-      throw Exception;
-    }
+    return isValid;
   }
 
   Future<dynamic> post(

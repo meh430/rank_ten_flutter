@@ -5,6 +5,10 @@ import 'package:intl/intl.dart';
 
 import 'app_theme.dart';
 
+const LIKES_DESC = 0;
+const DATE_DESC = 1;
+const DATE_ASC = 2;
+
 var colors = [
   Colors.red,
   Colors.green,

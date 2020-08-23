@@ -148,9 +148,10 @@ class PreviewImage extends StatefulWidget {
   final bool profilePicker;
   final imageValid;
 
-  PreviewImage({@required this.imageUrl,
-    @required this.profilePicker,
-    @required this.imageValid});
+  PreviewImage(
+      {@required this.imageUrl,
+      @required this.profilePicker,
+      @required this.imageValid});
 
   @override
   _PreviewImageState createState() => _PreviewImageState();
@@ -172,9 +173,9 @@ class _PreviewImageState extends State<PreviewImage> {
     );
     return FutureBuilder(
       future: _api.validateImage(widget.imageUrl),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.isNotEmpty) {
+          if (snapshot.data) {
             widget.imageValid(true);
             return widget.profilePicker
                 ? RoundedImage(imageUrl: widget.imageUrl)
