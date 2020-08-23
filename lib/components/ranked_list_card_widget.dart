@@ -33,18 +33,20 @@ class RankedListCardWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4,
                 textAlign: TextAlign.center),
             SizedBox(height: 10),
-            RankItemImage(
-                imageUrl:
-                    "https://cdn.vox-cdn.com/thumbor/hOagCnRe2cCIIZhcLuJUH5ZPVvk=/0x0:1075x604/1200x800/filters:focal(452x216:624x388)/cdn.vox-cdn.com/uploads/chorus_image/image/66255911/Screen_Shot_2020_02_05_at_9.44.59_AM.0.png"),
+            listCard.picture.isNotEmpty
+                ? RankItemImage(imageUrl: listCard.picture)
+                : SizedBox(),
             RankPreviewItems(previewItems: listCard.rankList),
             Text("View 7 more items",
                 style: Theme.of(context).textTheme.headline6.copyWith(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.bold)),
             CardFooter(),
-            CommentPreviewCard(
-                commentPreview: listCard.commentPreview,
-                numComments: listCard.numComments)
+            listCard.commentPreview != null
+                ? CommentPreviewCard(
+                    commentPreview: listCard.commentPreview,
+                    numComments: listCard.numComments)
+                : SizedBox()
           ],
         ),
       ),
@@ -236,7 +238,10 @@ class CommentPreviewCard extends StatelessWidget {
         margin: EdgeInsets.all(10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Container(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
