@@ -16,9 +16,10 @@ class PicChooser extends StatefulWidget {
   final String prevImage;
   final SetImage setImage;
 
-  PicChooser({@required this.profilePicker,
-    @required this.prevImage,
-    @required this.setImage});
+  PicChooser(
+      {@required this.profilePicker,
+      @required this.prevImage,
+      @required this.setImage});
 
   @override
   _PicChooserState createState() => _PicChooserState();
@@ -128,13 +129,16 @@ void showProfilePicker(BuildContext context, String url, SetImage setImage) {
 class RankItemImage extends StatelessWidget {
   final String imageUrl;
 
-  RankItemImage({this.imageUrl});
+  RankItemImage({@required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: Image.network(imageUrl, width: 160, height: 90, fit: BoxFit.cover),
+    return Padding(
+      padding: EdgeInsets.all(12),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: Image.network(imageUrl, fit: BoxFit.cover),
+      ),
     );
   }
 }
