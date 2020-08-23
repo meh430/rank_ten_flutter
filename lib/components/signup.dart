@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 
 import 'login.dart';
@@ -35,9 +36,7 @@ class Signup extends StatelessWidget {
 
   submitForm(BuildContext context) {
     if (pController.text != pConfirmController.text) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text("Please confirm password"),
-          behavior: SnackBarBehavior.floating));
+      Scaffold.of(context).showSnackBar(Utils.getSB('Please confirm password'));
     } else if (_fKey.currentState.validate()) {
       final password = pController.text;
       final username = uController.text;
@@ -50,7 +49,7 @@ class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelStyle =
-        Theme.of(context).primaryTextTheme.headline6.copyWith(fontSize: 16);
+        Theme.of(context).textTheme.headline6.copyWith(fontSize: 16);
 
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

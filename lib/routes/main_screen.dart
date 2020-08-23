@@ -124,9 +124,7 @@ class _MainAppBarState extends State<MainAppBar> {
       toolbarHeight: 70,
       elevation: 0.0,
       brightness: isDark ? Brightness.dark : Brightness.light,
-      backgroundColor: Theme
-          .of(context)
-          .scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       actions: [
         IconButton(
           icon: Icon(

@@ -24,17 +24,18 @@ class UserInfo extends StatelessWidget {
     profilePic = isMain
         ? GestureDetector(
             child: profilePic,
-            onTap: () =>
-                showProfilePicker(context, user.profPic, (String imageUrl) {
-                  userProvider.mainUserBloc.userEventSink.add(
-                      UpdateProfilePicEvent(
-                          profPic: imageUrl, token: userProvider.jwtToken));
+            onTap: () => showProfilePicker(
+                context: context,
+                url: user.profPic,
+                setImage: (String imageUrl) {
+                  userProvider.addUserEvent(UpdateProfilePicEvent(
+                      profPic: imageUrl, token: userProvider.jwtToken));
                 }))
         : profilePic;
 
     return Card(
-      margin: EdgeInsets.all(10.0),
-      elevation: 4.0,
+      margin: const EdgeInsets.all(10.0),
+      elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -56,7 +57,7 @@ class RoundedImage extends StatelessWidget {
   final String imageUrl;
   final String uInitial;
 
-  RoundedImage({this.imageUrl, this.uInitial});
+  RoundedImage({@required this.imageUrl, @required this.uInitial});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,7 @@ class RoundedImage extends StatelessWidget {
 
     return Padding(
       child: image,
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
     );
   }
 }
@@ -94,7 +95,10 @@ class UserStat extends StatelessWidget {
             statCount.toString(),
             style: Theme.of(context).primaryTextTheme.headline6,
           ),
-          Text(statLabel, style: Theme.of(context).primaryTextTheme.headline6)
+          Text(statLabel, style: Theme
+              .of(context)
+              .textTheme
+              .headline6)
         ],
       ),
     );
@@ -137,10 +141,10 @@ class UserBio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      elevation: 4.0,
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -150,13 +154,15 @@ class UserBio extends StatelessWidget {
             isMain ? BioEditWidget(bio: user.bio) : BioWidget(bio: user.bio),
             const SizedBox(height: 10),
             Text("Date Created",
-                style: Theme.of(context)
-                    .primaryTextTheme
+                style: Theme
+                    .of(context)
+                    .textTheme
                     .headline5
                     .copyWith(color: getTitleColor(context))),
             Text(Utils.getDate(user.dateCreated),
-                style: Theme.of(context)
-                    .primaryTextTheme
+                style: Theme
+                    .of(context)
+                    .textTheme
                     .headline4
                     .copyWith(fontSize: 18))
           ],
@@ -177,15 +183,16 @@ class BioWidget extends StatelessWidget {
       children: [
         Text(
           "Bio",
-          style: Theme.of(context)
-              .primaryTextTheme
+          style: Theme
+              .of(context)
+              .textTheme
               .headline5
               .copyWith(color: getTitleColor(context)),
         ),
         Text(bio,
             style: Theme
                 .of(context)
-                .primaryTextTheme
+                .textTheme
                 .headline4
                 .copyWith(fontSize: 18))
       ],
@@ -204,14 +211,14 @@ class BioEditWidget extends StatefulWidget {
 
 class _BioEditWidgetState extends State<BioEditWidget> {
   String _currBio;
-  bool editing = false;
-  TextEditingController bController;
+  bool _editing = false;
+  TextEditingController _bController;
 
   @override
   void initState() {
     super.initState();
     setState(() => _currBio = widget.bio);
-    bController = TextEditingController(text: widget.bio);
+    _bController = TextEditingController(text: widget.bio);
   }
 
   Widget getBioEditField() {
@@ -223,13 +230,13 @@ class _BioEditWidgetState extends State<BioEditWidget> {
         if (value.isEmpty) {
           Scaffold.of(context).showSnackBar(Utils.getSB('Bio cannot be empty'));
         } else {
-          editing = false;
-          userProvider.mainUserBloc.userEventSink
-              .add(UpdateBioEvent(bio: value, token: userProvider.jwtToken));
+          _editing = false;
+          userProvider.addUserEvent(
+              UpdateBioEvent(bio: value, token: userProvider.jwtToken));
         }
       },
       textInputAction: TextInputAction.done,
-      controller: bController,
+      controller: _bController,
       maxLines: null,
       style: TextStyle(color: themeChange.isDark ? white : Colors.black),
       decoration: InputDecoration(
@@ -250,23 +257,23 @@ class _BioEditWidgetState extends State<BioEditWidget> {
               "Bio",
               style: Theme
                   .of(context)
-                  .primaryTextTheme
+                  .textTheme
                   .headline5
                   .copyWith(color: getTitleColor(context)),
             ),
             const SizedBox(width: 10),
             IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () => setState(() => editing = !editing),
+              onPressed: () => setState(() => _editing = !_editing),
             )
           ],
         ),
-        editing
+        _editing
             ? getBioEditField()
             : Text(_currBio,
             style: Theme
                 .of(context)
-                .primaryTextTheme
+                .textTheme
                 .headline4
                 .copyWith(fontSize: 18))
       ],
@@ -285,7 +292,7 @@ Widget getProfilePic(String uInitial, BuildContext context) {
         child: Text((uInitial ?? "I").toUpperCase(),
             style: Theme
                 .of(context)
-                .primaryTextTheme
+                .textTheme
                 .headline2
                 .copyWith(color: Colors.black))),
   );

@@ -5,6 +5,7 @@ import 'package:rank_ten/api/auth.dart';
 import 'package:rank_ten/components/login.dart';
 import 'package:rank_ten/components/logo.dart';
 import 'package:rank_ten/components/signup.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 
 class LoginSignup extends StatefulWidget {
@@ -53,10 +54,8 @@ class _LoginSignupState extends State<LoginSignup> {
         _isLoading = false;
       });
       _logSignScaffKey.currentState.hideCurrentSnackBar();
-      _logSignScaffKey.currentState.showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text('Incorrect username or password'),
-      ));
+      _logSignScaffKey.currentState
+          .showSnackBar(Utils.getSB('Incorrect username or password'));
     }
   }
 
@@ -83,10 +82,8 @@ class _LoginSignupState extends State<LoginSignup> {
         _isLoading = false;
       });
       _logSignScaffKey.currentState.hideCurrentSnackBar();
-      _logSignScaffKey.currentState.showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text('Username already exists'),
-      ));
+      _logSignScaffKey.currentState
+          .showSnackBar(Utils.getSB('Username already exists'));
     }
   }
 
@@ -109,37 +106,30 @@ class _LoginSignupState extends State<LoginSignup> {
                 flex: 1),
             _isLogin
                 ? Login(
-                submitLogin: _handleLogin,
-                isLoading: _isLoading,
-                pController: _pController,
-                uController: _uController)
+                    submitLogin: _handleLogin,
+                    isLoading: _isLoading,
+                    pController: _pController,
+                    uController: _uController)
                 : Signup(
-                submitSignup: _handleSignup,
-                isLoading: _isLoading,
-                pController: _pController,
-                uController: _uController,
-                bController: _bController,
-                pConfirmController: _pConfirmController),
+                    submitSignup: _handleSignup,
+                    isLoading: _isLoading,
+                    pController: _pController,
+                    uController: _uController,
+                    bController: _bController,
+                    pConfirmController: _pConfirmController),
             Flexible(
                 child: const SizedBox(height: 70), fit: FlexFit.tight, flex: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(_isLogin ? "Don't have an account? " : "Have an account? ",
-                    style: Theme
-                        .of(context)
-                        .primaryTextTheme
-                        .headline6),
+                    style: Theme.of(context).textTheme.headline6),
                 GestureDetector(
                   onTap: () => setState(() => _isLogin = !_isLogin),
                   child: Text(_isLogin ? "Sign up!" : "Log in!",
-                      style: Theme
-                          .of(context)
-                          .primaryTextTheme
-                          .headline6
-                          .copyWith(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold)),
+                      style: Theme.of(context).textTheme.headline6.copyWith(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold)),
                 )
               ],
             ),
