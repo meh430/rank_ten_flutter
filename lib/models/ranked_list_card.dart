@@ -46,12 +46,16 @@ class RankedListCard {
 class CommentPreview {
   String comment;
   String userName;
+  String profPic;
+  int dateCreated;
 
-  CommentPreview({this.comment, this.userName});
+  CommentPreview({this.comment, this.userName, this.dateCreated, this.profPic});
 
   CommentPreview.fromJson(Map<String, dynamic> json) {
     comment = json['comment'];
     userName = json['user_name'];
+    dateCreated = json['date_created'];
+    profPic = json['prof_pic'];
   }
 }
 

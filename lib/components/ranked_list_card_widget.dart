@@ -30,26 +30,21 @@ class RankedListCardWidget extends StatelessWidget {
                 profPicUrl: listCard.profPic,
                 dateCreated: listCard.dateCreated),
             Text("Best Shows!",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline4,
+                style: Theme.of(context).textTheme.headline4,
                 textAlign: TextAlign.center),
             SizedBox(height: 10),
             RankItemImage(
                 imageUrl:
-                "https://cdn.vox-cdn.com/thumbor/hOagCnRe2cCIIZhcLuJUH5ZPVvk=/0x0:1075x604/1200x800/filters:focal(452x216:624x388)/cdn.vox-cdn.com/uploads/chorus_image/image/66255911/Screen_Shot_2020_02_05_at_9.44.59_AM.0.png"),
-            RankPreviewItems(),
+                    "https://cdn.vox-cdn.com/thumbor/hOagCnRe2cCIIZhcLuJUH5ZPVvk=/0x0:1075x604/1200x800/filters:focal(452x216:624x388)/cdn.vox-cdn.com/uploads/chorus_image/image/66255911/Screen_Shot_2020_02_05_at_9.44.59_AM.0.png"),
+            RankPreviewItems(previewItems: listCard.rankList),
             Text("View 7 more items",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(
+                style: Theme.of(context).textTheme.headline6.copyWith(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.bold)),
             CardFooter(),
-            CommentPreviewCard()
+            CommentPreviewCard(
+                commentPreview: listCard.commentPreview,
+                numComments: listCard.numComments)
           ],
         ),
       ),
@@ -133,7 +128,8 @@ class RankPreviewItem extends StatelessWidget {
   final String rank;
   final String rankItemTitle;
 
-  RankPreviewItem({this.rank, this.rankItemTitle});
+  RankPreviewItem({Key key, @required this.rank, @required this.rankItemTitle})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -203,18 +199,36 @@ class _CardFooterState extends State<CardFooter> {
 }
 
 class RankPreviewItems extends StatelessWidget {
+  final List<RankItemPreview> previewItems;
+
+  RankPreviewItems({@required this.previewItems});
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [RankPreviewItem(), RankPreviewItem(), RankPreviewItem()],
-    );
+    var colChildren = List<Widget>();
+    previewItems.forEach((item) {
+      colChildren.add(RankPreviewItem(
+          rank: item.rank.toString(),
+          rankItemTitle: item.itemName,
+          key: ObjectKey(item)));
+    });
+
+    return Column(children: colChildren);
   }
 }
 
 class CommentPreviewCard extends StatelessWidget {
+  final CommentPreview commentPreview;
+  final int numComments;
+
+  CommentPreviewCard(
+      {@required this.commentPreview, @required this.numComments});
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Provider.of<DarkThemeProvider>(context).isDark;
+    final isDark = Provider
+        .of<DarkThemeProvider>(context)
+        .isDark;
 
     return Card(
         color: isDark ? hanPurple : palePurple,
@@ -228,18 +242,28 @@ class CommentPreviewCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CardHeader(),
+              CardHeader(
+                  dateCreated: commentPreview.dateCreated,
+                  userName: commentPreview.userName,
+                  profPicUrl: commentPreview.profPic),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
-                  "I made.",
+                  commentPreview.comment,
                   textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6,
                 ),
               ),
               SizedBox(height: 10),
-              Text("View all 22 comments",
-                  style: Theme.of(context).textTheme.headline6.copyWith(
+              Text("View all $numComments comments",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(
                       fontSize: 14,
                       decoration: TextDecoration.underline,
                       fontWeight: FontWeight.bold)),
