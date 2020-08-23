@@ -51,22 +51,23 @@ class UserBloc {
       } else if (event is UpdateBioEvent) {
         _userStateSink.add(Response.loading("Updating bio"));
 
-        await _userRepository.updateBio(event.bio, event.token);
+        await _userRepository.updateBio(bio: event.bio, token: event.token);
 
         _user.bio = event.bio;
         _userStateSink.add(Response.completed(_user));
       } else if (event is UpdateProfilePicEvent) {
         _userStateSink.add(Response.loading("Updating profile pic"));
 
-        await _userRepository.updateProfilePic(event.profPic, event.token);
+        await _userRepository.updateProfilePic(
+            profPic: event.profPic, token: event.token);
 
         _user.profPic = event.profPic;
         _userStateSink.add(Response.completed(_user));
       } else if (event is FollowEvent) {
         _userStateSink.add(Response.loading("Follow event"));
 
-        final action =
-            await _userRepository.followUser(event.name, event.token);
+        final action = await _userRepository.followUser(
+            name: event.name, token: event.token);
         if (action == "FOLLOW") {
           _user.numFollowers += 1;
         } else {

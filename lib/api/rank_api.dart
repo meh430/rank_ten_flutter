@@ -66,9 +66,10 @@ class RankApi {
     return jsonResponse;
   }
 
-  Future<dynamic> put({@required String endpoint,
-    Map<String, dynamic> data,
-    String bearerToken = ""}) async {
+  Future<dynamic> put(
+      {@required String endpoint,
+      Map<String, dynamic> data,
+      String bearerToken = ""}) async {
     if (data == null) {
       data = Map<String, String>();
     }
@@ -104,7 +105,13 @@ class RankApi {
       case 200:
         return json.decode(res.body.toString());
       case 400:
-        throw SchemaValidationError(res.body.toString());
+        if (res.body.toString().contains("page")) {
+          throw InvalidPageError(res.body.toString());
+        } else {
+          throw SchemaValidationError(res.body.toString());
+        }
+
+        break;
       case 401:
         throw AuthenticationError(res.body.toString());
       case 403:

@@ -11,19 +11,19 @@ class UserRepository {
     return User.fromJson(response);
   }
 
-  Future<dynamic> updateBio(String bio, String token) async {
+  Future<dynamic> updateBio({String bio, String token}) async {
     final response = await _api.put(
         endpoint: '/users', data: {'bio': bio}, bearerToken: token);
     return response;
   }
 
-  Future<dynamic> updateProfilePic(String profPic, String token) async {
+  Future<dynamic> updateProfilePic({String profPic, String token}) async {
     final response = await _api.put(
         endpoint: '/users', data: {'prof_pic': profPic}, bearerToken: token);
     return response;
   }
 
-  Future<String> followUser(String name, String token) async {
+  Future<String> followUser({String name, String token}) async {
     final response =
         await _api.post(endpoint: '/follow/$name', bearerToken: token);
 
@@ -34,9 +34,9 @@ class UserRepository {
     }
   }
 
-  Future<String> likeList(String listId, String token) async {
+  Future<String> likeList({String listId, String token}) async {
     final response =
-        await _api.post(endpoint: '/like/$Icons.list', bearerToken: token);
+    await _api.post(endpoint: '/like/$Icons.list', bearerToken: token);
 
     if (response['message'].contains("unliked")) {
       return "UNLIKED";
@@ -45,9 +45,9 @@ class UserRepository {
     }
   }
 
-  Future<Set<String>> getLikedListIds(String name, String token) async {
+  Future<Set<String>> getLikedListIds({String name, String token}) async {
     final response =
-        await _api.get(endpoint: '/likes/1?ids=True', bearerToken: token);
+    await _api.get(endpoint: '/likes/1?ids=True', bearerToken: token);
     return Set.from(
         List.generate(response.length, (index) => response[index].toString()));
   }

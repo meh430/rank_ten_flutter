@@ -14,6 +14,11 @@ class SchemaValidationError extends RankExceptions {
       : super(errorMessage: message, errorType: 'Bad Request');
 }
 
+class InvalidPageError extends RankExceptions {
+  InvalidPageError([String message])
+      : super(errorMessage: message, errorType: 'Accessing invalid page');
+}
+
 class UnauthorizedError extends RankExceptions {
   UnauthorizedError([String message])
       : super(errorMessage: message, errorType: 'Unauthorized Request');
