@@ -43,10 +43,12 @@ class UserListsBloc {
       }
 
       try {
+        currentStatus = Status.LOADING;
         _currPage += 1;
         var pageContent = await _userListsRepository.getUserRankedLists(
             name: name, page: _currPage, sort: event.sort);
         _userLists.addAll(pageContent);
+        currentStatus = Status.IDLE;
         _userListsStateSink.add(_userLists);
       } on InvalidPageError {
         hitMax = true;
