@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/components/choose_pic.dart';
@@ -41,11 +39,12 @@ class UserInfo extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           //RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
           profilePic,
-          const SizedBox(width: 10),
-          UserStatRow(user: user)
+          UserStatRow(user: user),
+          const SizedBox(width: 10)
         ],
       ),
     );
@@ -177,8 +176,7 @@ class BioWidget extends StatelessWidget {
       children: [
         Text(
           "Bio",
-          style: Theme
-              .of(context)
+          style: Theme.of(context)
               .primaryTextTheme
               .headline5
               .copyWith(color: getTitleColor(context)),
@@ -232,12 +230,7 @@ class _BioEditWidgetState extends State<BioEditWidget> {
       textInputAction: TextInputAction.done,
       controller: bController,
       maxLines: null,
-      style:
-      Theme
-          .of(context)
-          .primaryTextTheme
-          .headline4
-          .copyWith(fontSize: 16),
+      style: TextStyle(color: themeChange.isDark ? white : Colors.black),
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(20.0),
           border: getInputStyle(themeChange.isDark),
@@ -281,21 +274,12 @@ class _BioEditWidgetState extends State<BioEditWidget> {
 }
 
 Widget getProfilePic(String uInitial, BuildContext context) {
-  var colors = [
-    Colors.red,
-    Colors.green,
-    Colors.amber,
-    Colors.amberAccent,
-    Colors.purple,
-    hanPurple,
-    paraPink
-  ];
   return Container(
     width: 130.0,
     height: 130.0,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(15.0)),
-        color: colors[Random().nextInt(colors.length)]),
+        color: Utils.getRandomColor()),
     child: Center(
         child: Text((uInitial ?? "I").toUpperCase(),
             style: Theme

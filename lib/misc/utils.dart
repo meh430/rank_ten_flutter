@@ -1,5 +1,19 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'app_theme.dart';
+
+var colors = [
+  Colors.red,
+  Colors.green,
+  Colors.amber,
+  Colors.amberAccent,
+  Colors.purple,
+  hanPurple,
+  paraPink
+];
 
 class Utils {
   static String getTimeDiff(int timestamp) {
@@ -36,5 +50,9 @@ class Utils {
 
   static SnackBar getSB(String text) {
     return SnackBar(content: Text(text), behavior: SnackBarBehavior.floating);
+  }
+
+  static Color getRandomColor() {
+    return colors[Random().nextInt(colors.length)];
   }
 }

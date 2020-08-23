@@ -145,6 +145,7 @@ class _PasswordFieldState extends State<PasswordField> {
         controller: widget.pController,
         validator: widget.fieldValidator,
         obscureText: obscureText,
+        style: TextStyle(color: themeChange.isDark ? white : Colors.black),
         decoration: InputDecoration(
             suffixIcon: GestureDetector(
               dragStartBehavior: DragStartBehavior.down,
@@ -180,6 +181,7 @@ class NameField extends StatelessWidget {
         .isDark;
     return TextFormField(
         controller: uController,
+        style: TextStyle(color: isDark ? white : Colors.black),
         validator: validateUsername,
         decoration: InputDecoration(
             labelText: 'Username',

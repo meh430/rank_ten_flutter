@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
+import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
-import 'package:rank_ten/providers/main_user_provider.dart';
 
 import 'choose_pic.dart';
 
 class RankedListCardWidget extends StatelessWidget {
+  final RankedListCard listCard;
+
+  const RankedListCardWidget({Key key, this.listCard}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final MainUserProvider userProvider =
-        Provider.of<MainUserProvider>(context);
     return Card(
       elevation: 4,
       margin: EdgeInsets.only(left: 10, right: 10, bottom: 12),
@@ -22,17 +25,27 @@ class RankedListCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CardHeader(),
+            CardHeader(
+                userName: listCard.userName,
+                profPicUrl: listCard.profPic,
+                dateCreated: listCard.dateCreated),
             Text("Best Shows!",
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4,
                 textAlign: TextAlign.center),
             SizedBox(height: 10),
             RankItemImage(
                 imageUrl:
-                    "https://cdn.vox-cdn.com/thumbor/hOagCnRe2cCIIZhcLuJUH5ZPVvk=/0x0:1075x604/1200x800/filters:focal(452x216:624x388)/cdn.vox-cdn.com/uploads/chorus_image/image/66255911/Screen_Shot_2020_02_05_at_9.44.59_AM.0.png"),
+                "https://cdn.vox-cdn.com/thumbor/hOagCnRe2cCIIZhcLuJUH5ZPVvk=/0x0:1075x604/1200x800/filters:focal(452x216:624x388)/cdn.vox-cdn.com/uploads/chorus_image/image/66255911/Screen_Shot_2020_02_05_at_9.44.59_AM.0.png"),
             RankPreviewItems(),
             Text("View 7 more items",
-                style: Theme.of(context).textTheme.headline6.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.bold)),
             CardFooter(),
@@ -45,10 +58,21 @@ class RankedListCardWidget extends StatelessWidget {
 }
 
 class CardHeader extends StatelessWidget {
+  final int dateCreated;
+  final String userName;
+  final String profPicUrl;
+
+  CardHeader({@required this.dateCreated,
+    @required this.userName,
+    @required this.profPicUrl});
+
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
-    var textTheme = Theme.of(context)
+    var isDark = Provider
+        .of<DarkThemeProvider>(context)
+        .isDark;
+    var textTheme = Theme
+        .of(context)
         .primaryTextTheme
         .headline6
         .copyWith(color: isDark ? white : secondText);
@@ -60,13 +84,13 @@ class CardHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Row(children: [
-            CircleImage(),
+            CircleImage(profPicUrl: profPicUrl, userName: userName),
             SizedBox(
               width: 8,
             ),
-            Text("Meh4life321", style: textTheme)
+            Text(userName, style: textTheme)
           ]),
-          Text("2h ago", style: textTheme)
+          Text(Utils.getTimeDiff(dateCreated), style: textTheme)
         ],
       ),
     );
@@ -74,20 +98,43 @@ class CardHeader extends StatelessWidget {
 }
 
 class CircleImage extends StatelessWidget {
+  final String profPicUrl;
+  final String userName;
+
+  CircleImage({@required this.profPicUrl, this.userName});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    var profPic = profPicUrl.isEmpty
+        ? Container(
+        width: 60.0,
+        height: 60.0,
+        color: Utils.getRandomColor(),
+        child: Text(userName[0],
+            style: Theme
+                .of(context)
+                .primaryTextTheme
+                .headline2
+                .copyWith(color: Colors.black)),
+        decoration: new BoxDecoration(shape: BoxShape.circle))
+        : Container(
         width: 60.0,
         height: 60.0,
         decoration: new BoxDecoration(
             shape: BoxShape.circle,
             image: new DecorationImage(
-                fit: BoxFit.fill,
-                image: new NetworkImage("https://i.imgur.com/BoN9kdC.png"))));
+                fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
+
+    return profPic;
   }
 }
 
 class RankPreviewItem extends StatelessWidget {
+  final String rank;
+  final String rankItemTitle;
+
+  RankPreviewItem({this.rank, this.rankItemTitle});
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -96,19 +143,26 @@ class RankPreviewItem extends StatelessWidget {
             margin: EdgeInsets.all(12),
             child: Center(
                 child: Text(
-              "1",
-              textAlign: TextAlign.center,
-              style:
-                  Theme.of(context).textTheme.headline4.copyWith(color: white),
-            )),
+                  rank,
+                  textAlign: TextAlign.center,
+                  style:
+                  Theme
+                      .of(context)
+                      .textTheme
+                      .headline4
+                      .copyWith(color: white),
+                )),
             width: 85.0,
             height: 85.0,
             decoration:
-                new BoxDecoration(shape: BoxShape.circle, color: lavender)),
+            new BoxDecoration(shape: BoxShape.circle, color: lavender)),
         SizedBox(width: 10),
         Expanded(
-            child:
-                Text("Rank Item", style: Theme.of(context).textTheme.headline4))
+            child: Text(rankItemTitle,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4))
       ],
     );
   }

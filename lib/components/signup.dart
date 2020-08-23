@@ -89,10 +89,10 @@ class Signup extends StatelessWidget {
 TextFormField getBioField(TextEditingController bController,
     TextStyle labelStyle, BuildContext context) {
   final themeChange = Provider.of<DarkThemeProvider>(context);
-  print(themeChange.isDark);
   return TextFormField(
       controller: bController,
       validator: validateBio,
+      style: TextStyle(color: themeChange.isDark ? Colors.white : Colors.black),
       maxLines: 3,
       decoration: InputDecoration(
           labelText: 'Bio',
