@@ -21,10 +21,12 @@ class MainUserProvider with ChangeNotifier {
         .getLikedListIds(name: mainUser.userName, token: jwtToken);
     print(mainUser.likedLists);
     print(mainUser.userName);
-    mainUserState.listen((Response response) {
+    mainUserState.listen((Response response) async {
       currentStatus = response.status;
       if (response.status == Status.COMPLETED) {
         mainUser = response.value;
+        mainUser.likedLists = await UserRepository()
+            .getLikedListIds(name: mainUser.userName, token: jwtToken);
         notifyListeners();
       }
     });

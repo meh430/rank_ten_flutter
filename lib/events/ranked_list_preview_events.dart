@@ -4,5 +4,5 @@ class RankedListPreviewEvent {
   final String token;
   final String query;
 
-  RankedListPreviewEvent(this.sort, this.name, this.token, this.query);
+  RankedListPreviewEvent({this.sort, this.name, this.token, this.query});
 }

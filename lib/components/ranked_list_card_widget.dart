@@ -43,7 +43,7 @@ class RankedListCardWidget extends StatelessWidget {
                 userName: listCard.userName,
                 profPicUrl: listCard.profPic,
                 dateCreated: listCard.dateCreated),
-            Text("Best Shows!",
+            Text(listCard.title,
                 style: Theme.of(context).textTheme.headline4,
                 textAlign: TextAlign.center),
             const SizedBox(height: 10),
@@ -325,7 +325,8 @@ class CommentPreviewCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Text("View all $numComments comments",
+              numComments > 1
+                  ? Text("View all $numComments comments",
                   style: Theme
                       .of(context)
                       .textTheme
@@ -333,8 +334,9 @@ class CommentPreviewCard extends StatelessWidget {
                       .copyWith(
                       fontSize: 14,
                       decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10)
+                      fontWeight: FontWeight.bold))
+                  : SizedBox(),
+              numComments > 1 ? SizedBox(height: 10) : SizedBox()
             ],
           ),
         ));

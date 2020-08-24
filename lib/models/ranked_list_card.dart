@@ -25,11 +25,12 @@ class RankedListCard {
       this.picture});
 
   RankedListCard.fromJson(Map<String, dynamic> json) {
+    print(json);
     id = json['_id'];
     userName = json['user_name'];
     profPic = json['prof_pic'];
     title = json['title'];
-    dateCreated = json['date_created'][r'$date_created'];
+    dateCreated = json['date_created'][r'$date'];
     numLikes = json['num_likes'];
     numItems = json['num_rank_items'];
     numComments = json['num_comments'];

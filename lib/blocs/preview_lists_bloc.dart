@@ -54,6 +54,10 @@ class PreviewListsBloc {
             token: event.token,
             query: event.query);
 
+        if (pageContent.length <= 10) {
+          hitMax = true;
+        }
+
         _previewLists.addAll(pageContent);
         currentStatus = Status.IDLE;
         _listStateSink.add(_previewLists);
