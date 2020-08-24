@@ -82,17 +82,15 @@ class CardHeader extends StatelessWidget {
   final String userName;
   final String profPicUrl;
 
-  CardHeader({@required this.dateCreated,
-    @required this.userName,
-    @required this.profPicUrl});
+  CardHeader(
+      {@required this.dateCreated,
+      @required this.userName,
+      @required this.profPicUrl});
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider
-        .of<DarkThemeProvider>(context)
-        .isDark;
-    var textTheme = Theme
-        .of(context)
+    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
+    var textTheme = Theme.of(context)
         .textTheme
         .headline6
         .copyWith(color: isDark ? white : secondText);
@@ -181,7 +179,8 @@ class RankPreviewItem extends StatelessWidget {
                 style: Theme
                     .of(context)
                     .textTheme
-                    .headline4))
+                    .headline5
+                    .copyWith(fontSize: 26)))
       ],
     );
   }
@@ -215,47 +214,52 @@ class _CardFooterState extends State<CardFooter> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 18, bottom: 20),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
+      child: Column(
         children: [
-          IconButton(
-            icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
-                color: Colors.red, size: 60),
-            onPressed: () {
-              setState(() {
-                if (_liking) {
-                  return;
-                } else {
-                  if (_isLiked) {
-                    _numLikes--;
-                  } else {
-                    _numLikes++;
-                  }
-                  _isLiked = !_isLiked;
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
+                    color: Colors.red, size: 55),
+                onPressed: () {
+                  setState(() {
+                    if (_liking) {
+                      return;
+                    } else {
+                      if (_isLiked) {
+                        _numLikes--;
+                      } else {
+                        _numLikes++;
+                      }
+                      _isLiked = !_isLiked;
 
-                  widget.likePressed();
-                  _liking = true;
-                  Future.delayed(
-                      Duration(milliseconds: 1500), () => _liking = false);
-                }
-              });
-            },
+                      widget.likePressed();
+                      _liking = true;
+                      Future.delayed(
+                          Duration(milliseconds: 1500), () => _liking = false);
+                    }
+                  });
+                },
+              ),
+              Column(children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "$_numLikes likes",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline5,
+                )
+              ])
+            ],
           ),
-          Column(children: [
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "$_numLikes likes",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            )
-          ])
+          SizedBox(height: 10)
         ],
       ),
     );
@@ -277,7 +281,8 @@ class RankPreviewItems extends StatelessWidget {
           key: ObjectKey(item)));
     });
 
-    return Column(children: colChildren);
+    return Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(children: colChildren));
   }
 }
 
