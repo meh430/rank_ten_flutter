@@ -52,7 +52,8 @@ class PreviewListsBloc {
             page: _currPage,
             sort: event.sort,
             token: event.token,
-            query: event.query);
+            query: event.query,
+            refresh: event.refresh);
 
         if (pageContent.length <= 10) {
           hitMax = true;

@@ -32,8 +32,9 @@ class LikeCommentEvent extends UserEvent {
 
 class GetUserEvent extends UserEvent {
   final String name;
+  final String token;
 
-  GetUserEvent(this.name);
+  GetUserEvent(this.name, {this.token = ""});
 }
 
 class CreateList extends UserEvent {}

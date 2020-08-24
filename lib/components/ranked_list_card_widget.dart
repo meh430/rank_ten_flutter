@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rank_ten/events/user_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
@@ -17,7 +16,7 @@ class RankedListCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<MainUserProvider>(context);
+    var userProvider = Provider.of<MainUserProvider>(context, listen: false);
     var isLiked = userProvider.mainUser.likedLists.contains(listCard.id);
 
     var hasThree = listCard.numItems > 3;
@@ -61,8 +60,9 @@ class RankedListCardWidget extends StatelessWidget {
               numLikes: listCard.numLikes,
               isLiked: isLiked,
               likePressed: () {
-                userProvider.addUserEvent(LikeListEvent(
-                    id: listCard.id, token: userProvider.jwtToken));
+                userProvider.likeList(listCard.id);
+                //userProvider.addUserEvent(LikeListEvent(
+                //   id: listCard.id, token: userProvider.jwtToken));
               },
             ),
             listCard.commentPreview != null
@@ -123,23 +123,22 @@ class CircleImage extends StatelessWidget {
   Widget build(BuildContext context) {
     var profPic = profPicUrl.isEmpty
         ? Container(
-        width: 60.0,
-        height: 60.0,
-        color: Utils.getRandomColor(),
-        child: Text(userName[0],
-            style: Theme
-                .of(context)
-                .textTheme
-                .headline2
-                .copyWith(color: Colors.black)),
-        decoration: new BoxDecoration(shape: BoxShape.circle))
+            width: 60.0,
+            height: 60.0,
+            color: Utils.getRandomColor(),
+            child: Text(userName[0],
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2
+                    .copyWith(color: Colors.black)),
+            decoration: new BoxDecoration(shape: BoxShape.circle))
         : Container(
-        width: 60.0,
-        height: 60.0,
-        decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            image: new DecorationImage(
-                fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
+            width: 60.0,
+            height: 60.0,
+            decoration: new BoxDecoration(
+                shape: BoxShape.circle,
+                image: new DecorationImage(
+                    fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
 
     return profPic;
   }
@@ -154,6 +153,9 @@ class RankPreviewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDark = Provider
+        .of<DarkThemeProvider>(context, listen: false)
+        .isDark;
     return Row(
       children: [
         Container(
@@ -180,7 +182,8 @@ class RankPreviewItem extends StatelessWidget {
                     .of(context)
                     .textTheme
                     .headline5
-                    .copyWith(fontSize: 26)))
+                    .copyWith(
+                    fontSize: 26, color: isDark ? white : Colors.black)))
       ],
     );
   }
@@ -226,23 +229,23 @@ class _CardFooterState extends State<CardFooter> {
                 icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
                     color: Colors.red, size: 55),
                 onPressed: () {
-                  setState(() {
-                    if (_liking) {
-                      return;
-                    } else {
-                      if (_isLiked) {
+                  if (!_liking) {
+                    if (_isLiked) {
+                      setState(() {
                         _numLikes--;
-                      } else {
+                        _isLiked = false;
+                      });
+                    } else {
+                      setState(() {
                         _numLikes++;
-                      }
-                      _isLiked = !_isLiked;
-
-                      widget.likePressed();
-                      _liking = true;
-                      Future.delayed(
-                          Duration(milliseconds: 1500), () => _liking = false);
+                        _isLiked = true;
+                      });
                     }
-                  });
+                    widget.likePressed();
+                    _liking = true;
+                    Future.delayed(
+                        Duration(milliseconds: 1500), () => _liking = false);
+                  }
                 },
               ),
               Column(children: [
@@ -281,7 +284,8 @@ class RankPreviewItems extends StatelessWidget {
           key: ObjectKey(item)));
     });
 
-    return Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(children: colChildren));
   }
 }

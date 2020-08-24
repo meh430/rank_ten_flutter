@@ -7,6 +7,7 @@ import 'package:rank_ten/repos/user_repository.dart';
 
 class UserBloc {
   User _user;
+  bool isMain;
 
   UserRepository _userRepository;
 
@@ -23,6 +24,7 @@ class UserBloc {
   StreamSink<UserEvent> get userEventSink => _userEventController.sink;
 
   UserBloc({String name, bool isMain = false, User mainUser}) {
+    this.isMain = isMain;
     _userRepository = UserRepository();
     if (isMain) {
       _userStateController = StreamController<Response<User>>.broadcast();
@@ -47,6 +49,10 @@ class UserBloc {
         _userStateSink.add(Response.loading("Loading user"));
 
         _user = await _userRepository.getUser(event.name);
+        if (isMain) {
+          _user.likedLists = await UserRepository()
+              .getLikedListIds(name: event.name, token: event.token);
+        }
         _userStateSink.add(Response.completed(_user));
       } else if (event is UpdateBioEvent) {
         _userStateSink.add(Response.loading("Updating bio"));

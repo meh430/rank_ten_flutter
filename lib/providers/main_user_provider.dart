@@ -25,8 +25,9 @@ class MainUserProvider with ChangeNotifier {
       currentStatus = response.status;
       if (response.status == Status.COMPLETED) {
         mainUser = response.value;
-        mainUser.likedLists = await UserRepository()
-            .getLikedListIds(name: mainUser.userName, token: jwtToken);
+
+        //mainUser.likedLists = await UserRepository()
+        //    .getLikedListIds(name: mainUser.userName, token: jwtToken);
         notifyListeners();
       }
     });
@@ -36,6 +37,16 @@ class MainUserProvider with ChangeNotifier {
   void addUserEvent(UserEvent event) {
     mainUserBloc.userEventSink.add(event);
     notifyListeners();
+  }
+
+  void likeList(String listId) async {
+    await UserRepository().likeList(listId: listId, token: jwtToken);
+
+    if (mainUser.likedLists.contains(listId)) {
+      mainUser.likedLists.remove(listId);
+    } else {
+      mainUser.likedLists.add(listId);
+    }
   }
 
   void logOut() {

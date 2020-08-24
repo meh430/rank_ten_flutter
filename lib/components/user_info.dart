@@ -95,10 +95,7 @@ class UserStat extends StatelessWidget {
             statCount.toString(),
             style: Theme.of(context).primaryTextTheme.headline6,
           ),
-          Text(statLabel, style: Theme
-              .of(context)
-              .textTheme
-              .headline6)
+          Text(statLabel, style: Theme.of(context).textTheme.headline6)
         ],
       ),
     );

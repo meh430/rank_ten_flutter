@@ -66,7 +66,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
           (BuildContext context, AsyncSnapshot<List<RankedListCard>> snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           return ListView.builder(
-              shrinkWrap: true,
+              shrinkWrap: false,
               controller: _scrollController,
               itemCount: snapshot.data.length + 1,
               itemBuilder: (context, index) {

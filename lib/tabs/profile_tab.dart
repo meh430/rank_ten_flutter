@@ -5,7 +5,7 @@ import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/blocs/user_bloc.dart';
 import 'package:rank_ten/components/user_info.dart';
-import 'package:rank_ten/components/user_lists.dart';
+import 'package:rank_ten/components/user_top_lists.dart';
 import 'package:rank_ten/events/user_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/user.dart';
@@ -26,6 +26,7 @@ class UserInfoBuilder extends StatefulWidget {
 class _UserInfoBuilderState extends State<UserInfoBuilder> {
   MainUserProvider _userProvider;
   UserBloc _mainUserBloc;
+  bool refresh = false;
 
   @override
   void initState() {
@@ -56,8 +57,6 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
             children: [
               UserInfo(user: snapshot.data.value, isMain: true),
               UserBio(user: snapshot.data.value, isMain: true),
-              UserLists(),
-              LogOutButton()
             ],
           );
       }
@@ -70,17 +69,30 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => Future.delayed(
-          Duration(milliseconds: 0),
-          () => _mainUserBloc.userEventSink
-              .add(GetUserEvent(_userProvider.mainUser.userName))),
+      onRefresh: () =>
+          Future.delayed(Duration(milliseconds: 0), () {
+            _mainUserBloc.userEventSink
+                .add(GetUserEvent(_userProvider.mainUser.userName,
+                token: _userProvider.jwtToken));
+            setState(() {
+              print("Refresh $refresh");
+              refresh = !refresh;
+            });
+          }),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
             parent: const AlwaysScrollableScrollPhysics()),
-        child: StreamBuilder<Response<User>>(
-            stream: _mainUserBloc.userStateStream,
-            initialData: Response.completed(_userProvider.mainUser),
-            builder: builderFunction),
+        child: Column(children: [
+          StreamBuilder<Response<User>>(
+              key: UniqueKey(),
+              stream: _mainUserBloc.userStateStream,
+              initialData: Response.completed(_userProvider.mainUser),
+              builder: builderFunction),
+          UserTopLists(
+              name: _userProvider.mainUser.userName,
+              refresh: refresh,
+              key: UniqueKey())
+        ]),
       ),
     );
   }
