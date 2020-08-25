@@ -8,6 +8,7 @@ import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/tabs/discover_tab.dart';
 import 'package:rank_ten/tabs/feed_tab.dart';
 import 'package:rank_ten/tabs/profile_tab.dart';
+import 'package:rank_ten/tabs/search_tab.dart';
 
 var _appBarTitles = ["Feed", "Discover", "Search"];
 
@@ -22,11 +23,14 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen>
+    with SingleTickerProviderStateMixin {
   int _currIndex = 0;
   int _sortOption = LIKES_DESC;
   String _query = "";
   List<Widget> _destinations = [];
+
+  TabController _searchTabController;
 
   @override
   void initState() {
@@ -39,6 +43,7 @@ class _MainScreenState extends State<MainScreen> {
     _destinations.add(DiscoverTab(sort: _sortOption));
     _destinations.add(getTempDest(2));
     _destinations.add(ProfileTab());
+    _searchTabController = TabController(length: 2, vsync: this);
   }
 
   void _onItemTapped(int index) {
@@ -69,10 +74,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _searchCallback(String query) {
+    final prevIndex = _currIndex;
     print("query: $query");
     setState(() {
       _query = query;
+      _currIndex = 3;
     });
+
+    Future.delayed(Duration(milliseconds: 50),
+            () => setState(() => _currIndex = prevIndex));
   }
 
   Color getTabItemColor(int index) {
@@ -84,16 +94,26 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       extendBody: true,
       resizeToAvoidBottomInset: false,
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70.0),
-          child: _currIndex == 2
-              ? SearchAppBar(
-                  sortCallback: _sortCallback, searchCallback: _searchCallback)
-              : MainAppBar(
-                  sortCallback: _sortCallback,
-                  index: _currIndex,
-                )),
-      body: CurrentTab(sort: _sortOption, query: _query, index: _currIndex),
+      appBar: _currIndex == 2
+          ? PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: SearchAppBar(
+            sortCallback: _sortCallback,
+            searchCallback: _searchCallback,
+            tabController: _searchTabController),
+      )
+          : PreferredSize(
+        preferredSize: Size.fromHeight(70),
+        child: MainAppBar(
+          sortCallback: _sortCallback,
+          index: _currIndex,
+        ),
+      ),
+      body: CurrentTab(
+          sort: _sortOption,
+          query: _query,
+          index: _currIndex,
+          tabController: _searchTabController),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -140,7 +160,6 @@ class _MainScreenState extends State<MainScreen> {
                     iconSize: 35))
           ],
         ),
-
         color: Theme.of(context).cardColor,
       ),
     );
@@ -181,7 +200,6 @@ class _MainAppBarState extends State<MainAppBar> {
     }
 
     return AppBar(
-      toolbarHeight: 70,
       automaticallyImplyLeading: false,
       elevation: 0.0,
       brightness: isDark ? Brightness.dark : Brightness.light,
@@ -202,8 +220,9 @@ class _MainAppBarState extends State<MainAppBar> {
 
 class SearchAppBar extends StatefulWidget {
   final sortCallback, searchCallback;
+  final TabController tabController;
 
-  SearchAppBar({this.sortCallback, this.searchCallback});
+  SearchAppBar({this.sortCallback, this.searchCallback, this.tabController});
 
   @override
   _SearchAppBarState createState() => _SearchAppBarState();
@@ -211,7 +230,6 @@ class SearchAppBar extends StatefulWidget {
 
 class _SearchAppBarState extends State<SearchAppBar> {
   var _searchController = TextEditingController();
-  var _searching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -220,45 +238,54 @@ class _SearchAppBarState extends State<SearchAppBar> {
         .isDark;
 
     return AppBar(
-      toolbarHeight: 70,
-      elevation: 0.0,
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      backgroundColor: Theme
-          .of(context)
-          .scaffoldBackgroundColor,
-      actions: [
-        getSortAction(
-            context: context, isDark: isDark, sortCallback: widget.sortCallback)
-      ],
-      leading: Icon(Icons.search, color: isDark ? lavender : darkSienna),
-      title: _searching
-          ? TextField(
-        controller: _searchController,
-        style: Theme
+        elevation: 0.0,
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        backgroundColor: Theme
             .of(context)
-            .textTheme
-            .headline6,
-        textInputAction: TextInputAction.search,
-        decoration: InputDecoration(
-            hintText: "Search...",
-            hintStyle: Theme
-                .of(context)
-                .textTheme
-                .headline6
-                .copyWith(color: secondText)),
-        onSubmitted: (value) => widget.searchCallback(value),
-      )
-          : GestureDetector(
-        onTap: () => setState(() => _searching = true),
-        child: Padding(
-            padding: const EdgeInsets.only(left: 12.0, top: 12.0),
-            child: Text("Search",
-                style: Theme
-                    .of(context)
-                    .primaryTextTheme
-                    .headline3)),
-      ),
-    );
+            .scaffoldBackgroundColor,
+        actions: [
+          getSortAction(
+              context: context,
+              isDark: isDark,
+              sortCallback: widget.sortCallback)
+        ],
+        leading: Icon(Icons.search, color: isDark ? lavender : darkSienna),
+        bottom: TabBar(
+          controller: widget.tabController,
+          indicatorSize: TabBarIndicatorSize.label,
+          indicatorColor: Theme
+              .of(context)
+              .accentColor,
+          tabs: [
+            Tab(
+              text: 'Lists',
+            ),
+            Tab(
+              text: 'People',
+            ),
+          ],
+        ),
+        title: TextField(
+          controller: _searchController,
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline6,
+          textInputAction: TextInputAction.search,
+          decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: secondText
+                  )
+              ),
+              hintText: "Search...",
+              hintStyle: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6
+                  .copyWith(color: secondText)),
+          onSubmitted: (value) => widget.searchCallback(value),
+        ));
   }
 }
 
@@ -319,8 +346,9 @@ Widget getSortOption(
 class CurrentTab extends StatelessWidget {
   final int sort, index;
   final String query;
+  final TabController tabController;
 
-  CurrentTab({this.sort, this.index, this.query});
+  CurrentTab({this.sort, this.index, this.query, this.tabController});
 
   @override
   Widget build(BuildContext context) {
@@ -329,10 +357,15 @@ class CurrentTab extends StatelessWidget {
     } else if (index == 1) {
       return DiscoverTab(sort: sort);
     } else if (index == 2) {
-      return getTempDest(2);
+      return TabBarView(
+        controller: tabController,
+        children: [
+          SearchTabLists(query: query, sort: sort, searchLists: true),
+          SearchTabLists(query: query, sort: sort, searchLists: false)
+        ],
+      );
     }
 
     return ProfileTab();
   }
 }
-

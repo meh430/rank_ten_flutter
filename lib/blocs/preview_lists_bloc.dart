@@ -67,7 +67,11 @@ class PreviewListsBloc {
 
         _previewLists.addAll(pageContent);
         currentStatus = Status.IDLE;
-        _listStateSink.add(_previewLists);
+        try {
+          _listStateSink.add(_previewLists);
+        } catch (e) {
+          print("Sink disposed?");
+        }
       } on InvalidPageError {
         hitMax = true;
         _currPage -= 1;

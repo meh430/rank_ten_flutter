@@ -51,7 +51,8 @@ class RankedListPreviewRepository {
         endpoint = '/rankedlists/$name/1/$LIKES_DESC';
         break;
       case SEARCH_LISTS:
-        endpoint += '/$page/$sort';
+        query = query.replaceAll(" ", "+");
+        endpoint += '/$page/$sort?q=$query';
         break;
     }
 

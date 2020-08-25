@@ -8,13 +8,14 @@ import 'package:rank_ten/models/ranked_list_card.dart';
 
 class GenericListPreviewWidget extends StatefulWidget {
   final int sort;
-  final String name, token, query, listType;
+  final String name, token, query, listType, emptyMessage;
 
   const GenericListPreviewWidget(
       {this.sort = 0,
       this.name = "",
       this.token = "",
       this.query = "",
+      this.emptyMessage = 'No lists found',
       @required this.listType});
 
   @override
@@ -76,21 +77,28 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                     refresh: true));
               });
             },
-            child: ListView.builder(
-                shrinkWrap: false,
-                physics: const BouncingScrollPhysics(
-                    parent: const AlwaysScrollableScrollPhysics()),
-                controller: _scrollController,
-                itemCount: snapshot.data.length + 1,
-                itemBuilder: (context, index) {
-                  if (index >= snapshot.data.length && !_listsBloc.hitMax) {
-                    return SpinKitRipple(size: 50, color: hanPurple);
-                  } else if (index >= snapshot.data.length) {
-                    return SizedBox();
-                  }
+            child: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: ListView.builder(
+                  shrinkWrap: false,
+                  physics: const BouncingScrollPhysics(
+                      parent: const AlwaysScrollableScrollPhysics()),
+                  controller: _scrollController,
+                  itemCount: snapshot.data.length + 1,
+                  itemBuilder: (context, index) {
+                    if (snapshot.data.length == 0) {
+                      return Text(widget.emptyMessage);
+                    }
 
-                  return RankedListCardWidget(listCard: snapshot.data[index]);
-                }),
+                    if (index >= snapshot.data.length && !_listsBloc.hitMax) {
+                      return SpinKitRipple(size: 50, color: hanPurple);
+                    } else if (index >= snapshot.data.length) {
+                      return SizedBox();
+                    }
+
+                    return RankedListCardWidget(listCard: snapshot.data[index]);
+                  }),
+            ),
           );
         } else if (snapshot.hasError) {
           return Text("Error retrieving items...");
