@@ -21,7 +21,6 @@ var colors = [
 
 class Utils {
   static String getTimeDiff(int timestamp) {
-    print(timestamp);
     var now = DateTime.now();
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     var diff = now.difference(date);

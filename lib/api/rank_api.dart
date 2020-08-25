@@ -13,8 +13,6 @@ class RankApi {
     var isValid = false;
     try {
       final res = await http.get(imageUrl, headers: {'Accept': 'image/*'});
-      print(res.headers);
-      print(res.statusCode);
 
       isValid = res.statusCode == 200 &&
           res.headers['content-type'].contains("image");

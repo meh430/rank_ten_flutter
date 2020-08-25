@@ -19,7 +19,6 @@ class Authorization {
     var response = await _api.post(
         endpoint: '/login',
         data: {'user_name': userName, 'password': password});
-    print(response);
     var user = User.fromJson(response);
     _store.saveCred(user.jwtToken, userName, password);
     return user;

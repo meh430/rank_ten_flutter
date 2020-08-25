@@ -53,7 +53,6 @@ class _MainScreenState extends State<MainScreen>
   }
 
   void _sortCallback(String option) {
-    final prevIndex = _currIndex;
     print(option);
     setState(() {
       if (option.contains("like")) {
@@ -63,26 +62,14 @@ class _MainScreenState extends State<MainScreen>
       } else if (option.contains("oldest")) {
         _sortOption = DATE_ASC;
       }
-
-      //_destinations[0] = FeedTab(sort: _sortOption);
-      //_destinations[1] = DiscoverTab(sort: _sortOption);
-      _currIndex = 3;
     });
-
-    Future.delayed(Duration(milliseconds: 15),
-        () => setState(() => _currIndex = prevIndex));
   }
 
   void _searchCallback(String query) {
-    final prevIndex = _currIndex;
     print("query: $query");
     setState(() {
       _query = query;
-      _currIndex = 3;
     });
-
-    Future.delayed(Duration(milliseconds: 50),
-            () => setState(() => _currIndex = prevIndex));
   }
 
   Color getTabItemColor(int index) {
@@ -96,20 +83,21 @@ class _MainScreenState extends State<MainScreen>
       resizeToAvoidBottomInset: false,
       appBar: _currIndex == 2
           ? PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: SearchAppBar(
-            sortCallback: _sortCallback,
-            searchCallback: _searchCallback,
-            tabController: _searchTabController),
-      )
+              preferredSize: Size.fromHeight(100),
+              child: SearchAppBar(
+                  sortCallback: _sortCallback,
+                  searchCallback: _searchCallback,
+                  tabController: _searchTabController),
+            )
           : PreferredSize(
-        preferredSize: Size.fromHeight(70),
-        child: MainAppBar(
-          sortCallback: _sortCallback,
-          index: _currIndex,
-        ),
-      ),
+              preferredSize: Size.fromHeight(70),
+              child: MainAppBar(
+                sortCallback: _sortCallback,
+                index: _currIndex,
+              ),
+            ),
       body: CurrentTab(
+          key: UniqueKey(),
           sort: _sortOption,
           query: _query,
           index: _currIndex,
@@ -274,10 +262,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
           textInputAction: TextInputAction.search,
           decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: secondText
-                  )
-              ),
+                  borderSide: BorderSide(color: secondText)),
               hintText: "Search...",
               hintStyle: Theme
                   .of(context)
@@ -348,20 +333,38 @@ class CurrentTab extends StatelessWidget {
   final String query;
   final TabController tabController;
 
-  CurrentTab({this.sort, this.index, this.query, this.tabController});
+  CurrentTab({this.sort, this.index, this.query, this.tabController, Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (index == 0) {
-      return FeedTab(sort: sort);
+      return FeedTab(
+        sort: sort,
+        key: UniqueKey(),
+      );
     } else if (index == 1) {
-      return DiscoverTab(sort: sort);
+      return DiscoverTab(
+        sort: sort,
+        key: UniqueKey(),
+      );
     } else if (index == 2) {
       return TabBarView(
         controller: tabController,
+        key: UniqueKey(),
         children: [
-          SearchTabLists(query: query, sort: sort, searchLists: true),
-          SearchTabLists(query: query, sort: sort, searchLists: false)
+          SearchTabLists(
+            query: query,
+            sort: sort,
+            searchLists: true,
+            key: UniqueKey(),
+          ),
+          SearchTabLists(
+            query: query,
+            sort: sort,
+            searchLists: false,
+            key: UniqueKey(),
+          )
         ],
       );
     }

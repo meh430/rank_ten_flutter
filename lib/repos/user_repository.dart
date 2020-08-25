@@ -57,7 +57,7 @@ class UserRepository {
 
   Future<Set<String>> getLikedListIds({String name, String token}) async {
     final response =
-        await _api.get(endpoint: '/likes/1?ids=True', bearerToken: token);
+        await _api.get(endpoint: '/likes/1/0?ids=True', bearerToken: token);
     return Set.from(
         List.generate(response.length, (index) => response[index].toString()));
   }

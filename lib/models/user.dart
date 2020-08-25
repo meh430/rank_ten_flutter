@@ -8,6 +8,7 @@ class User {
   int numFollowing;
   int rankPoints;
   int numComments;
+  int numLiked;
   int listNum;
   String jwtToken;
   Set<String> followers;
@@ -24,6 +25,7 @@ class User {
       this.numFollowing,
       this.rankPoints,
       this.numComments,
+      this.numLiked,
       this.listNum,
       this.jwtToken,
       this.likedLists,
@@ -41,6 +43,7 @@ class User {
     numComments = json['num_comments'];
     numFollowers = json['num_followers'];
     numFollowing = json['num_following'];
+    numLiked = json['num_liked'];
 
     if (json['following'] != null) {
       following = Set<String>();

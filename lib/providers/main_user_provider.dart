@@ -19,8 +19,7 @@ class MainUserProvider with ChangeNotifier {
     mainUser = user;
     mainUser.likedLists = await UserRepository()
         .getLikedListIds(name: mainUser.userName, token: jwtToken);
-    print(mainUser.likedLists);
-    print(mainUser.userName);
+
     mainUserState.listen((Response response) async {
       currentStatus = response.status;
       if (response.status == Status.COMPLETED) {

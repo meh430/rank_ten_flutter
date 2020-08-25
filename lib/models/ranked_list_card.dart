@@ -25,7 +25,6 @@ class RankedListCard {
       this.picture});
 
   RankedListCard.fromJson(Map<String, dynamic> json) {
-    print(json);
     id = json['_id'];
     userName = json['user_name'];
     profPic = json['prof_pic'];

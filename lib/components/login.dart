@@ -84,7 +84,6 @@ class Login extends StatelessWidget {
     if (_fKey.currentState.validate()) {
       final password = pController.text;
       final username = uController.text;
-      print(username + ", " + password);
       submitLogin(username, password);
     }
   }

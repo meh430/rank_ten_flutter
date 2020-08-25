@@ -7,16 +7,14 @@ class SearchTabLists extends StatelessWidget {
   final int sort;
   final bool searchLists;
 
-  SearchTabLists({this.query, this.sort, this.searchLists});
+  const SearchTabLists({Key key, this.query, this.sort, this.searchLists})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return searchLists
         ? GenericListPreviewWidget(
-            listType: SEARCH_LISTS,
-            query: query,
-            sort: sort,
-          )
+            listType: SEARCH_LISTS, query: query, sort: sort, key: key)
         : Text(query);
   }
 }

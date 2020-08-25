@@ -39,7 +39,7 @@ class PreviewListsBloc {
 
   void _eventToState(event) async {
     if (event is RankedListPreviewEvent) {
-      if (hitMax) {
+      if (hitMax && !event.refresh) {
         return;
       }
 

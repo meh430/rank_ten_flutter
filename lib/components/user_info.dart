@@ -6,6 +6,8 @@ import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
+import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
+import 'package:rank_ten/routes/list_screen.dart';
 
 import '../misc/utils.dart';
 import 'login.dart';
@@ -34,22 +36,28 @@ class UserInfo extends StatelessWidget {
         : profilePic;
 
     return Card(
-      margin: const EdgeInsets.all(10.0),
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          //RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
-          profilePic,
-          UserStatRow(user: user),
-          const SizedBox(width: 10)
-        ],
-      ),
-    );
+        margin: const EdgeInsets.all(10.0),
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
+            profilePic,
+            UserStatRow(
+              user: user,
+              isMain: isMain,
+            ),
+            isMain
+                ? SizedBox()
+                : SizedBox(
+                    width: 12,
+                  )
+          ],
+        ));
   }
 }
 
@@ -82,8 +90,11 @@ class RoundedImage extends StatelessWidget {
 class UserStat extends StatelessWidget {
   final int statCount;
   final String statLabel;
+  final bool isMain;
 
-  UserStat({@required this.statLabel, @required this.statCount});
+  UserStat({@required this.statLabel,
+    @required this.statCount,
+    this.isMain = false});
 
   @override
   Widget build(BuildContext context) {
@@ -93,9 +104,18 @@ class UserStat extends StatelessWidget {
         children: <Widget>[
           Text(
             statCount.toString(),
-            style: Theme.of(context).primaryTextTheme.headline6,
+            style: Theme
+                .of(context)
+                .primaryTextTheme
+                .headline6
+                .copyWith(fontSize: isMain ? 14 : 18),
           ),
-          Text(statLabel, style: Theme.of(context).textTheme.headline6)
+          Text(statLabel,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6
+                  .copyWith(fontSize: isMain ? 14 : 18))
         ],
       ),
     );
@@ -104,24 +124,65 @@ class UserStat extends StatelessWidget {
 
 class UserStatRow extends StatelessWidget {
   final User user;
+  final bool isMain;
 
-  UserStatRow({@required this.user});
+  UserStatRow({@required this.user, this.isMain = false});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final token =
+        Provider
+            .of<MainUserProvider>(context, listen: false)
+            .jwtToken;
+    return Column(
       children: <Widget>[
-        Column(
+        Row(
           children: [
-            UserStat(statLabel: "Rank Points", statCount: user.rankPoints),
-            UserStat(statLabel: "Rank Lists", statCount: user.listNum),
+            UserStat(
+              statLabel: "Rank Points",
+              statCount: user.rankPoints,
+              isMain: isMain,
+            ),
+            UserStat(
+              statLabel: "Following",
+              statCount: user.numFollowing,
+              isMain: isMain,
+            ),
+            isMain
+                ? UserStat(
+              statLabel: "Comments",
+              statCount: user.numComments,
+              isMain: isMain,
+            )
+                : SizedBox()
           ],
         ),
-        const SizedBox(width: 10),
-        Column(
+        Row(
           children: [
-            UserStat(statLabel: "Following", statCount: user.numFollowing),
-            UserStat(statLabel: "Followers", statCount: user.numFollowers)
+            UserStat(
+              statLabel: "Rank Lists",
+              statCount: user.listNum,
+              isMain: isMain,
+            ),
+            UserStat(
+              statLabel: "Followers",
+              statCount: user.numFollowers,
+              isMain: isMain,
+            ),
+            isMain
+                ? GestureDetector(
+                onTap: () =>
+                    Navigator.pushNamed(context, '/lists',
+                        arguments: ListScreenArgs(
+                            listType: LIKED_LISTS,
+                            name: user.userName,
+                            token: token)),
+                child: UserStat(
+                  statLabel: "Liked Lists",
+                  statCount: user.numLiked,
+                  isMain: isMain,
+                ))
+                : SizedBox()
           ],
         )
       ],

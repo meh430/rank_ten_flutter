@@ -16,7 +16,9 @@ class GenericListPreviewWidget extends StatefulWidget {
       this.token = "",
       this.query = "",
       this.emptyMessage = 'No lists found',
-      @required this.listType});
+      @required this.listType,
+      Key key})
+      : super(key: key);
 
   @override
   _GenericListPreviewWidgetState createState() =>
@@ -69,6 +71,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
           return RefreshIndicator(
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
+                print("Refreshing list");
                 _listsBloc.listEventSink.add(RankedListPreviewEvent(
                     sort: widget.sort,
                     name: widget.name,
@@ -77,28 +80,35 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                     refresh: true));
               });
             },
-            child: Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: ListView.builder(
-                  shrinkWrap: false,
-                  physics: const BouncingScrollPhysics(
-                      parent: const AlwaysScrollableScrollPhysics()),
-                  controller: _scrollController,
-                  itemCount: snapshot.data.length + 1,
-                  itemBuilder: (context, index) {
-                    if (snapshot.data.length == 0) {
-                      return Text(widget.emptyMessage);
-                    }
+            child: ListView.builder(
+                shrinkWrap: false,
+                physics: const BouncingScrollPhysics(
+                    parent: const AlwaysScrollableScrollPhysics()),
+                controller: _scrollController,
+                itemCount: snapshot.data.length + 1,
+                itemBuilder: (context, index) {
+                  if (snapshot.data.length == 0) {
+                    return Center(
+                        child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Text(
+                              widget.emptyMessage,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline4,
+                              textAlign: TextAlign.center,
+                            )));
+                  }
 
-                    if (index >= snapshot.data.length && !_listsBloc.hitMax) {
-                      return SpinKitRipple(size: 50, color: hanPurple);
-                    } else if (index >= snapshot.data.length) {
-                      return SizedBox();
-                    }
+                  if (index >= snapshot.data.length && !_listsBloc.hitMax) {
+                    return SpinKitRipple(size: 50, color: hanPurple);
+                  } else if (index >= snapshot.data.length) {
+                    return SizedBox();
+                  }
 
-                    return RankedListCardWidget(listCard: snapshot.data[index]);
-                  }),
-            ),
+                  return RankedListCardWidget(listCard: snapshot.data[index]);
+                }),
           );
         } else if (snapshot.hasError) {
           return Text("Error retrieving items...");

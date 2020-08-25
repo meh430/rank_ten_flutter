@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
-import 'package:rank_ten/routes/login_signup.dart';
-import 'package:rank_ten/routes/main_screen.dart';
-import 'package:rank_ten/routes/splash.dart';
+import 'package:rank_ten/router.dart';
 
 import 'misc/app_theme.dart';
 
@@ -42,11 +40,12 @@ class _AppState extends State<App> {
           darkTheme: AppTheme.getAppTheme(themeProvider.isDark),
           debugShowCheckedModeBanner: false,
           initialRoute: '/splash',
-          routes: {
+          onGenerateRoute: Router.generateRoute,
+          /*routes: {
             '/splash': (context) => Splash(),
             '/login_signup': (context) => LoginSignup(),
             '/main': (context) => MainScreen()
-          },
+          },*/
         );
       }),
     );

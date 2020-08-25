@@ -24,7 +24,6 @@ class _UserTopListsState extends State<UserTopLists> {
   void initState() {
     super.initState();
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
-    print("Refresh: ${widget.refresh}");
     _listsBloc.listEventSink.add(
         RankedListPreviewEvent(name: widget.name, refresh: widget.refresh));
   }

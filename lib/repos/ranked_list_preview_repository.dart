@@ -39,7 +39,7 @@ class RankedListPreviewRepository {
         endpoint += '/$page/$sort';
         break;
       case LIKED_LISTS:
-        endpoint += '/$page';
+        endpoint += '/$page/$sort';
         break;
       case USER_LISTS:
         endpoint += '/$name/$page/$sort';

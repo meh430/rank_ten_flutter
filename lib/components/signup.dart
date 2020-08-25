@@ -41,7 +41,6 @@ class Signup extends StatelessWidget {
       final password = pController.text;
       final username = uController.text;
       final bio = bController.text;
-      print(username + ", " + password + ", " + bio);
       submitSignup(username, password, bio);
     }
   }
