@@ -45,7 +45,13 @@ class PreviewListsBloc {
 
       try {
         currentStatus = Status.LOADING;
-        _currPage += 1;
+        if (event.refresh) {
+          _currPage = 1;
+          _previewLists.clear();
+        } else {
+          _currPage += 1;
+        }
+
         var pageContent = await _previewRepository.getRankedListPreview(
             endpointBase: endpointBase,
             name: event.name,
@@ -55,7 +61,7 @@ class PreviewListsBloc {
             query: event.query,
             refresh: event.refresh);
 
-        if (pageContent.length <= 10) {
+        if (pageContent.length < 10) {
           hitMax = true;
         }
 

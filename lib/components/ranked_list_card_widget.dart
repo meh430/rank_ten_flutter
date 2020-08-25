@@ -125,13 +125,18 @@ class CircleImage extends StatelessWidget {
         ? Container(
             width: 60.0,
             height: 60.0,
-            color: Utils.getRandomColor(),
-            child: Text(userName[0],
-                style: Theme.of(context)
-                    .textTheme
-                    .headline2
-                    .copyWith(color: Colors.black)),
-            decoration: new BoxDecoration(shape: BoxShape.circle))
+            child: Center(
+              child: Text(userName[0],
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      .copyWith(color: Colors.black)),
+            ),
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              color: Utils.getRandomColor(),
+            ))
         : Container(
             width: 60.0,
             height: 60.0,

@@ -32,6 +32,9 @@ class RankedListPreviewRepository {
     String endpoint = '/$endpointBase';
 
     switch (endpointBase) {
+      case FEED_LISTS:
+        endpoint += '/$page';
+        break;
       case DISCOVER_LISTS:
         endpoint += '/$page/$sort';
         break;

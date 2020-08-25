@@ -65,19 +65,33 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
       builder:
           (BuildContext context, AsyncSnapshot<List<RankedListCard>> snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
-          return ListView.builder(
-              shrinkWrap: false,
-              controller: _scrollController,
-              itemCount: snapshot.data.length + 1,
-              itemBuilder: (context, index) {
-                if (index >= snapshot.data.length && !_listsBloc.hitMax) {
-                  return SpinKitRipple(size: 50, color: hanPurple);
-                } else if (index >= snapshot.data.length) {
-                  return SizedBox();
-                }
-
-                return RankedListCardWidget(listCard: snapshot.data[index]);
+          return RefreshIndicator(
+            onRefresh: () {
+              return Future.delayed(Duration(milliseconds: 0), () {
+                _listsBloc.listEventSink.add(RankedListPreviewEvent(
+                    sort: widget.sort,
+                    name: widget.name,
+                    token: widget.token,
+                    query: widget.query,
+                    refresh: true));
               });
+            },
+            child: ListView.builder(
+                shrinkWrap: false,
+                physics: const BouncingScrollPhysics(
+                    parent: const AlwaysScrollableScrollPhysics()),
+                controller: _scrollController,
+                itemCount: snapshot.data.length + 1,
+                itemBuilder: (context, index) {
+                  if (index >= snapshot.data.length && !_listsBloc.hitMax) {
+                    return SpinKitRipple(size: 50, color: hanPurple);
+                  } else if (index >= snapshot.data.length) {
+                    return SizedBox();
+                  }
+
+                  return RankedListCardWidget(listCard: snapshot.data[index]);
+                }),
+          );
         } else if (snapshot.hasError) {
           return Text("Error retrieving items...");
         }
