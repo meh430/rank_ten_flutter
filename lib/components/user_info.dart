@@ -92,9 +92,10 @@ class UserStat extends StatelessWidget {
   final String statLabel;
   final bool isMain;
 
-  UserStat({@required this.statLabel,
-    @required this.statCount,
-    this.isMain = false});
+  UserStat(
+      {@required this.statLabel,
+      @required this.statCount,
+      this.isMain = false});
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +105,7 @@ class UserStat extends StatelessWidget {
         children: <Widget>[
           Text(
             statCount.toString(),
-            style: Theme
-                .of(context)
+            style: Theme.of(context)
                 .primaryTextTheme
                 .headline6
                 .copyWith(fontSize: isMain ? 14 : 18),
@@ -159,10 +159,25 @@ class UserStatRow extends StatelessWidget {
         ),
         Row(
           children: [
-            UserStat(
-              statLabel: "Rank Lists",
-              statCount: user.listNum,
-              isMain: isMain,
+            GestureDetector(
+              onTap: () {
+                if (isMain) {
+                  Navigator.pushNamed(context, '/lists',
+                      arguments: ListScreenArgs(
+                          listType: USER_LISTS_ALL,
+                          token: token,
+                          name: user.userName));
+                } else {
+                  Navigator.pushNamed(context, '/lists',
+                      arguments: ListScreenArgs(
+                          listType: USER_LISTS, name: user.userName));
+                }
+              },
+              child: UserStat(
+                statLabel: "Rank Lists",
+                statCount: user.listNum,
+                isMain: isMain,
+              ),
             ),
             UserStat(
               statLabel: "Followers",
