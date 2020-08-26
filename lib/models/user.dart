@@ -91,7 +91,6 @@ class UserPreview {
   UserPreview({this.userName, this.profPic, this.bio, this.rankPoints});
 
   UserPreview.fromJson(Map<String, dynamic> json) {
-    print(json);
     rankPoints = json['rank_points'];
     userName = json['user_name'];
     profPic = json['prof_pic'];

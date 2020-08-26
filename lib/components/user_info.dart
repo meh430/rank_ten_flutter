@@ -76,7 +76,10 @@ class UserInfo extends StatelessWidget {
                   )
           ],
         ),
-        FollowButton(isFollowing: false)
+        FollowButton(
+            isFollowing: userProvider.mainUser.following.contains(user.id),
+            name: user.userName,
+            id: user.id)
       ]);
     }
 
@@ -92,15 +95,21 @@ class UserInfo extends StatelessWidget {
 
 class FollowButton extends StatefulWidget {
   final bool isFollowing;
+  final String name, id;
 
-  FollowButton({Key key, this.isFollowing}) : super(key: key);
+  FollowButton({Key key,
+    @required this.isFollowing,
+    @required this.name,
+    @required this.id})
+      : super(key: key);
 
   @override
   _FollowButtonState createState() => _FollowButtonState();
 }
 
 class _FollowButtonState extends State<FollowButton> {
-  bool _isFollowing;
+  bool _isFollowing,
+      _runningFollow = false;
 
   @override
   void initState() {
@@ -110,19 +119,37 @@ class _FollowButtonState extends State<FollowButton> {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<MainUserProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: RaisedButton(
-        color: hanPurple,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-          child: Text(_isFollowing ? "Followed" : "Follow",
-              style:
-                  Theme.of(context).textTheme.headline4.copyWith(color: white)),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        onPressed: () => setState(() => _isFollowing = !_isFollowing),
-      ),
+          color: hanPurple,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+            child: Text(_isFollowing ? "Followed" : "Follow",
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4
+                    .copyWith(color: white)),
+          ),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          onPressed: () async {
+            if (!_runningFollow) {
+              _runningFollow = true;
+              var status = await userProvider.followUser(
+                  name: widget.name, userId: widget.id);
+              print(status);
+              setState(() {
+                _isFollowing = status == "FOLLOW";
+              });
+              Future.delayed(
+                  Duration(milliseconds: 2500), () => _runningFollow = false);
+            } else {
+              Scaffold.of(context).showSnackBar(Utils.getSB('Please wait'));
+            }
+          }),
     );
   }
 }

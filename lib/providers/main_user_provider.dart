@@ -48,6 +48,16 @@ class MainUserProvider with ChangeNotifier {
     }
   }
 
+  Future<String> followUser({String name, String userId}) async {
+    var action = await UserRepository().followUser(name: name, token: jwtToken);
+    if (mainUser.following.contains(userId)) {
+      mainUser.following.remove(userId);
+    } else {
+      mainUser.following.add(userId);
+    }
+    return action;
+  }
+
   void logOut() {
     mainUserBloc.dispose();
     mainUser = null;
