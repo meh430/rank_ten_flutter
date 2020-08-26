@@ -30,6 +30,14 @@ class RankedListCardWidget extends StatelessWidget {
       remainingLabel = "View ${listCard.numItems - 3} more items";
     }
 
+    Future<bool> Function() likePressed = () async {
+      var action = await userProvider.likeList(listCard.id);
+      print(action);
+      return action == "LIKED";
+      //userProvider.addUserEvent(LikeListEvent(
+      //   id: listCard.id, token: userProvider.jwtToken));
+    };
+
     return Card(
       elevation: 4,
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
@@ -63,11 +71,7 @@ class RankedListCardWidget extends StatelessWidget {
             CardFooter(
               numLikes: listCard.numLikes,
               isLiked: isLiked,
-              likePressed: () async {
-                await userProvider.likeList(listCard.id);
-                //userProvider.addUserEvent(LikeListEvent(
-                //   id: listCard.id, token: userProvider.jwtToken));
-              },
+              likePressed: likePressed,
             ),
             listCard.commentPreview != null
                 ? CommentPreviewCard(
@@ -150,17 +154,17 @@ class CircleImage extends StatelessWidget {
   Widget build(BuildContext context) {
     var profPic = profPicUrl.isEmpty
         ? Container(
-            width: size,
-            height: size,
-            child: Center(
-              child: Text(userName[0],
-                  textAlign: TextAlign.center,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline5
-                      .copyWith(color: Colors.black, fontSize: textSize)),
-            ),
+        width: size,
+        height: size,
+        child: Center(
+          child: Text(userName[0],
+              textAlign: TextAlign.center,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline5
+                  .copyWith(color: Colors.black, fontSize: textSize)),
+        ),
         decoration: new BoxDecoration(
           shape: BoxShape.circle,
           color: Utils.getRandomColor(),
@@ -225,7 +229,7 @@ class RankPreviewItem extends StatelessWidget {
 class CardFooter extends StatefulWidget {
   final int numLikes;
   final bool isLiked;
-  final VoidCallback likePressed;
+  final likePressed;
 
   CardFooter({@required this.numLikes,
     @required this.isLiked,
@@ -237,14 +241,14 @@ class CardFooter extends StatefulWidget {
 
 class _CardFooterState extends State<CardFooter> {
   int _numLikes;
-  bool _isLiked,
-      _liking = false;
+  bool _isLiked, _liking;
 
   @override
   void initState() {
     super.initState();
     _numLikes = widget.numLikes;
     _isLiked = widget.isLiked;
+    _liking = false;
   }
 
   @override
@@ -263,22 +267,33 @@ class _CardFooterState extends State<CardFooter> {
                 icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
                     color: Colors.red, size: 55),
                 onPressed: () async {
-                  if (!_liking) {
-                    if (_isLiked) {
-                      setState(() {
-                        _numLikes--;
-                        _isLiked = false;
-                      });
-                    } else {
+                  if (true) {
+                    _liking = true;
+                    var action;
+                    try {
+                      action = await widget.likePressed();
+                    } catch (e) {
+                      print(e);
+                    }
+
+
+                    if (action) {
                       setState(() {
                         _numLikes++;
                         _isLiked = true;
                       });
+                    } else {
+                      setState(() {
+                        _numLikes--;
+                        _isLiked = false;
+                      });
                     }
-                    await widget.likePressed();
-                    _liking = true;
-                    Future.delayed(
-                        Duration(milliseconds: 1500), () => _liking = false);
+                    //Future.delayed(
+                    //    Duration(milliseconds: 1500), () => _liking = false);
+                  } else {
+                    Scaffold.of(context).hideCurrentSnackBar();
+                    Scaffold.of(context)
+                        .showSnackBar(Utils.getSB('Please wait'));
                   }
                 },
               ),
@@ -339,8 +354,7 @@ class CommentPreviewCard extends StatelessWidget {
 
     return Card(
         color: isDark ? hanPurple : palePurple,
-        elevation: 2,
-        margin: const EdgeInsets.all(10),
+        elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Container(
           width: MediaQuery

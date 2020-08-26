@@ -97,10 +97,11 @@ class FollowButton extends StatefulWidget {
   final bool isFollowing;
   final String name, id;
 
-  FollowButton({Key key,
-    @required this.isFollowing,
-    @required this.name,
-    @required this.id})
+  FollowButton(
+      {Key key,
+      @required this.isFollowing,
+      @required this.name,
+      @required this.id})
       : super(key: key);
 
   @override
@@ -108,13 +109,13 @@ class FollowButton extends StatefulWidget {
 }
 
 class _FollowButtonState extends State<FollowButton> {
-  bool _isFollowing,
-      _runningFollow = false;
+  bool _isFollowing, _runningFollow;
 
   @override
   void initState() {
     super.initState();
     _isFollowing = widget.isFollowing;
+    _runningFollow = false;
   }
 
   @override
@@ -138,8 +139,16 @@ class _FollowButtonState extends State<FollowButton> {
           onPressed: () async {
             if (!_runningFollow) {
               _runningFollow = true;
-              var status = await userProvider.followUser(
-                  name: widget.name, userId: widget.id);
+              var status = "";
+              try {
+                status = await userProvider.followUser(
+                    name: widget.name, userId: widget.id);
+              } catch (e) {
+                print("error $e");
+                if (!(status is String)) {
+                  return;
+                }
+              }
               print(status);
               setState(() {
                 _isFollowing = status == "FOLLOW";
@@ -147,6 +156,7 @@ class _FollowButtonState extends State<FollowButton> {
               Future.delayed(
                   Duration(milliseconds: 2500), () => _runningFollow = false);
             } else {
+              Scaffold.of(context).hideCurrentSnackBar();
               Scaffold.of(context).showSnackBar(Utils.getSB('Please wait'));
             }
           }),

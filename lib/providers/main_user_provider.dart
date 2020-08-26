@@ -38,14 +38,17 @@ class MainUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void likeList(String listId) async {
-    await UserRepository().likeList(listId: listId, token: jwtToken);
+  Future<String> likeList(String listId) async {
+    String action =
+        await UserRepository().likeList(listId: listId, token: jwtToken);
 
     if (mainUser.likedLists.contains(listId)) {
       mainUser.likedLists.remove(listId);
     } else {
       mainUser.likedLists.add(listId);
     }
+
+    return action;
   }
 
   Future<String> followUser({String name, String userId}) async {

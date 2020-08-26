@@ -15,8 +15,14 @@ var colors = [
   Colors.amber,
   Colors.amberAccent,
   Colors.purple,
-  hanPurple,
-  paraPink
+  paraPink,
+  Colors.teal,
+  Colors.deepOrange,
+  Colors.blue,
+  Colors.cyanAccent,
+  Colors.tealAccent,
+  Colors.pinkAccent,
+  Colors.indigo
 ];
 
 class Utils {
