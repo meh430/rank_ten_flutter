@@ -37,13 +37,29 @@ class UserInfo extends StatelessWidget {
                 }))
         : profilePic;
 
-    return Card(
-        margin: const EdgeInsets.all(10.0),
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Row(
+    Widget cardChild;
+
+    if (isMain) {
+      cardChild = Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          //RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
+          profilePic,
+          UserStatRow(
+            user: user,
+            isMain: isMain,
+          ),
+          isMain
+              ? SizedBox()
+              : SizedBox(
+                  width: 12,
+                )
+        ],
+      );
+    } else {
+      cardChild = Column(children: [
+        Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -59,7 +75,55 @@ class UserInfo extends StatelessWidget {
                     width: 12,
                   )
           ],
-        ));
+        ),
+        FollowButton(isFollowing: false)
+      ]);
+    }
+
+    return Card(
+        margin: const EdgeInsets.all(10.0),
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: cardChild);
+  }
+}
+
+class FollowButton extends StatefulWidget {
+  final bool isFollowing;
+
+  FollowButton({Key key, this.isFollowing}) : super(key: key);
+
+  @override
+  _FollowButtonState createState() => _FollowButtonState();
+}
+
+class _FollowButtonState extends State<FollowButton> {
+  bool _isFollowing;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFollowing = widget.isFollowing;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: RaisedButton(
+        color: hanPurple,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+          child: Text(_isFollowing ? "Followed" : "Follow",
+              style:
+                  Theme.of(context).textTheme.headline4.copyWith(color: white)),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        onPressed: () => setState(() => _isFollowing = !_isFollowing),
+      ),
+    );
   }
 }
 

@@ -114,9 +114,9 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                   }
 
                   return RankedListCardWidget(
-                      shouldPushInfo: widget.listType == USER_LISTS ||
-                          widget.listType == USER_LISTS_ALL ||
-                          widget.listType == USER_TOP_LISTS,
+                      shouldPushInfo: widget.listType != USER_LISTS &&
+                          widget.listType != USER_LISTS_ALL &&
+                          widget.listType != USER_TOP_LISTS,
                       listCard: snapshot.data[index],
                       key: ObjectKey(snapshot.data[index]));
                 }),
