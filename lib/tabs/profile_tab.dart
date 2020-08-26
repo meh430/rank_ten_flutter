@@ -3,36 +3,47 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/api/response.dart';
-import 'package:rank_ten/blocs/user_bloc.dart';
+import 'package:rank_ten/blocs/preview_lists_bloc.dart';
 import 'package:rank_ten/components/user_info.dart';
 import 'package:rank_ten/components/user_top_lists.dart';
+import 'package:rank_ten/events/ranked_list_preview_events.dart';
 import 'package:rank_ten/events/user_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
+import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
 
 class ProfileTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return UserInfoBuilder();
+    return MainUserInfoBuilder();
   }
 }
 
-class UserInfoBuilder extends StatefulWidget {
+class MainUserInfoBuilder extends StatefulWidget {
   @override
-  _UserInfoBuilderState createState() => _UserInfoBuilderState();
+  _MainUserInfoBuilderState createState() => _MainUserInfoBuilderState();
 }
 
-class _UserInfoBuilderState extends State<UserInfoBuilder> {
+class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
   MainUserProvider _userProvider;
-  UserBloc _mainUserBloc;
-  bool refresh = false;
+  PreviewListsBloc _listsBloc;
 
   @override
   void initState() {
     super.initState();
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
-    _mainUserBloc = _userProvider.mainUserBloc;
+    _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
+
+    _listsBloc.listEventSink
+        .add(RankedListPreviewEvent(name: _userProvider.mainUser.userName));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _listsBloc.dispose();
   }
 
   Widget builderFunction(
@@ -62,6 +73,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
       }
     }
     return SpinKitWave(
+      color: hanPurple,
       size: 50,
     );
   }
@@ -71,27 +83,38 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     return RefreshIndicator(
       onRefresh: () =>
           Future.delayed(Duration(milliseconds: 0), () {
-            _mainUserBloc.userEventSink
-                .add(GetUserEvent(_userProvider.mainUser.userName,
-                token: _userProvider.jwtToken));
-            setState(() {
-              print("Refresh $refresh");
-              refresh = !refresh;
-            });
+            _userProvider.addUserEvent(
+                GetUserEvent(_userProvider.mainUser.userName,
+                    token: _userProvider.jwtToken));
+            _listsBloc.listEventSink.add(RankedListPreviewEvent(
+                name: _userProvider.mainUser.userName, refresh: true));
           }),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
             parent: const AlwaysScrollableScrollPhysics()),
         child: Column(children: [
           StreamBuilder<Response<User>>(
-              key: UniqueKey(),
-              stream: _mainUserBloc.userStateStream,
+              stream: _userProvider.mainUserBloc.userStateStream,
               initialData: Response.completed(_userProvider.mainUser),
               builder: builderFunction),
-          UserTopLists(
-              name: _userProvider.mainUser.userName,
-              refresh: refresh,
-              key: UniqueKey())
+          StreamBuilder<List<RankedListCard>>(
+            stream: _listsBloc.listStateStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return UserTopLists(
+                    name: _userProvider.mainUser.userName,
+                    topLists: snapshot.data);
+              } else if (snapshot.hasError) {
+                return Text("Error getting top lists",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline5);
+              }
+
+              return SpinKitRipple(size: 50, color: hanPurple);
+            },
+          )
         ]),
       ),
     );

@@ -5,13 +5,16 @@ import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
+import 'package:rank_ten/routes/user_info_screen.dart';
 
 import 'choose_pic.dart';
 
 class RankedListCardWidget extends StatelessWidget {
   final RankedListCard listCard;
+  final bool shouldPushInfo;
 
-  const RankedListCardWidget({Key key, @required this.listCard})
+  const RankedListCardWidget(
+      {Key key, @required this.listCard, this.shouldPushInfo = true})
       : super(key: key);
 
   @override
@@ -39,6 +42,7 @@ class RankedListCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CardHeader(
+                shouldPushInfo: shouldPushInfo,
                 userName: listCard.userName,
                 profPicUrl: listCard.profPic,
                 dateCreated: listCard.dateCreated),
@@ -59,8 +63,8 @@ class RankedListCardWidget extends StatelessWidget {
             CardFooter(
               numLikes: listCard.numLikes,
               isLiked: isLiked,
-              likePressed: () {
-                userProvider.likeList(listCard.id);
+              likePressed: () async {
+                await userProvider.likeList(listCard.id);
                 //userProvider.addUserEvent(LikeListEvent(
                 //   id: listCard.id, token: userProvider.jwtToken));
               },
@@ -81,11 +85,13 @@ class CardHeader extends StatelessWidget {
   final int dateCreated;
   final String userName;
   final String profPicUrl;
+  final bool shouldPushInfo;
 
   CardHeader(
       {@required this.dateCreated,
       @required this.userName,
-      @required this.profPicUrl});
+      @required this.profPicUrl,
+      this.shouldPushInfo = true});
 
   @override
   Widget build(BuildContext context) {
@@ -94,20 +100,36 @@ class CardHeader extends StatelessWidget {
         .textTheme
         .headline6
         .copyWith(color: isDark ? white : secondText);
-    return Padding(
-      padding: const EdgeInsets.only(top: 14, left: 14, right: 20, bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Row(children: [
-            CircleImage(profPicUrl: profPicUrl, userName: userName),
-            const SizedBox(width: 8),
-            Text(userName, style: textTheme)
-          ]),
-          Text(Utils.getTimeDiff(dateCreated), style: textTheme)
-        ],
+    return GestureDetector(
+      onTap: () {
+        if (userName ==
+            Provider.of<MainUserProvider>(context, listen: false)
+                .mainUser
+                .userName) {
+          Scaffold.of(context).showSnackBar(Utils.getSB("That's you!"));
+          return;
+        }
+
+        if (shouldPushInfo) {
+          Navigator.pushNamed(context, '/user_info_screen',
+              arguments: UserInfoScreenArgs(name: userName));
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 14, left: 14, right: 20, bottom: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Row(children: [
+              CircleImage(profPicUrl: profPicUrl, userName: userName),
+              const SizedBox(width: 8),
+              Text(userName, style: textTheme)
+            ]),
+            Text(Utils.getTimeDiff(dateCreated), style: textTheme)
+          ],
+        ),
       ),
     );
   }
@@ -133,15 +155,16 @@ class CircleImage extends StatelessWidget {
             child: Center(
               child: Text(userName[0],
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
+                  style: Theme
+                      .of(context)
                       .textTheme
                       .headline5
                       .copyWith(color: Colors.black, fontSize: textSize)),
             ),
-            decoration: new BoxDecoration(
-              shape: BoxShape.circle,
-              color: Utils.getRandomColor(),
-            ))
+        decoration: new BoxDecoration(
+          shape: BoxShape.circle,
+          color: Utils.getRandomColor(),
+        ))
         : Container(
         width: size,
         height: size,
@@ -239,7 +262,7 @@ class _CardFooterState extends State<CardFooter> {
                 splashColor: Colors.transparent,
                 icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
                     color: Colors.red, size: 55),
-                onPressed: () {
+                onPressed: () async {
                   if (!_liking) {
                     if (_isLiked) {
                       setState(() {
@@ -252,7 +275,7 @@ class _CardFooterState extends State<CardFooter> {
                         _isLiked = true;
                       });
                     }
-                    widget.likePressed();
+                    await widget.likePressed();
                     _liking = true;
                     Future.delayed(
                         Duration(milliseconds: 1500), () => _liking = false);

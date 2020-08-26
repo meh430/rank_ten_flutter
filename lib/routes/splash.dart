@@ -40,7 +40,7 @@ class _SplashState extends State<Splash> {
         var userData = (await Authorization.tokenValid(token)) as User;
         print(userData);
         mainUserProvider.jwtToken = token;
-        mainUserProvider.initMainUser(userData);
+        await mainUserProvider.initMainUser(userData);
         print("Token valid. Parsed user data");
         Navigator.pop(context);
         Navigator.pushNamed(context, '/main');
@@ -69,7 +69,7 @@ class _SplashState extends State<Splash> {
             userName: userName, password: password);
         print(userData);
         userProvider.jwtToken = userData.jwtToken;
-        userProvider.initMainUser(userData);
+        await userProvider.initMainUser(userData);
         print("Credentials valid. Parsed user data");
 
         Navigator.pop(context);

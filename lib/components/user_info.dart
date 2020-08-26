@@ -239,17 +239,16 @@ class UserBio extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(width: MediaQuery.of(context).size.width),
             isMain ? BioEditWidget(bio: user.bio) : BioWidget(bio: user.bio),
             const SizedBox(height: 10),
             Text("Date Created",
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .headline5
                     .copyWith(color: getTitleColor(context))),
             Text(Utils.getDate(user.dateCreated),
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .headline4
                     .copyWith(fontSize: 18))
@@ -268,16 +267,18 @@ class BioWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Bio",
+          textAlign: TextAlign.start,
           style: Theme
               .of(context)
               .textTheme
               .headline5
               .copyWith(color: getTitleColor(context)),
         ),
-        Text(bio,
+        Text(bio.isNotEmpty ? bio : "This person does not have a bio...",
             style: Theme
                 .of(context)
                 .textTheme

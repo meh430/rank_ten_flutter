@@ -5,6 +5,7 @@ import 'package:rank_ten/components/ranked_list_card_widget.dart';
 import 'package:rank_ten/events/ranked_list_preview_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
+import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
 
 class GenericListPreviewWidget extends StatefulWidget {
   final int sort;
@@ -113,6 +114,9 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                   }
 
                   return RankedListCardWidget(
+                      shouldPushInfo: widget.listType == USER_LISTS ||
+                          widget.listType == USER_LISTS_ALL ||
+                          widget.listType == USER_TOP_LISTS,
                       listCard: snapshot.data[index],
                       key: ObjectKey(snapshot.data[index]));
                 }),

@@ -3,6 +3,7 @@ import 'package:rank_ten/routes/list_screen.dart';
 import 'package:rank_ten/routes/login_signup.dart';
 import 'package:rank_ten/routes/main_screen.dart';
 import 'package:rank_ten/routes/splash.dart';
+import 'package:rank_ten/routes/user_info_screen.dart';
 import 'package:rank_ten/routes/user_preview_screen.dart';
 
 class Router {
@@ -24,6 +25,10 @@ class Router {
         return MaterialPageRoute(
             builder: (context) =>
                 UserPreviewScreen(listType: args.listType, name: args.name));
+      case '/user_info_screen':
+        final UserInfoScreenArgs args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (context) => UserInfoScreen(name: args.name));
     }
   }
 }
