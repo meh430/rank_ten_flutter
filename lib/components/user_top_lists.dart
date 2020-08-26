@@ -71,7 +71,12 @@ class _UserTopListsState extends State<UserTopLists> {
           return Text("Error retrieving items...");
         }
 
-        return SpinKitRipple(size: 50, color: hanPurple);
+        return Column(children: [
+          SizedBox(
+            height: 40,
+          ),
+          SpinKitRipple(size: 50, color: hanPurple)
+        ]);
       },
     );
   }

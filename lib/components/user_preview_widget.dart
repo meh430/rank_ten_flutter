@@ -1,43 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:rank_ten/blocs/preview_lists_bloc.dart';
-import 'package:rank_ten/components/ranked_list_card_widget.dart';
-import 'package:rank_ten/events/ranked_list_preview_events.dart';
+import 'package:rank_ten/blocs/user_preview_bloc.dart';
+import 'package:rank_ten/components/user_preview_card.dart';
+import 'package:rank_ten/events/user_preview_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
-import 'package:rank_ten/models/ranked_list_card.dart';
+import 'package:rank_ten/models/user.dart';
 
-class GenericListPreviewWidget extends StatefulWidget {
+class UserPreviewWidget extends StatefulWidget {
   final int sort;
-  final String name, token, query, listType, emptyMessage;
+  final String name, query, listType, emptyMessage;
 
-  const GenericListPreviewWidget(
+  const UserPreviewWidget(
       {this.sort = 0,
       this.name = "",
-      this.token = "",
       this.query = "",
-      this.emptyMessage = 'No lists found',
+      this.emptyMessage = 'No users found',
       @required this.listType,
       Key key})
       : super(key: key);
 
   @override
-  _GenericListPreviewWidgetState createState() =>
-      _GenericListPreviewWidgetState();
+  _UserPreviewWidgetState createState() => _UserPreviewWidgetState();
 }
 
-class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
-  PreviewListsBloc _listsBloc;
+class _UserPreviewWidgetState extends State<UserPreviewWidget> {
+  UserPreviewBloc _userPreviewBloc;
   ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _listsBloc = PreviewListsBloc(endpointBase: widget.listType);
-    _listsBloc.listEventSink.add(RankedListPreviewEvent(
-        sort: widget.sort,
-        name: widget.name,
-        token: widget.token,
-        query: widget.query));
+    _userPreviewBloc = UserPreviewBloc(endpointBase: widget.listType);
+    _userPreviewBloc.userPreviewEventSink.add(UserPreviewEvent(
+        sort: widget.sort, name: widget.name, query: widget.query));
     _scrollController = ScrollController()..addListener(_onScrollListener);
   }
 
@@ -45,37 +40,33 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
   void dispose() {
     super.dispose();
     _scrollController.dispose();
-    _listsBloc.dispose();
+    _userPreviewBloc.dispose();
   }
 
   void _onScrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      if (!_listsBloc.hitMax) {
-        _listsBloc.listEventSink.add(RankedListPreviewEvent(
-            sort: widget.sort,
-            name: widget.name,
-            token: widget.token,
-            query: widget.query));
+      if (!_userPreviewBloc.hitMax) {
+        _userPreviewBloc.userPreviewEventSink.add(UserPreviewEvent(
+            sort: widget.sort, name: widget.name, query: widget.query));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<RankedListCard>>(
-      stream: _listsBloc.listStateStream,
+    return StreamBuilder<List<UserPreview>>(
+      stream: _userPreviewBloc.userPreviewStateStream,
       builder:
-          (BuildContext context, AsyncSnapshot<List<RankedListCard>> snapshot) {
+          (BuildContext context, AsyncSnapshot<List<UserPreview>> snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           return RefreshIndicator(
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
                 print("Refreshing list");
-                _listsBloc.listEventSink.add(RankedListPreviewEvent(
+                _userPreviewBloc.userPreviewEventSink.add(UserPreviewEvent(
                     sort: widget.sort,
                     name: widget.name,
-                    token: widget.token,
                     query: widget.query,
                     refresh: true));
               });
@@ -98,7 +89,8 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                             )));
                   }
 
-                  if (index >= snapshot.data.length && !_listsBloc.hitMax) {
+                  if (index >= snapshot.data.length &&
+                      !_userPreviewBloc.hitMax) {
                     return Column(children: [
                       SizedBox(
                         height: 10,
@@ -112,8 +104,8 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                     return SizedBox();
                   }
 
-                  return RankedListCardWidget(
-                      listCard: snapshot.data[index],
+                  return UserPreviewCard(
+                      userPreview: snapshot.data[index],
                       key: ObjectKey(snapshot.data[index]));
                 }),
           );

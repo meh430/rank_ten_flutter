@@ -86,10 +86,13 @@ class UserPreview {
   String userName;
   String profPic;
   String bio;
+  int rankPoints;
 
-  UserPreview({this.userName, this.profPic, this.bio});
+  UserPreview({this.userName, this.profPic, this.bio, this.rankPoints});
 
   UserPreview.fromJson(Map<String, dynamic> json) {
+    print(json);
+    rankPoints = json['rank_points'];
     userName = json['user_name'];
     profPic = json['prof_pic'];
     bio = json['bio'];

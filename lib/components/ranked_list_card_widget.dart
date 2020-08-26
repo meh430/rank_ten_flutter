@@ -116,34 +116,39 @@ class CardHeader extends StatelessWidget {
 class CircleImage extends StatelessWidget {
   final String profPicUrl;
   final String userName;
+  final double size, textSize;
 
-  CircleImage({@required this.profPicUrl, @required this.userName});
+  CircleImage(
+      {@required this.profPicUrl,
+      @required this.userName,
+      this.size = 60.0,
+      this.textSize = 26});
 
   @override
   Widget build(BuildContext context) {
     var profPic = profPicUrl.isEmpty
         ? Container(
-            width: 60.0,
-            height: 60.0,
+            width: size,
+            height: size,
             child: Center(
               child: Text(userName[0],
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
                       .headline5
-                      .copyWith(color: Colors.black)),
+                      .copyWith(color: Colors.black, fontSize: textSize)),
             ),
             decoration: new BoxDecoration(
               shape: BoxShape.circle,
               color: Utils.getRandomColor(),
             ))
         : Container(
-            width: 60.0,
-            height: 60.0,
-            decoration: new BoxDecoration(
-                shape: BoxShape.circle,
-                image: new DecorationImage(
-                    fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
+        width: size,
+        height: size,
+        decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            image: new DecorationImage(
+                fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
 
     return profPic;
   }
@@ -231,6 +236,7 @@ class _CardFooterState extends State<CardFooter> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
+                splashColor: Colors.transparent,
                 icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
                     color: Colors.red, size: 55),
                 onPressed: () {

@@ -7,7 +7,9 @@ import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
+import 'package:rank_ten/repos/user_preview_repository.dart';
 import 'package:rank_ten/routes/list_screen.dart';
+import 'package:rank_ten/routes/user_preview_screen.dart';
 
 import '../misc/utils.dart';
 import 'login.dart';
@@ -111,8 +113,7 @@ class UserStat extends StatelessWidget {
                 .copyWith(fontSize: isMain ? 14 : 18),
           ),
           Text(statLabel,
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .headline6
                   .copyWith(fontSize: isMain ? 14 : 18))
@@ -143,10 +144,16 @@ class UserStatRow extends StatelessWidget {
               statCount: user.rankPoints,
               isMain: isMain,
             ),
-            UserStat(
-              statLabel: "Following",
-              statCount: user.numFollowing,
-              isMain: isMain,
+            GestureDetector(
+              onTap: () =>
+                  Navigator.pushNamed(context, '/user_preview_list',
+                      arguments: UserPreviewScreenArgs(
+                          listType: FOLLOWING_USERS, name: user.userName)),
+              child: UserStat(
+                statLabel: "Following",
+                statCount: user.numFollowing,
+                isMain: isMain,
+              ),
             ),
             isMain
                 ? UserStat(
@@ -162,12 +169,14 @@ class UserStatRow extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (isMain) {
+                  //private
                   Navigator.pushNamed(context, '/lists',
                       arguments: ListScreenArgs(
                           listType: USER_LISTS_ALL,
                           token: token,
                           name: user.userName));
                 } else {
+                  //public
                   Navigator.pushNamed(context, '/lists',
                       arguments: ListScreenArgs(
                           listType: USER_LISTS, name: user.userName));
@@ -179,10 +188,16 @@ class UserStatRow extends StatelessWidget {
                 isMain: isMain,
               ),
             ),
-            UserStat(
-              statLabel: "Followers",
-              statCount: user.numFollowers,
-              isMain: isMain,
+            GestureDetector(
+              onTap: () =>
+                  Navigator.pushNamed(context, '/user_preview_list',
+                      arguments: UserPreviewScreenArgs(
+                          listType: FOLLOWERS_USERS, name: user.userName)),
+              child: UserStat(
+                statLabel: "Followers",
+                statCount: user.numFollowers,
+                isMain: isMain,
+              ),
             ),
             isMain
                 ? GestureDetector(

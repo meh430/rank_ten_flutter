@@ -40,7 +40,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     if (snapshot.hasData) {
       switch (snapshot.data.status) {
         case Status.LOADING:
-          return SpinKitRipple(
+          return SpinKitWave(
             size: 50,
             color: hanPurple,
           );
@@ -61,7 +61,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
           );
       }
     }
-    return SpinKitFadingCube(
+    return SpinKitWave(
       size: 50,
     );
   }
