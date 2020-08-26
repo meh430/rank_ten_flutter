@@ -8,6 +8,7 @@ class RankedList {
   List<RankItem> rankList;
   int numLikes;
   int numComments;
+  bool private;
 
   RankedList(
       {this.id,
@@ -16,7 +17,8 @@ class RankedList {
       this.title,
       this.rankList,
       this.numLikes,
-      this.numComments});
+      this.numComments,
+      this.private});
 
   RankedList.fromJson(Map<String, dynamic> json) {
     id = json['_id'][r'$oid'];
@@ -31,6 +33,7 @@ class RankedList {
     }
     numLikes = json['num_likes'];
     numComments = json['num_comments'];
+    private = json['private'];
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +43,7 @@ class RankedList {
     if (this.rankList != null) {
       data['rank_list'] = this.rankList.map((v) => v.toJson()).toList();
     }
+    data['private'] = this.private;
     //data['num_likes'] = this.numLikes;
     //data['num_comments'] = this.numComments;
     return data;

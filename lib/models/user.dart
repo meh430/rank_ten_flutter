@@ -35,7 +35,7 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     id = json['_id'] != null ? json['_id'][r'$oid'] : null;
     dateCreated =
-    json['date_created'] != null ? json['date_created'][r'$date'] : null;
+        json['date_created'] != null ? json['date_created'][r'$date'] : null;
     userName = json['user_name'];
     bio = json['bio'];
     profPic = json['prof_pic'];
