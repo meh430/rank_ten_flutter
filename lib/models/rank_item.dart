@@ -20,9 +20,9 @@ class RankItem {
 
   RankItem.fromJson(Map<String, dynamic> json) {
     id = json['_id'][r'$oid'];
+    belongsTo = json['belongs_to'][r'$oid'];
     private = json['private'];
     parentTitle = json['parent_title'];
-    belongsTo = json['belongs_to'][r'$oid'];
     description = json['description'];
     itemName = json['item_name'];
     picture = json['picture'];
