@@ -11,6 +11,16 @@ import 'package:rank_ten/routes/user_info_screen.dart';
 
 import 'choose_pic.dart';
 
+void launchRankListViewScreen({BuildContext context, RankedListCard listCard}) {
+  var mainUserName =
+      Provider.of<MainUserProvider>(context, listen: false).mainUser.userName;
+  Navigator.pushNamed(context, 'ranked_list_view',
+      arguments: RankedListViewScreenArgs(
+          listTitle: listCard.title,
+          listId: listCard.id,
+          isMain: mainUserName == listCard.userName));
+}
+
 class RankedListCardWidget extends StatelessWidget {
   final RankedListCard listCard;
   final bool shouldPushInfo;
