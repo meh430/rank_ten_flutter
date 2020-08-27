@@ -81,14 +81,12 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () =>
-          Future.delayed(Duration(milliseconds: 0), () {
-            _userProvider.addUserEvent(
-                GetUserEvent(_userProvider.mainUser.userName,
-                    token: _userProvider.jwtToken));
-            _listsBloc.listEventSink.add(RankedListPreviewEvent(
-                name: _userProvider.mainUser.userName, refresh: true));
-          }),
+      onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
+        _userProvider.addUserEvent(GetUserEvent(_userProvider.mainUser.userName,
+            token: _userProvider.jwtToken));
+        _listsBloc.listEventSink.add(RankedListPreviewEvent(
+            name: _userProvider.mainUser.userName, refresh: true));
+      }),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
             parent: const AlwaysScrollableScrollPhysics()),
@@ -112,7 +110,10 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                         .headline5);
               }
 
-              return SpinKitRipple(size: 50, color: hanPurple);
+              return Padding(
+                padding: const EdgeInsets.all(15),
+                child: SpinKitThreeBounce(size: 30, color: hanPurple),
+              );
             },
           )
         ]),

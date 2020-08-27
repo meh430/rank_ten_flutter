@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/components/choose_pic.dart';
 import 'package:rank_ten/events/user_events.dart';
@@ -109,19 +110,69 @@ class FollowButton extends StatefulWidget {
 }
 
 class _FollowButtonState extends State<FollowButton> {
-  bool _isFollowing, _runningFollow;
+  bool _isFollowing;
+  Future<String> followFuture;
 
   @override
   void initState() {
     super.initState();
     _isFollowing = widget.isFollowing;
-    _runningFollow = false;
+    followFuture = Future.delayed(Duration(milliseconds: 5), () => "INIT");
   }
 
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<MainUserProvider>(context);
-    return Padding(
+    var loading = Padding(
+      padding: const EdgeInsets.all(10),
+      child: SpinKitDoubleBounce(size: 50, color: hanPurple),
+    );
+
+    return FutureBuilder<String>(
+      future: followFuture,
+      key: UniqueKey(),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        var buttonText = "";
+
+        if (snapshot.hasData) {
+          if (snapshot.data == "INIT") {
+            buttonText = _isFollowing ? "Following" : "Follow";
+          } else if (snapshot.data == "FOLLOW") {
+            buttonText = "Following";
+          } else if (snapshot.data == "UNFOLLOW") {
+            buttonText = "Follow";
+          } else {
+            return loading;
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: RaisedButton(
+                color: hanPurple,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                  child: Text(buttonText,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4
+                          .copyWith(color: white)),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                onPressed: () {
+                  setState(() {
+                    followFuture = userProvider.followUser(
+                        name: widget.name, userId: widget.id);
+                  });
+                }),
+          );
+        }
+
+        return loading;
+      },
+    );
+    /*return Padding(
       padding: const EdgeInsets.all(10),
       child: RaisedButton(
           color: hanPurple,
@@ -160,7 +211,7 @@ class _FollowButtonState extends State<FollowButton> {
               Scaffold.of(context).showSnackBar(Utils.getSB('Please wait'));
             }
           }),
-    );
+    );*/
   }
 }
 

@@ -114,7 +114,10 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
                     style: Theme.of(context).textTheme.headline5);
               }
 
-              return SpinKitRipple(size: 50, color: hanPurple);
+              return Padding(
+                padding: const EdgeInsets.all(10),
+                child: SpinKitThreeBounce(size: 30, color: hanPurple),
+              );
             },
           )
         ]),
