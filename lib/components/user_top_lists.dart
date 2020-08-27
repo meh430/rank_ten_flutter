@@ -20,8 +20,8 @@ class UserTopLists extends StatelessWidget {
     }
 
     var rankCards = <Widget>[];
-    topLists.forEach((listCard) => rankCards
-        .add(RankedListCardWidget(listCard: listCard, shouldPushInfo: false)));
+    topLists.forEach((listCard) => rankCards.add(RankedListCardWidget(
+        listCard: listCard, shouldPushInfo: false, key: ObjectKey(listCard))));
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

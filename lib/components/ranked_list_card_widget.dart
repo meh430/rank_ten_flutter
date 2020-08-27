@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
@@ -29,14 +30,6 @@ class RankedListCardWidget extends StatelessWidget {
     } else if (hasThree) {
       remainingLabel = "View ${listCard.numItems - 3} more items";
     }
-
-    Future<bool> Function() likePressed = () async {
-      var action = await userProvider.likeList(listCard.id);
-      print(action);
-      return action == "LIKED";
-      //userProvider.addUserEvent(LikeListEvent(
-      //   id: listCard.id, token: userProvider.jwtToken));
-    };
 
     return Card(
       elevation: 4,
@@ -69,10 +62,10 @@ class RankedListCardWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold))
                 : SizedBox(),
             CardFooter(
-              numLikes: listCard.numLikes,
-              isLiked: isLiked,
-              likePressed: likePressed,
-            ),
+                numLikes: listCard.numLikes,
+                isLiked: isLiked,
+                id: listCard.id,
+                isList: true),
             listCard.commentPreview != null
                 ? CommentPreviewCard(
                     commentPreview: listCard.commentPreview,
@@ -228,12 +221,15 @@ class RankPreviewItem extends StatelessWidget {
 
 class CardFooter extends StatefulWidget {
   final int numLikes;
-  final bool isLiked;
-  final likePressed;
+  final bool isLiked, isList;
+  final String id;
 
-  CardFooter({@required this.numLikes,
+  CardFooter({
+    @required this.numLikes,
+    @required this.id,
     @required this.isLiked,
-    @required this.likePressed});
+    this.isList = true,
+  });
 
   @override
   _CardFooterState createState() => _CardFooterState();
@@ -241,19 +237,94 @@ class CardFooter extends StatefulWidget {
 
 class _CardFooterState extends State<CardFooter> {
   int _numLikes;
-  bool _isLiked, _liking;
+  bool _isLiked;
+  Future<String> likeFuture;
 
   @override
   void initState() {
     super.initState();
     _numLikes = widget.numLikes;
     _isLiked = widget.isLiked;
-    _liking = false;
+    likeFuture = Future.delayed(Duration(milliseconds: 5), () => "INIT");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    var loading = Padding(
+        padding: const EdgeInsets.all(15),
+        child: SpinKitFoldingCube(size: 30, color: hanPurple));
+    var userProvider = Provider.of<MainUserProvider>(context, listen: false);
+
+    return FutureBuilder<String>(
+        future: likeFuture,
+        key: UniqueKey(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            bool liked;
+            if (snapshot.data == "INIT") {
+              liked = _isLiked;
+            } else if (snapshot.data == "LIKED") {
+              liked = true;
+              _numLikes += 1;
+            } else if (snapshot.data == "UNLIKED") {
+              liked = false;
+              _numLikes -= 1;
+            } else {
+              return loading;
+            }
+
+            if (_numLikes < 0) {
+              _numLikes = 0;
+            }
+
+            return Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        splashColor: Colors.transparent,
+                        icon: Icon(
+                            liked ? Icons.favorite : Icons.favorite_border,
+                            color: Colors.red,
+                            size: 55),
+                        onPressed: () {
+                          //TODO: replace other future with liking comments
+                          setState(() {
+                            likeFuture = widget.isList
+                                ? userProvider.likeList(widget.id)
+                                : userProvider.likeList(widget.id);
+                          });
+                        },
+                      ),
+                      Column(children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "$_numLikes likes",
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline5,
+                        )
+                      ])
+                    ],
+                  ),
+                  SizedBox(height: 10)
+                ],
+              ),
+            );
+          }
+
+          return loading;
+        });
+
+    /*return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
       child: Column(
         children: [
@@ -314,7 +385,7 @@ class _CardFooterState extends State<CardFooter> {
           SizedBox(height: 10)
         ],
       ),
-    );
+    );*/
   }
 }
 
