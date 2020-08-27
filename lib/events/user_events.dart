@@ -36,7 +36,3 @@ class GetUserEvent extends UserEvent {
 
   GetUserEvent(this.name, {this.token = ""});
 }
-
-class CreateList extends UserEvent {}
-
-class DeleteList extends UserEvent {}

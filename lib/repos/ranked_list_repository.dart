@@ -1,7 +1,7 @@
 import 'package:rank_ten/api/rank_api.dart';
 import 'package:rank_ten/models/ranked_list.dart';
 
-class RankListRepository {
+class RankedListRepository {
   RankApi _api = RankApi();
 
   Future<RankedList> getRankedList(String listId) async {
