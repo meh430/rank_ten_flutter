@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rank_ten/routes/list_screen.dart';
 import 'package:rank_ten/routes/login_signup.dart';
 import 'package:rank_ten/routes/main_screen.dart';
+import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 import 'package:rank_ten/routes/splash.dart';
 import 'package:rank_ten/routes/user_info_screen.dart';
 import 'package:rank_ten/routes/user_preview_screen.dart';
@@ -29,6 +30,13 @@ class Router {
         final UserInfoScreenArgs args = settings.arguments;
         return MaterialPageRoute(
             builder: (context) => UserInfoScreen(name: args.name));
+      case '/ranked_list_view':
+        final RankedListViewScreenArgs args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (context) => RankedListViewScreen(
+                listId: args.listId,
+                listTitle: args.listTitle,
+                isMain: args.isMain));
     }
   }
 }

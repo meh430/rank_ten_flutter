@@ -6,6 +6,7 @@ import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
+import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 import 'package:rank_ten/routes/user_info_screen.dart';
 
 import 'choose_pic.dart';
@@ -56,10 +57,17 @@ class RankedListCardWidget extends StatelessWidget {
                 : SizedBox(),
             RankPreviewItems(previewItems: listCard.rankList),
             hasThree
-                ? Text(remainingLabel,
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.bold))
+                ? GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/ranked_list_view',
+                          arguments: RankedListViewScreenArgs(
+                              listTitle: listCard.title, listId: listCard.id));
+                    },
+                    child: Text(remainingLabel,
+                        style: Theme.of(context).textTheme.headline6.copyWith(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold)),
+                  )
                 : SizedBox(),
             CardFooter(
                 numLikes: listCard.numLikes,

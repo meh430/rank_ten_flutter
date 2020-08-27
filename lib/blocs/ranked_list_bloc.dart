@@ -30,7 +30,7 @@ class RankedListBloc {
     _rankedListEventController.stream.listen(_eventToState);
   }
 
-  void _eventToState(RankedListEvent event) async {
+  void _eventToState(dynamic event) async {
     if (event is GetRankedListEvent) {
       _rankedList = await _rankedListRepository.getRankedList(event.listId);
       _rankedListStateSink.add(_rankedList);
