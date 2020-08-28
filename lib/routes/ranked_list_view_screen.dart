@@ -287,7 +287,19 @@ void showLikedUsers({BuildContext context, String listId}) {
     builder: (BuildContext context) {
       return Padding(
           padding: const EdgeInsets.only(top: 10),
-          child: UserPreviewWidget(listType: LIKED_USERS, name: listId));
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  child: Text("Liked By",
+                      style: Theme.of(context).textTheme.headline4)),
+              Expanded(
+                  child:
+                      UserPreviewWidget(listType: LIKED_USERS, name: listId)),
+            ],
+          ));
     },
   );
 }

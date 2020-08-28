@@ -77,7 +77,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
               });
             },
             child: ListView.builder(
-                shrinkWrap: false,
+                shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
                     parent: const AlwaysScrollableScrollPhysics()),
                 controller: _scrollController,
