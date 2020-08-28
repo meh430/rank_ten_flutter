@@ -327,12 +327,13 @@ class _CardFooterState extends State<CardFooter> {
                         SizedBox(
                           height: 20,
                         ),
-                        Text(
-                          "$_numLikes likes",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headline5,
+                        GestureDetector(
+                          onTap: () => showLikedUsers(
+                              context: context, listId: widget.id),
+                          child: Text(
+                            "$_numLikes likes",
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
                         )
                       ])
                     ],

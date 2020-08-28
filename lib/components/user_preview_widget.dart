@@ -5,6 +5,7 @@ import 'package:rank_ten/components/user_preview_card.dart';
 import 'package:rank_ten/events/user_preview_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/user.dart';
+import 'package:rank_ten/repos/user_preview_repository.dart';
 
 class UserPreviewWidget extends StatefulWidget {
   final int sort;
@@ -60,6 +61,10 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
       builder:
           (BuildContext context, AsyncSnapshot<List<UserPreview>> snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
+          if (widget.listType == LIKED_USERS) {
+            _userPreviewBloc.hitMax = true;
+          }
+
           return RefreshIndicator(
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/rank_item.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
 
 import 'choose_pic.dart';
 
@@ -12,20 +14,23 @@ class RankItemViewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
+    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
     return Card(
       elevation: 4,
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
         child: Column(
           mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 10, top: 10),
+                  padding: const EdgeInsets.only(right: 20, top: 20, left: 10),
                   child: RankCircle(
                     rank: rankItem.rank,
                     margin: 0,
@@ -34,9 +39,10 @@ class RankItemViewCard extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 20),
                     child: Text(
                       rankItem.itemName,
+                      textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
                       style: textTheme.headline4,
                     ),
@@ -51,7 +57,14 @@ class RankItemViewCard extends StatelessWidget {
                   )
                 : SizedBox(),
             rankItem.description.isNotEmpty
-                ? Text(rankItem.description, style: textTheme.headline6)
+                ? Padding(
+              padding:
+              const EdgeInsets.only(left: 20, right: 10, top: 10),
+              child: Text(rankItem.description,
+                  textAlign: TextAlign.center,
+                  style: textTheme.headline6
+                      .copyWith(color: isDark ? lightCard : secondText)),
+            )
                 : SizedBox()
           ],
         ),
