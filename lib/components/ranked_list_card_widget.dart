@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/components/rank_item_view_card.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
@@ -11,10 +12,11 @@ import 'package:rank_ten/routes/user_info_screen.dart';
 
 import 'choose_pic.dart';
 
-void launchRankListViewScreen({BuildContext context, RankedListCard listCard}) {
+void launchRankListViewScreen(
+    {@required BuildContext context, @required RankedListCard listCard}) {
   var mainUserName =
       Provider.of<MainUserProvider>(context, listen: false).mainUser.userName;
-  Navigator.pushNamed(context, 'ranked_list_view',
+  Navigator.pushNamed(context, '/ranked_list_view',
       arguments: RankedListViewScreenArgs(
           listTitle: listCard.title,
           listId: listCard.id,
@@ -58,26 +60,44 @@ class RankedListCardWidget extends StatelessWidget {
                 userName: listCard.userName,
                 profPicUrl: listCard.profPic,
                 dateCreated: listCard.dateCreated),
-            Text(listCard.title,
-                style: Theme.of(context).textTheme.headline4,
-                textAlign: TextAlign.center),
+            GestureDetector(
+              onTap: () =>
+                  launchRankListViewScreen(
+                      context: context, listCard: listCard),
+              child: Text(listCard.title,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline4,
+                  textAlign: TextAlign.center),
+            ),
             const SizedBox(height: 10),
             listCard.picture.isNotEmpty
-                ? RankItemImage(imageUrl: listCard.picture)
+                ? GestureDetector(
+                onTap: () =>
+                    launchRankListViewScreen(
+                        context: context, listCard: listCard),
+                child: RankItemImage(imageUrl: listCard.picture))
                 : SizedBox(),
-            RankPreviewItems(previewItems: listCard.rankList),
+            GestureDetector(
+                onTap: () =>
+                    launchRankListViewScreen(
+                        context: context, listCard: listCard),
+                child: RankPreviewItems(previewItems: listCard.rankList)),
             hasThree
                 ? GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/ranked_list_view',
-                          arguments: RankedListViewScreenArgs(
-                              listTitle: listCard.title, listId: listCard.id));
-                    },
-                    child: Text(remainingLabel,
-                        style: Theme.of(context).textTheme.headline6.copyWith(
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold)),
-                  )
+              onTap: () =>
+                  launchRankListViewScreen(
+                      context: context, listCard: listCard),
+              child: Text(remainingLabel,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold)),
+            )
                 : SizedBox(),
             CardFooter(
                 numLikes: listCard.numLikes,
@@ -193,7 +213,7 @@ class CircleImage extends StatelessWidget {
 }
 
 class RankPreviewItem extends StatelessWidget {
-  final String rank;
+  final int rank;
   final String rankItemTitle;
 
   RankPreviewItem({Key key, @required this.rank, @required this.rankItemTitle})
@@ -206,23 +226,7 @@ class RankPreviewItem extends StatelessWidget {
         .isDark;
     return Row(
       children: [
-        Container(
-            margin: const EdgeInsets.all(12),
-            child: Center(
-                child: Text(
-                  rank,
-                  textAlign: TextAlign.center,
-                  style:
-                  Theme
-                      .of(context)
-                      .textTheme
-                      .headline4
-                      .copyWith(color: white),
-                )),
-            width: 85.0,
-            height: 85.0,
-            decoration:
-            new BoxDecoration(shape: BoxShape.circle, color: lavender)),
+        RankCircle(rank: rank),
         const SizedBox(width: 10),
         Expanded(
             child: Text(rankItemTitle,
@@ -417,9 +421,7 @@ class RankPreviewItems extends StatelessWidget {
     var colChildren = List<Widget>();
     previewItems.forEach((item) {
       colChildren.add(RankPreviewItem(
-          rank: item.rank.toString(),
-          rankItemTitle: item.itemName,
-          key: ObjectKey(item)));
+          rank: item.rank, rankItemTitle: item.itemName, key: ObjectKey(item)));
     });
 
     return Padding(

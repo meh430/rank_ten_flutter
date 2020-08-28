@@ -47,15 +47,15 @@ class UserInfo extends StatelessWidget {
         children: [
           //RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
           profilePic,
-          UserStatRow(
-            user: user,
-            isMain: isMain,
+          Expanded(
+            child: UserStatRow(
+              user: user,
+              isMain: isMain,
+            ),
           ),
-          isMain
-              ? SizedBox()
-              : SizedBox(
-                  width: 12,
-                )
+          SizedBox(
+            width: 12,
+          )
         ],
       );
     } else {
@@ -66,15 +66,13 @@ class UserInfo extends StatelessWidget {
           children: [
             //RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]),
             profilePic,
-            UserStatRow(
-              user: user,
-              isMain: isMain,
+            Expanded(
+              child: UserStatRow(
+                user: user,
+                isMain: isMain,
+              ),
             ),
-            isMain
-                ? SizedBox()
-                : SizedBox(
-                    width: 12,
-                  )
+            SizedBox()
           ],
         ),
         FollowButton(
@@ -284,90 +282,91 @@ class UserStatRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final token =
-        Provider
-            .of<MainUserProvider>(context, listen: false)
-            .jwtToken;
-    return Column(
-      children: <Widget>[
-        Row(
-          children: [
-            UserStat(
-              statLabel: "Rank Points",
-              statCount: user.rankPoints,
-              isMain: isMain,
-            ),
-            GestureDetector(
-              onTap: () =>
-                  Navigator.pushNamed(context, '/user_preview_list',
-                      arguments: UserPreviewScreenArgs(
-                          listType: FOLLOWING_USERS, name: user.userName)),
-              child: UserStat(
-                statLabel: "Following",
-                statCount: user.numFollowing,
+        Provider.of<MainUserProvider>(context, listen: false).jwtToken;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          Column(
+            children: [
+              UserStat(
+                statLabel: "Rank Points",
+                statCount: user.rankPoints,
                 isMain: isMain,
               ),
-            ),
-            isMain
-                ? UserStat(
-              statLabel: "Comments",
-              statCount: user.numComments,
-              isMain: isMain,
-            )
-                : SizedBox()
-          ],
-        ),
-        Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                if (isMain) {
-                  //private
-                  Navigator.pushNamed(context, '/lists',
-                      arguments: ListScreenArgs(
-                          listType: USER_LISTS_ALL,
-                          token: token,
-                          name: user.userName));
-                } else {
-                  //public
-                  Navigator.pushNamed(context, '/lists',
-                      arguments: ListScreenArgs(
-                          listType: USER_LISTS, name: user.userName));
-                }
-              },
-              child: UserStat(
-                statLabel: "Rank Lists",
-                statCount: user.listNum,
-                isMain: isMain,
-              ),
-            ),
-            GestureDetector(
-              onTap: () =>
-                  Navigator.pushNamed(context, '/user_preview_list',
-                      arguments: UserPreviewScreenArgs(
-                          listType: FOLLOWERS_USERS, name: user.userName)),
-              child: UserStat(
-                statLabel: "Followers",
-                statCount: user.numFollowers,
-                isMain: isMain,
-              ),
-            ),
-            isMain
-                ? GestureDetector(
-                onTap: () =>
+              GestureDetector(
+                onTap: () {
+                  if (isMain) {
+                    //private
                     Navigator.pushNamed(context, '/lists',
                         arguments: ListScreenArgs(
-                            listType: LIKED_LISTS,
-                            name: user.userName,
-                            token: token)),
+                            listType: USER_LISTS_ALL,
+                            token: token,
+                            name: user.userName));
+                  } else {
+                    //public
+                    Navigator.pushNamed(context, '/lists',
+                        arguments: ListScreenArgs(
+                            listType: USER_LISTS, name: user.userName));
+                  }
+                },
                 child: UserStat(
-                  statLabel: "Liked Lists",
-                  statCount: user.numLiked,
+                  statLabel: "Rank Lists",
+                  statCount: user.listNum,
                   isMain: isMain,
-                ))
-                : SizedBox()
-          ],
-        )
-      ],
+                ),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/user_preview_list',
+                    arguments: UserPreviewScreenArgs(
+                        listType: FOLLOWING_USERS, name: user.userName)),
+                child: UserStat(
+                  statLabel: "Following",
+                  statCount: user.numFollowing,
+                  isMain: isMain,
+                ),
+              ),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/user_preview_list',
+                    arguments: UserPreviewScreenArgs(
+                        listType: FOLLOWERS_USERS, name: user.userName)),
+                child: UserStat(
+                  statLabel: "Followers",
+                  statCount: user.numFollowers,
+                  isMain: isMain,
+                ),
+              ),
+            ],
+          ),
+          isMain
+              ? Column(
+                  children: [
+                    UserStat(
+                      statLabel: "Comments",
+                      statCount: user.numComments,
+                      isMain: isMain,
+                    ),
+                    GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, '/lists',
+                            arguments: ListScreenArgs(
+                                listType: LIKED_LISTS,
+                                name: user.userName,
+                                token: token)),
+                        child: UserStat(
+                          statLabel: "Liked Lists",
+                          statCount: user.numLiked,
+                          isMain: isMain,
+                        ))
+                  ],
+                )
+              : SizedBox()
+        ],
+      ),
     );
   }
 }

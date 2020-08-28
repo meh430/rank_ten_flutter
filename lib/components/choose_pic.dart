@@ -132,8 +132,9 @@ void showItemImagePicker(
 
 class RankItemImage extends StatelessWidget {
   final String imageUrl;
+  final BoxFit fit;
 
-  RankItemImage({@required this.imageUrl});
+  RankItemImage({@required this.imageUrl, this.fit = BoxFit.cover});
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +142,7 @@ class RankItemImage extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
-        child: Image.network(imageUrl, fit: BoxFit.cover),
+        child: Image.network(imageUrl, fit: fit),
       ),
     );
   }
@@ -181,7 +182,10 @@ class _PreviewImageState extends State<PreviewImage> {
           if (snapshot.data) {
             widget.imageValid(true);
             return widget.profilePicker
-                ? RoundedImage(imageUrl: widget.imageUrl)
+                ? RoundedImage(
+                    imageUrl: widget.imageUrl,
+                    uInitial: "I",
+                  )
                 : RankItemImage(imageUrl: widget.imageUrl);
           } else {
             widget.imageValid(false);

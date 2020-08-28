@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/blocs/ranked_list_bloc.dart';
+import 'package:rank_ten/components/rank_item_view_card.dart';
 import 'package:rank_ten/events/ranked_list_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/ranked_list.dart';
@@ -44,7 +45,13 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
             builder:
                 (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data.userName);
+                return ListView(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    shrinkWrap: true,
+                    children: snapshot.data.rankList.map((rItem) =>
+                        RankItemViewCard(rankItem: rItem,)).toList()
+                );
               }
 
               return SpinKitRipple(size: 50, color: hanPurple);
