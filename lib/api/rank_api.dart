@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:rank_ten/api/rank_exceptions.dart';
 
 class RankApi {
-  final _baseUrl = 'http://192.168.0.22:5000';
+  final String _baseUrl = 'http://192.168.0.22:5000';
 
   Future<bool> validateImage(String imageUrl) async {
     var isValid = false;
@@ -72,6 +72,21 @@ class RankApi {
     try {
       final res = await http.put(_baseUrl + endpoint,
           body: json.encode(data),
+          headers: _getHeaders(bearerToken: bearerToken));
+      jsonResponse = _parseResponse(res);
+    } on SocketException {
+      throw DefaultError('No network connection');
+    }
+
+    return jsonResponse;
+  }
+
+  Future<dynamic> delete(
+      {@required String endpoint, String bearerToken = ""}) async {
+    var jsonResponse;
+
+    try {
+      final res = await http.delete(endpoint,
           headers: _getHeaders(bearerToken: bearerToken));
       jsonResponse = _parseResponse(res);
     } on SocketException {
