@@ -38,6 +38,13 @@ class MainUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> likeComment(String commentId) async {
+    String action = await UserRepository()
+        .likeComment(commentId: commentId, token: jwtToken);
+
+    return action;
+  }
+
   Future<String> likeList(String listId) async {
     String action =
         await UserRepository().likeList(listId: listId, token: jwtToken);

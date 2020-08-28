@@ -6,7 +6,7 @@ class CommentsRepository {
 
   Future<List<Comment>> getListComments(
       {String listId, int page, int sort, bool refresh = false}) async {
-    var endpoint = '/comment/$listId/$page/$sort';
+    var endpoint = '/comments/$listId/$page/$sort';
     if (refresh) {
       endpoint += '?re=True';
     }

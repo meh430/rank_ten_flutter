@@ -61,14 +61,10 @@ class RankedListCardWidget extends StatelessWidget {
                 profPicUrl: listCard.profPic,
                 dateCreated: listCard.dateCreated),
             GestureDetector(
-              onTap: () =>
-                  launchRankListViewScreen(
-                      context: context, listCard: listCard),
+              onTap: () => launchRankListViewScreen(
+                  context: context, listCard: listCard),
               child: Text(listCard.title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline4,
+                  style: Theme.of(context).textTheme.headline4,
                   textAlign: TextAlign.center),
             ),
             const SizedBox(height: 10),
@@ -315,11 +311,10 @@ class _CardFooterState extends State<CardFooter> {
                             color: Colors.red,
                             size: 55),
                         onPressed: () {
-                          //TODO: replace other future with liking comments
                           setState(() {
                             likeFuture = widget.isList
                                 ? userProvider.likeList(widget.id)
-                                : userProvider.likeList(widget.id);
+                                : userProvider.likeComment(widget.id);
                           });
                         },
                       ),

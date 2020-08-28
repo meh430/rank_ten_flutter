@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/blocs/ranked_list_bloc.dart';
+import 'package:rank_ten/components/list_comments.dart';
 import 'package:rank_ten/components/rank_item_view_card.dart';
 import 'package:rank_ten/components/user_preview_widget.dart';
 import 'package:rank_ten/events/ranked_list_events.dart';
@@ -55,9 +56,8 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                       child: RefreshIndicator(
                         onRefresh: () => Future.delayed(
                             Duration(milliseconds: 0),
-                            () =>
-                                    _rankedListBloc.modelEventSink
-                                        .add(GetRankedListEvent(widget.listId))),
+                            () => _rankedListBloc.modelEventSink
+                                .add(GetRankedListEvent(widget.listId))),
                         child: ListView(
                             physics: const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
@@ -107,11 +107,19 @@ class RankListBottomBar extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.message),
-                  onPressed: () => print("COMMENT"),
+                  onPressed: () =>
+                      showListComments(context: context, listId: rankedList.id),
                 ),
-                Text(
-                  "${rankedList.numComments} comments",
-                  style: Theme.of(context).textTheme.headline5,
+                GestureDetector(
+                  onTap: () =>
+                      showListComments(context: context, listId: rankedList.id),
+                  child: Text(
+                    "${rankedList.numComments} comments",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline5,
+                  ),
                 )
               ],
             ),
@@ -184,7 +192,6 @@ class _LikeWidgetState extends State<LikeWidget> {
                   icon: Icon(liked ? Icons.favorite : Icons.favorite_border,
                       color: Colors.red),
                   onPressed: () {
-                    //TODO: replace other future with liking comments
                     setState(() {
                       _likeFuture = userProvider.likeList(widget.rankedList.id);
                     });
@@ -295,12 +302,23 @@ void showLikedUsers({BuildContext context, String listId}) {
               Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   child: Text("Liked By",
-                      style: Theme.of(context).textTheme.headline4)),
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headline4)),
               Expanded(
                   child:
-                      UserPreviewWidget(listType: LIKED_USERS, name: listId)),
+                  UserPreviewWidget(listType: LIKED_USERS, name: listId)),
             ],
           ));
     },
   );
+}
+
+void showListComments({BuildContext context, String listId}) {
+  showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return ListComments(listId: listId);
+      });
 }

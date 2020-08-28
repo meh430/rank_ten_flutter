@@ -24,7 +24,7 @@ class Comment {
     id = json['_id'][r'$oid'];
     belongsTo = json['belongs_to'][r'$oid'];
     comment = json['comment'];
-    dateCreated = json['date_created'][r'$date'];
+    dateCreated = ((json['date_created'][r'$date'] as int) / 1000).floor();
     edited = json['edited'];
     if (json['liked_users'] != null) {
       likedUsers = new Set<String>();
