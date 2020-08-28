@@ -58,4 +58,14 @@ class CommentsRepository {
 
     return Comment.fromJson(response);
   }
+
+  Future<Map<String, String>> getCommentParent({String commentId}) async {
+    var response = await _api.get(endpoint: '/comment/$commentId');
+
+    return {
+      '_id': response['_id'][r'$oid'],
+      'title': response['title'],
+      'user_name': response['user_name']
+    };
+  }
 }

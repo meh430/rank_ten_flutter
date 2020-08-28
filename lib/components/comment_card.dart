@@ -54,10 +54,7 @@ class _CommentCardState extends State<CommentCard> {
             child: Padding(
                 padding: const EdgeInsets.only(left: 40, bottom: 6, top: 6),
                 child: Text(widget.comment.comment,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5)),
+                    style: Theme.of(context).textTheme.headline5)),
           ),
           CardFooter(
               numLikes: widget.comment.numLikes,
@@ -120,7 +117,8 @@ void editCommentDialog(
                         style: Theme
                             .of(context)
                             .textTheme
-                            .headline6),
+                            .headline6
+                            .copyWith(color: palePurple)),
                   ),
                 )
               ],

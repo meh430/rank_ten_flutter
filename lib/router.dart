@@ -7,6 +7,7 @@ import 'package:rank_ten/routes/login_signup.dart';
 import 'package:rank_ten/routes/main_screen.dart';
 import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 import 'package:rank_ten/routes/splash.dart';
+import 'package:rank_ten/routes/user_comments_screen.dart';
 import 'package:rank_ten/routes/user_info_screen.dart';
 import 'package:rank_ten/routes/user_preview_screen.dart';
 
@@ -55,6 +56,11 @@ class Router {
                 listId: args.listId,
                 listTitle: args.listTitle,
                 isMain: args.isMain));
+      case '/user_comments_screen':
+        return CircularReveal(
+            centerAlignment: Alignment.center,
+            maxRadius: 800,
+            page: UserCommentsScreen());
     }
   }
 }

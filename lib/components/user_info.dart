@@ -346,10 +346,14 @@ class UserStatRow extends StatelessWidget {
           isMain
               ? Column(
                   children: [
-                    UserStat(
-                      statLabel: "Comments",
-                      statCount: user.numComments,
-                      isMain: isMain,
+                    GestureDetector(
+                      onTap: () =>
+                          Navigator.pushNamed(context, '/user_comments_screen'),
+                      child: UserStat(
+                        statLabel: "Comments",
+                        statCount: user.numComments,
+                        isMain: isMain,
+                      ),
                     ),
                     GestureDetector(
                         onTap: () => Navigator.pushNamed(context, '/lists',
