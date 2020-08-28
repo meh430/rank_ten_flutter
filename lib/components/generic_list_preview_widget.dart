@@ -34,7 +34,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
   void initState() {
     super.initState();
     _listsBloc = PreviewListsBloc(endpointBase: widget.listType);
-    _listsBloc.listEventSink.add(RankedListPreviewEvent(
+    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
         sort: widget.sort,
         name: widget.name,
         token: widget.token,
@@ -53,7 +53,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       if (!_listsBloc.hitMax) {
-        _listsBloc.listEventSink.add(RankedListPreviewEvent(
+        _listsBloc.modelEventSink.add(RankedListPreviewEvent(
             sort: widget.sort,
             name: widget.name,
             token: widget.token,
@@ -65,7 +65,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<RankedListCard>>(
-      stream: _listsBloc.listStateStream,
+      stream: _listsBloc.modelStateStream,
       builder:
           (BuildContext context, AsyncSnapshot<List<RankedListCard>> snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
@@ -73,7 +73,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
                 print("Refreshing list");
-                _listsBloc.listEventSink.add(RankedListPreviewEvent(
+                _listsBloc.modelEventSink.add(RankedListPreviewEvent(
                     sort: widget.sort,
                     name: widget.name,
                     token: widget.token,

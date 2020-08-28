@@ -57,7 +57,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     super.initState();
     _userBloc = UserBloc(name: widget.name);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
-    _listsBloc.listEventSink.add(RankedListPreviewEvent(name: widget.name));
+    _listsBloc.modelEventSink.add(RankedListPreviewEvent(name: widget.name));
   }
 
   Widget builderFunction(
@@ -95,7 +95,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     return RefreshIndicator(
       onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
         _userBloc.userEventSink.add(GetUserEvent(widget.name));
-        _listsBloc.listEventSink
+        _listsBloc.modelEventSink
             .add(RankedListPreviewEvent(name: widget.name, refresh: true));
       }),
       child: SingleChildScrollView(
@@ -105,7 +105,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
           StreamBuilder<Response<User>>(
               stream: _userBloc.userStateStream, builder: builderFunction),
           StreamBuilder<List<RankedListCard>>(
-            stream: _listsBloc.listStateStream,
+            stream: _listsBloc.modelStateStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return UserTopLists(name: widget.name, topLists: snapshot.data);

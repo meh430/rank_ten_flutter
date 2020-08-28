@@ -36,7 +36,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
 
-    _listsBloc.listEventSink
+    _listsBloc.modelEventSink
         .add(RankedListPreviewEvent(name: _userProvider.mainUser.userName));
   }
 
@@ -84,7 +84,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
       onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
         _userProvider.addUserEvent(GetUserEvent(_userProvider.mainUser.userName,
             token: _userProvider.jwtToken));
-        _listsBloc.listEventSink.add(RankedListPreviewEvent(
+        _listsBloc.modelEventSink.add(RankedListPreviewEvent(
             name: _userProvider.mainUser.userName, refresh: true));
       }),
       child: SingleChildScrollView(
@@ -96,7 +96,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
               initialData: Response.completed(_userProvider.mainUser),
               builder: builderFunction),
           StreamBuilder<List<RankedListCard>>(
-            stream: _listsBloc.listStateStream,
+            stream: _listsBloc.modelStateStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return UserTopLists(
@@ -104,10 +104,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                     topLists: snapshot.data);
               } else if (snapshot.hasError) {
                 return Text("Error getting top lists",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5);
+                    style: Theme.of(context).textTheme.headline5);
               }
 
               return Padding(

@@ -3,29 +3,29 @@ import 'dart:async';
 abstract class Bloc<M, E> {
   M model;
 
-  StreamController _modelStateController;
+  StreamController modelStateController;
 
-  StreamSink<M> get modelStateSink => _modelStateController.sink;
+  StreamSink<M> get modelStateSink => modelStateController.sink;
 
-  Stream<M> get modelStateStream => _modelStateController.stream;
+  Stream<M> get modelStateStream => modelStateController.stream;
 
-  StreamController _modelEventController;
+  StreamController modelEventController;
 
-  StreamSink<E> get modelEventSink => _modelEventController.sink;
+  StreamSink<E> get modelEventSink => modelEventController.sink;
 
   void eventToState(dynamic event) async {}
 
   Bloc() {
-    _modelStateController = StreamController<M>();
-    _modelEventController = StreamController<E>();
+    modelStateController = StreamController<M>();
+    modelEventController = StreamController<E>();
   }
 
   void initEventListener() {
-    _modelEventController.stream.listen(eventToState);
+    modelEventController.stream.listen(eventToState);
   }
 
   void dispose() {
-    _modelStateController.close();
-    _modelEventController.close();
+    modelStateController.close();
+    modelEventController.close();
   }
 }

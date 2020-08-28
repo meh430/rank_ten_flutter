@@ -6,8 +6,9 @@ import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/repos/user_repository.dart';
 
 class UserBloc {
-  bool isMain;
   User _user;
+  bool isMain;
+
   UserRepository _userRepository;
 
   //stream the state
