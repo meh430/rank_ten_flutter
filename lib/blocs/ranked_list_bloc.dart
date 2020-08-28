@@ -1,44 +1,23 @@
-import 'dart:async';
-
 import 'package:rank_ten/events/ranked_list_events.dart';
 import 'package:rank_ten/models/ranked_list.dart';
 import 'package:rank_ten/repos/ranked_list_repository.dart';
 
-class RankedListBloc {
+import 'bloc.dart';
+
+class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
   RankedListRepository _rankedListRepository;
 
-  RankedList _rankedList;
-
-  StreamController _rankedListStateController;
-
-  Stream<RankedList> get rankedListStateStream =>
-      _rankedListStateController.stream;
-
-  StreamSink<RankedList> get _rankedListStateSink =>
-      _rankedListStateController.sink;
-
-  StreamController _rankedListEventController;
-
-  StreamSink<RankedListEvent> get rankedListEventSink =>
-      _rankedListEventController.sink;
-
-  RankedListBloc() {
+  RankedListBloc() : super() {
     _rankedListRepository = RankedListRepository();
-    _rankedListStateController = StreamController<RankedList>();
-    _rankedListEventController = StreamController<RankedListEvent>();
-
-    _rankedListEventController.stream.listen(_eventToState);
+    initEventListener();
   }
 
-  void _eventToState(dynamic event) async {
+  @override
+  void eventToState(event) async {
+    super.eventToState(event);
     if (event is GetRankedListEvent) {
-      _rankedList = await _rankedListRepository.getRankedList(event.listId);
-      _rankedListStateSink.add(_rankedList);
+      model = await _rankedListRepository.getRankedList(event.listId);
+      modelStateSink.add(model);
     }
-  }
-
-  void dispose() {
-    _rankedListEventController.close();
-    _rankedListStateController.close();
   }
 }

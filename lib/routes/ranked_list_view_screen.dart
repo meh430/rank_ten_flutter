@@ -29,7 +29,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
   void initState() {
     super.initState();
     _rankedListBloc = RankedListBloc();
-    _rankedListBloc.rankedListEventSink.add(GetRankedListEvent(widget.listId));
+    _rankedListBloc.modelEventSink.add(GetRankedListEvent(widget.listId));
   }
 
   @override
@@ -44,7 +44,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
               style: Theme.of(context).primaryTextTheme.headline5),
         ),
         body: StreamBuilder<RankedList>(
-            stream: _rankedListBloc.rankedListStateStream,
+            stream: _rankedListBloc.modelStateStream,
             builder:
                 (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
               if (snapshot.hasData) {
@@ -55,8 +55,9 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                       child: RefreshIndicator(
                         onRefresh: () => Future.delayed(
                             Duration(milliseconds: 0),
-                            () => _rankedListBloc.rankedListEventSink
-                                .add(GetRankedListEvent(widget.listId))),
+                            () =>
+                                    _rankedListBloc.modelEventSink
+                                        .add(GetRankedListEvent(widget.listId))),
                         child: ListView(
                             physics: const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
