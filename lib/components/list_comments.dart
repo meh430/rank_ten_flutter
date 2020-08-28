@@ -97,25 +97,28 @@ class _ListCommentsState extends State<ListComments> {
               children: [
                 Flexible(
                     child: TextField(
-                      controller: _commentController,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) {
-                        if (value.isNotEmpty) {
-                          _commentBloc.modelEventSink.add(AddCommentEvent(
-                              token: userProvider.jwtToken,
-                              listId: widget.listId,
-                              comment: value));
-                          _commentController.clear();
-                        }
-                      },
-                      decoration: InputDecoration(
-                          hintStyle: Theme
-                              .of(context)
-                              .textTheme
-                              .headline6
-                              .copyWith(fontSize: 18),
-                          hintText: "Send a comment"),
-                    )),
+                  controller: _commentController,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(fontSize: 18),
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (value) {
+                    if (value.isNotEmpty) {
+                      _commentBloc.modelEventSink.add(AddCommentEvent(
+                          token: userProvider.jwtToken,
+                          listId: widget.listId,
+                          comment: value));
+                      _commentController.clear();
+                    }
+                  },
+                  decoration: InputDecoration(
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(fontSize: 18),
+                      hintText: "Send a comment"),
+                )),
                 IconButton(
                     icon: const Icon(Icons.send),
                     onPressed: () {
@@ -181,17 +184,38 @@ class _ListCommentsState extends State<ListComments> {
                               return SizedBox();
                             }
 
-                            return Dismissible(
+                            var isMain = snapshot.data[index].userName ==
+                                userProvider.mainUser.userName;
+
+                            return isMain
+                                ? Dismissible(
                               background: Container(color: Colors.red),
                               key: ObjectKey(snapshot.data[index]),
                               onDismissed: (direction) {
                                 _commentBloc.modelEventSink.add(
                                     DeleteCommentEvent(
                                         token: userProvider.jwtToken,
-                                        commentId: snapshot.data[index].id));
+                                        commentId:
+                                        snapshot.data[index].id));
                               },
-                              child: CommentCard(comment: snapshot.data[index]),
-                            );
+                              child: CommentCard(
+                                  editCallback: (value) {
+                                    if (value.isNotEmpty) {
+                                      _commentBloc.modelEventSink.add(
+                                          UpdateCommentEvent(
+                                              commentId:
+                                              snapshot.data[index].id,
+                                              comment: value,
+                                              token:
+                                              userProvider.jwtToken));
+                                    }
+                                  },
+                                  comment: snapshot.data[index],
+                                  isMain: true),
+                            )
+                                : CommentCard(
+                                comment: snapshot.data[index],
+                                isMain: false);
                           }),
                     );
                   } else if (snapshot.hasError) {
