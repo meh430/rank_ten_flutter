@@ -54,11 +54,7 @@ class UserPreviewBloc extends Bloc<List<UserPreview>, UserPreviewEvent> {
 
         model.addAll(pageContent);
         currentStatus = Status.IDLE;
-        try {
-          modelStateSink.add(model);
-        } catch (e) {
-          print("Sink disposed?");
-        }
+        updateState();
       } on InvalidPageError {
         hitMax = true;
         _currPage -= 1;

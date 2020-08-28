@@ -24,6 +24,14 @@ abstract class Bloc<M, E> {
     modelEventController.stream.listen(eventToState);
   }
 
+  void updateState() {
+    try {
+      modelStateSink.add(model);
+    } catch (e) {
+      print("Sink may have been disposed");
+    }
+  }
+
   void dispose() {
     modelStateController.close();
     modelEventController.close();

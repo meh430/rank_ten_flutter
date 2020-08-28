@@ -1,9 +1,10 @@
 import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/api/response.dart';
-import 'package:rank_ten/blocs/bloc.dart';
 import 'package:rank_ten/events/ranked_list_preview_events.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
+
+import 'bloc.dart';
 
 class PreviewListsBloc
     extends Bloc<List<RankedListCard>, RankedListPreviewEvent> {
@@ -54,11 +55,7 @@ class PreviewListsBloc
 
         model.addAll(pageContent);
         currentStatus = Status.IDLE;
-        try {
-          modelStateSink.add(model);
-        } catch (e) {
-          print("Sink disposed?");
-        }
+        updateState();
       } on InvalidPageError {
         hitMax = true;
         _currPage -= 1;

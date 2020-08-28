@@ -5,15 +5,19 @@ abstract class CommentEvent {}
 class GetListCommentsEvent extends CommentEvent {
   final String listId;
   final int sort;
+  final bool refresh;
 
-  GetListCommentsEvent({@required this.listId, this.sort = 0});
+  GetListCommentsEvent(
+      {@required this.listId, this.sort = 0, this.refresh = false});
 }
 
 class GetUserCommentsEvent extends CommentEvent {
   final String token;
   final int sort;
+  final bool refresh;
 
-  GetUserCommentsEvent({@required this.token, this.sort = 0});
+  GetUserCommentsEvent(
+      {@required this.token, this.sort = 0, this.refresh = false});
 }
 
 class AddCommentEvent extends CommentEvent {
