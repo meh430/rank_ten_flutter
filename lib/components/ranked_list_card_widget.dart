@@ -12,15 +12,20 @@ import 'package:rank_ten/routes/user_info_screen.dart';
 
 import 'choose_pic.dart';
 
-void launchRankListViewScreen(
-    {@required BuildContext context, @required RankedListCard listCard}) {
-  var mainUserName =
-      Provider.of<MainUserProvider>(context, listen: false).mainUser.userName;
+void launchRankListViewScreen({
+  @required BuildContext context,
+  @required RankedListCard listCard,
+  @required bool shouldPushInfo,
+}) {
+  var userProvider =
+      Provider.of<MainUserProvider>(context, listen: false).mainUser;
   Navigator.pushNamed(context, '/ranked_list_view',
       arguments: RankedListViewScreenArgs(
           listTitle: listCard.title,
           listId: listCard.id,
-          isMain: mainUserName == listCard.userName));
+          isMain: userProvider.userName == listCard.userName,
+          shouldPushInfo: shouldPushInfo,
+          profPic: listCard.profPic));
 }
 
 class RankedListCardWidget extends StatelessWidget {
@@ -61,29 +66,42 @@ class RankedListCardWidget extends StatelessWidget {
                 profPicUrl: listCard.profPic,
                 dateCreated: listCard.dateCreated),
             GestureDetector(
-              onTap: () => launchRankListViewScreen(
-                  context: context, listCard: listCard),
+              onTap: () =>
+                  launchRankListViewScreen(
+                      context: context,
+                      listCard: listCard,
+                      shouldPushInfo: shouldPushInfo),
               child: Text(listCard.title,
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline4,
                   textAlign: TextAlign.center),
             ),
             const SizedBox(height: 10),
             listCard.picture.isNotEmpty
                 ? GestureDetector(
-                    onTap: () => launchRankListViewScreen(
-                        context: context, listCard: listCard),
-                    child: RankItemImage(imageUrl: listCard.picture))
+                onTap: () =>
+                    launchRankListViewScreen(
+                        context: context,
+                        listCard: listCard,
+                        shouldPushInfo: shouldPushInfo),
+                child: RankItemImage(imageUrl: listCard.picture))
                 : SizedBox(),
             GestureDetector(
                 onTap: () =>
                     launchRankListViewScreen(
-                        context: context, listCard: listCard),
+                        context: context,
+                        listCard: listCard,
+                        shouldPushInfo: shouldPushInfo),
                 child: RankPreviewItems(previewItems: listCard.rankList)),
             hasThree
                 ? GestureDetector(
               onTap: () =>
                   launchRankListViewScreen(
-                      context: context, listCard: listCard),
+                      context: context,
+                      listCard: listCard,
+                      shouldPushInfo: shouldPushInfo),
               child: Text(remainingLabel,
                   style: Theme
                       .of(context)

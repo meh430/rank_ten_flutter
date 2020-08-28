@@ -53,9 +53,12 @@ class Router {
             centerAlignment: Alignment.center,
             maxRadius: 800,
             page: RankedListViewScreen(
-                listId: args.listId,
-                listTitle: args.listTitle,
-                isMain: args.isMain));
+              listId: args.listId,
+              listTitle: args.listTitle,
+              isMain: args.isMain,
+              shouldPushInfo: args.shouldPushInfo,
+              profPic: args.profPic,
+            ));
       case '/user_comments_screen':
         return CircularReveal(
             centerAlignment: Alignment.center,

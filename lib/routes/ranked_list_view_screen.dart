@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rank_ten/blocs/ranked_list_bloc.dart';
 import 'package:rank_ten/components/list_comments.dart';
 import 'package:rank_ten/components/rank_item_view_card.dart';
+import 'package:rank_ten/components/ranked_list_card_widget.dart';
 import 'package:rank_ten/components/user_preview_widget.dart';
 import 'package:rank_ten/events/ranked_list_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
@@ -13,10 +14,16 @@ import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
 
 class RankedListViewScreen extends StatefulWidget {
-  final String listId, listTitle;
-  final bool isMain;
+  final String listId, listTitle, profPic;
+  final bool isMain, shouldPushInfo;
 
-  RankedListViewScreen({Key key, this.listId, this.listTitle, this.isMain})
+  RankedListViewScreen(
+      {Key key,
+      @required this.listId,
+      @required this.listTitle,
+      @required this.isMain,
+      @required this.shouldPushInfo,
+      @required this.profPic})
       : super(key: key);
 
   @override
@@ -49,24 +56,37 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
             builder:
                 (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
               if (snapshot.hasData) {
+                List<Widget> listChildren = [];
+                listChildren.add(Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: CardHeader(
+                      shouldPushInfo: widget.shouldPushInfo,
+                      userName: snapshot.data.userName,
+                      profPicUrl: widget.profPic,
+                      dateCreated: snapshot.data.dateCreated),
+                ));
+                snapshot.data.rankList
+                    .forEach((rItem) =>
+                    listChildren.add(RankItemViewCard(
+                      rankItem: rItem,
+                    )));
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: () => Future.delayed(
-                            Duration(milliseconds: 0),
-                            () => _rankedListBloc.modelEventSink
-                                .add(GetRankedListEvent(widget.listId))),
+                        onRefresh: () =>
+                            Future.delayed(
+                                Duration(milliseconds: 0),
+                                    () =>
+                                    _rankedListBloc.modelEventSink
+                                        .add(GetRankedListEvent(widget
+                                        .listId))),
                         child: ListView(
                             physics: const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
                             shrinkWrap: true,
-                            children: snapshot.data.rankList
-                                .map((rItem) => RankItemViewCard(
-                                      rankItem: rItem,
-                                    ))
-                                .toList()),
+                            children: listChildren),
                       ),
                     ),
                     RankListBottomBar(
@@ -212,11 +232,14 @@ class _LikeWidgetState extends State<LikeWidget> {
 }
 
 class RankedListViewScreenArgs {
-  final String listId, listTitle;
-  final bool isMain;
+  final String listId, listTitle, profPic;
+  final bool isMain, shouldPushInfo;
 
-  RankedListViewScreenArgs(
-      {@required this.listId, @required this.listTitle, this.isMain = false});
+  RankedListViewScreenArgs({@required this.profPic,
+    @required this.shouldPushInfo,
+    @required this.listId,
+    @required this.listTitle,
+    this.isMain = false});
 }
 
 void showLikedUsers({BuildContext context, String listId}) {
@@ -234,8 +257,8 @@ void showLikedUsers({BuildContext context, String listId}) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 16, top: 8, left: 18, right: 16),
+                  padding:
+                  EdgeInsets.only(bottom: 16, top: 8, left: 18, right: 16),
                   child: Text("Liked By",
                       style: Theme
                           .of(context)

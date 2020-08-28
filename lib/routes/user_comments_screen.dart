@@ -130,7 +130,11 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                                   listTitle: listCard['title'],
                                   listId: listCard['_id'],
                                   isMain: _userProvider.mainUser.userName ==
-                                      listCard['user_name']));
+                                      listCard['user_name'],
+                                  shouldPushInfo:
+                                      _userProvider.mainUser.userName ==
+                                          listCard['user_name'],
+                                  profPic: ""));
                         },
                         child: CommentCard(
                           isMain: false,
