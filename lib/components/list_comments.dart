@@ -69,15 +69,10 @@ class _ListCommentsState extends State<ListComments> {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider
-        .of<DarkThemeProvider>(context, listen: false)
-        .isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     var userProvider = Provider.of<MainUserProvider>(context, listen: false);
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 0.9,
+      height: MediaQuery.of(context).size.height * 0.9,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -87,12 +82,9 @@ class _ListCommentsState extends State<ListComments> {
             children: [
               Padding(
                   padding:
-                  EdgeInsets.only(bottom: 10, top: 14, left: 18, right: 16),
+                      EdgeInsets.only(bottom: 10, top: 14, left: 18, right: 16),
                   child: Text("Comments",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .headline4)),
+                      style: Theme.of(context).textTheme.headline4)),
               getSortAction(
                   context: context, isDark: isDark, sortCallback: _sortCallback)
             ],
@@ -189,9 +181,17 @@ class _ListCommentsState extends State<ListComments> {
                               return SizedBox();
                             }
 
-                            return CommentCard(
-                                comment: snapshot.data[index],
-                                key: ObjectKey(snapshot.data[index]));
+                            return Dismissible(
+                              background: Container(color: Colors.red),
+                              key: ObjectKey(snapshot.data[index]),
+                              onDismissed: (direction) {
+                                _commentBloc.modelEventSink.add(
+                                    DeleteCommentEvent(
+                                        token: userProvider.jwtToken,
+                                        commentId: snapshot.data[index].id));
+                              },
+                              child: CommentCard(comment: snapshot.data[index]),
+                            );
                           }),
                     );
                   } else if (snapshot.hasError) {

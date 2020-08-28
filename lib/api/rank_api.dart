@@ -86,7 +86,7 @@ class RankApi {
     var jsonResponse;
 
     try {
-      final res = await http.delete(endpoint,
+      final res = await http.delete(_baseUrl + endpoint,
           headers: _getHeaders(bearerToken: bearerToken));
       jsonResponse = _parseResponse(res);
     } on SocketException {
