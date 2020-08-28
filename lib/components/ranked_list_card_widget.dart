@@ -70,10 +70,9 @@ class RankedListCardWidget extends StatelessWidget {
             const SizedBox(height: 10),
             listCard.picture.isNotEmpty
                 ? GestureDetector(
-                onTap: () =>
-                    launchRankListViewScreen(
+                    onTap: () => launchRankListViewScreen(
                         context: context, listCard: listCard),
-                child: RankItemImage(imageUrl: listCard.picture))
+                    child: RankItemImage(imageUrl: listCard.picture))
                 : SizedBox(),
             GestureDetector(
                 onTap: () =>
@@ -102,8 +101,9 @@ class RankedListCardWidget extends StatelessWidget {
                 isList: true),
             listCard.commentPreview != null
                 ? CommentPreviewCard(
-                    commentPreview: listCard.commentPreview,
-                    numComments: listCard.numComments)
+                listId: listCard.id,
+                commentPreview: listCard.commentPreview,
+                numComments: listCard.numComments)
                 : SizedBox()
           ],
         ),
@@ -429,9 +429,11 @@ class RankPreviewItems extends StatelessWidget {
 class CommentPreviewCard extends StatelessWidget {
   final CommentPreview commentPreview;
   final int numComments;
+  final String listId;
 
-  CommentPreviewCard(
-      {@required this.commentPreview, @required this.numComments});
+  CommentPreviewCard({@required this.commentPreview,
+    @required this.numComments,
+    @required this.listId});
 
   @override
   Widget build(BuildContext context) {
@@ -470,15 +472,19 @@ class CommentPreviewCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               numComments > 1
-                  ? Text("View all $numComments comments",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(
-                      fontSize: 14,
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.bold))
+                  ? GestureDetector(
+                onTap: () =>
+                    showListComments(context: context, listId: listId),
+                child: Text("View all $numComments comments",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(
+                        fontSize: 14,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.bold)),
+              )
                   : SizedBox(),
               numComments > 1 ? SizedBox(height: 10) : SizedBox()
             ],

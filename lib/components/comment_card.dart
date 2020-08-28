@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/components/ranked_list_card_widget.dart';
@@ -19,13 +20,20 @@ class _CommentCardState extends State<CommentCard> {
   Widget build(BuildContext context) {
     var userProvider = Provider.of<MainUserProvider>(context);
     return Card(
+      margin: EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15))),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CardHeader(
               profPicUrl: widget.comment.profPic,
               userName: widget.comment.userName,
               dateCreated: widget.comment.dateCreated),
-          Text(widget.comment.comment),
+          Padding(
+              padding: const EdgeInsets.only(left: 40, bottom: 6, top: 6),
+              child: Text(widget.comment.comment,
+                  style: Theme.of(context).textTheme.headline5)),
           CardFooter(
               numLikes: widget.comment.numLikes,
               id: widget.comment.id,

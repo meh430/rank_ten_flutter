@@ -115,10 +115,7 @@ class RankListBottomBar extends StatelessWidget {
                       showListComments(context: context, listId: rankedList.id),
                   child: Text(
                     "${rankedList.numComments} comments",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 )
               ],
@@ -211,69 +208,6 @@ class _LikeWidgetState extends State<LikeWidget> {
 
           return loading;
         });
-
-    /*return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
-      child: Column(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                splashColor: Colors.transparent,
-                icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.red, size: 55),
-                onPressed: () async {
-                  if (true) {
-                    _liking = true;
-                    var action;
-                    try {
-                      action = await widget.likePressed();
-                    } catch (e) {
-                      print(e);
-                    }
-
-
-                    if (action) {
-                      setState(() {
-                        _numLikes++;
-                        _isLiked = true;
-                      });
-                    } else {
-                      setState(() {
-                        _numLikes--;
-                        _isLiked = false;
-                      });
-                    }
-                    //Future.delayed(
-                    //    Duration(milliseconds: 1500), () => _liking = false);
-                  } else {
-                    Scaffold.of(context).hideCurrentSnackBar();
-                    Scaffold.of(context)
-                        .showSnackBar(Utils.getSB('Please wait'));
-                  }
-                },
-              ),
-              Column(children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "$_numLikes likes",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline5,
-                )
-              ])
-            ],
-          ),
-          SizedBox(height: 10)
-        ],
-      ),
-    );*/
   }
 }
 
@@ -300,7 +234,8 @@ void showLikedUsers({BuildContext context, String listId}) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  padding: EdgeInsets.only(
+                      bottom: 16, top: 8, left: 18, right: 16),
                   child: Text("Liked By",
                       style: Theme
                           .of(context)
@@ -317,6 +252,10 @@ void showLikedUsers({BuildContext context, String listId}) {
 
 void showListComments({BuildContext context, String listId}) {
   showModalBottomSheet<void>(
+      isDismissible: true,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(15), topLeft: Radius.circular(15))),
       context: context,
       builder: (BuildContext context) {
         return ListComments(listId: listId);

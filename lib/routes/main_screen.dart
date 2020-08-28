@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: _currIndex == 2
           ? PreferredSize(
               preferredSize: Size.fromHeight(100),
@@ -275,7 +275,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
 }
 
 Widget getSortAction(
-    {BuildContext context, bool isDark, dynamic sortCallback}) {
+    {@required BuildContext context, @required bool isDark, @required dynamic sortCallback}) {
   return IconButton(
     icon: Icon(Icons.sort, color: isDark ? lavender : darkSienna),
     onPressed: () {
