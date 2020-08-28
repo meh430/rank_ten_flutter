@@ -1,45 +1,30 @@
-import 'dart:async';
-
 import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/events/user_preview_events.dart';
 import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
 
-class UserPreviewBloc {
+import 'bloc.dart';
+
+class UserPreviewBloc extends Bloc<List<UserPreview>, UserPreviewEvent> {
   final String endpointBase;
+  UserPreviewRepository _userPreviewRepository;
+
+  Status currentStatus = Status.IDLE;
 
   //only for search for now
   int _currPage = 0;
   bool hitMax = false;
 
-  List<UserPreview> _userPreviews = [];
-  UserPreviewRepository _userPreviewRepository;
-
-  Status currentStatus = Status.IDLE;
-
-  StreamController _userPreviewStateController;
-
-  StreamSink<List<UserPreview>> get _userPreviewStateSink =>
-      _userPreviewStateController.sink;
-
-  Stream<List<UserPreview>> get userPreviewStateStream =>
-      _userPreviewStateController.stream;
-
-  StreamController _userPreviewEventController;
-
-  StreamSink<UserPreviewEvent> get userPreviewEventSink =>
-      _userPreviewEventController.sink;
-
-  UserPreviewBloc({this.endpointBase}) {
+  UserPreviewBloc({this.endpointBase}) : super() {
     _userPreviewRepository = UserPreviewRepository();
-    _userPreviewStateController = StreamController<List<UserPreview>>();
-    _userPreviewEventController = StreamController<UserPreviewEvent>();
-
-    _userPreviewEventController.stream.listen(_eventToState);
+    model = <UserPreview>[];
+    initEventListener();
   }
 
-  void _eventToState(event) async {
+  @override
+  void eventToState(event) async {
+    super.eventToState(event);
     if (event is UserPreviewEvent) {
       if (hitMax && !event.refresh) {
         return;
@@ -48,7 +33,7 @@ class UserPreviewBloc {
         currentStatus = Status.LOADING;
         if (event.refresh) {
           _currPage = 1;
-          _userPreviews.clear();
+          model.clear();
         } else {
           _currPage += 1;
         }
@@ -67,23 +52,18 @@ class UserPreviewBloc {
           hitMax = true;
         }
 
-        _userPreviews.addAll(pageContent);
+        model.addAll(pageContent);
         currentStatus = Status.IDLE;
         try {
-          _userPreviewStateSink.add(_userPreviews);
+          modelStateSink.add(model);
         } catch (e) {
           print("Sink disposed?");
         }
       } on InvalidPageError {
         hitMax = true;
         _currPage -= 1;
-        _userPreviewStateSink.add(_userPreviews);
+        modelStateSink.add(model);
       }
     }
-  }
-
-  void dispose() {
-    _userPreviewEventController.close();
-    _userPreviewStateController.close();
   }
 }

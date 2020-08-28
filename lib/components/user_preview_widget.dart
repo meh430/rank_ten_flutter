@@ -32,7 +32,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
   void initState() {
     super.initState();
     _userPreviewBloc = UserPreviewBloc(endpointBase: widget.listType);
-    _userPreviewBloc.userPreviewEventSink.add(UserPreviewEvent(
+    _userPreviewBloc.modelEventSink.add(UserPreviewEvent(
         sort: widget.sort, name: widget.name, query: widget.query));
     _scrollController = ScrollController()..addListener(_onScrollListener);
   }
@@ -48,7 +48,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       if (!_userPreviewBloc.hitMax) {
-        _userPreviewBloc.userPreviewEventSink.add(UserPreviewEvent(
+        _userPreviewBloc.modelEventSink.add(UserPreviewEvent(
             sort: widget.sort, name: widget.name, query: widget.query));
       }
     }
@@ -57,7 +57,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<UserPreview>>(
-      stream: _userPreviewBloc.userPreviewStateStream,
+      stream: _userPreviewBloc.modelStateStream,
       builder:
           (BuildContext context, AsyncSnapshot<List<UserPreview>> snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
@@ -69,7 +69,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
                 print("Refreshing list");
-                _userPreviewBloc.userPreviewEventSink.add(UserPreviewEvent(
+                _userPreviewBloc.modelEventSink.add(UserPreviewEvent(
                     sort: widget.sort,
                     name: widget.name,
                     query: widget.query,
