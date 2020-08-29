@@ -46,7 +46,7 @@ class _PicChooserState extends State<PicChooser> {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).primaryTextTheme;
-    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Padding(

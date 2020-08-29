@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/components/login.dart';
 import 'package:rank_ten/components/ranked_list_card_widget.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/comment.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 
 class CommentCard extends StatefulWidget {
@@ -60,7 +62,7 @@ class _CommentCardState extends State<CommentCard> {
               numLikes: widget.comment.numLikes,
               id: widget.comment.id,
               isLiked:
-              widget.comment.likedUsers.contains(userProvider.mainUser.id),
+                  widget.comment.likedUsers.contains(userProvider.mainUser.id),
               isList: false)
         ],
       ),
@@ -71,6 +73,9 @@ class _CommentCardState extends State<CommentCard> {
 void editCommentDialog(
     {BuildContext context, String comment, dynamic editCallback}) {
   var commentController = TextEditingController(text: comment);
+  var isDark = Provider
+      .of<DarkThemeProvider>(context, listen: false)
+      .isDark;
   showDialog(
       context: context,
       builder: (context) {
@@ -96,14 +101,25 @@ void editCommentDialog(
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextField(
-                    controller: commentController,
-                    textInputAction: TextInputAction.done,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(fontSize: 18),
-                  ),
+                      textInputAction: TextInputAction.done,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(fontSize: 16),
+                      controller: commentController,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                          labelText: 'Comment',
+                          contentPadding: const EdgeInsets.all(20.0),
+                          labelStyle: Theme
+                              .of(context)
+                              .textTheme
+                              .headline6
+                              .copyWith(fontSize: 16),
+                          border: getInputStyle(isDark),
+                          enabledBorder: getInputStyle(isDark),
+                          focusedBorder: getInputStyle(isDark))),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
