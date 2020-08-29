@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rank_ten/components/ranked_list_card_widget.dart';
+import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/user.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/routes/user_info_screen.dart';
 
 class UserPreviewCard extends StatelessWidget {
@@ -11,6 +14,7 @@ class UserPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     Widget profPic = Padding(
       padding: const EdgeInsets.all(10),
       child: CircleImage(
@@ -28,7 +32,7 @@ class UserPreviewCard extends StatelessWidget {
           elevation: 4,
           margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Column(
             children: [
               Row(
@@ -56,10 +60,15 @@ class UserPreviewCard extends StatelessWidget {
               ),
               userPreview.bio.isNotEmpty
                   ? Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(userPreview.bio,
-                          style: Theme.of(context).textTheme.headline5),
-                    )
+                padding: const EdgeInsets.all(12.0),
+                child: Text(userPreview.bio,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline5
+                        .copyWith(
+                        color: isDark ? Colors.white : secondText)),
+              )
                   : SizedBox()
             ],
           )),
