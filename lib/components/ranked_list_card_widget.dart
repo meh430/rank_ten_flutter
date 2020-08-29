@@ -462,12 +462,10 @@ class CommentPreviewCard extends StatelessWidget {
     return Card(
         color: isDark ? hanPurple : palePurple,
         elevation: 0,
+        margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -478,7 +476,7 @@ class CommentPreviewCard extends StatelessWidget {
                   userName: commentPreview.userName,
                   profPicUrl: commentPreview.profPic),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 28),
                 child: Text(
                   commentPreview.comment,
                   textAlign: TextAlign.start,
