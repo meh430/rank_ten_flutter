@@ -8,14 +8,16 @@ import 'choose_pic.dart';
 
 class RankItemViewCard extends StatelessWidget {
   final RankItem rankItem;
+  final VoidCallback onTap;
 
-  const RankItemViewCard({Key key, @required this.rankItem}) : super(key: key);
+  const RankItemViewCard({Key key, @required this.rankItem, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     var isDark = Provider.of<DarkThemeProvider>(context).isDark;
-    return Card(
+    var rankItemCard = Card(
       elevation: 4,
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -70,6 +72,10 @@ class RankItemViewCard extends StatelessWidget {
         ),
       ),
     );
+
+    return onTap == null
+        ? rankItemCard
+        : GestureDetector(child: rankItemCard, onTap: onTap);
   }
 }
 

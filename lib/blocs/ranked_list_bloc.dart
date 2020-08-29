@@ -31,6 +31,7 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
       }
       modelStateSink.add(model);
     } else if (event is RankedListItemUpdateEvent) {
+      print(event.index);
       var rankItem = model.rankList[event.index];
       rankItem.itemName = event.itemName;
       rankItem.description = event.itemDescription;

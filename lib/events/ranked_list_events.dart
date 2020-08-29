@@ -41,7 +41,10 @@ class RankedListItemDeleteEvent extends RankedListEvent {
 class RankedListItemCreateEvent extends RankedListEvent {
   final String itemName, itemDescription, imageUrl;
 
-  RankedListItemCreateEvent(this.itemName, this.itemDescription, this.imageUrl);
+  RankedListItemCreateEvent(
+      {@required this.itemName,
+      @required this.itemDescription,
+      this.imageUrl = ""});
 }
 
 class RankedListReorderEvent extends RankedListEvent {
