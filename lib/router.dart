@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:rank_ten/routes/list_screen.dart';
 import 'package:rank_ten/routes/login_signup.dart';
 import 'package:rank_ten/routes/main_screen.dart';
+import 'package:rank_ten/routes/ranked_list_edit_screen.dart';
 import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 import 'package:rank_ten/routes/splash.dart';
 import 'package:rank_ten/routes/user_comments_screen.dart';
@@ -59,6 +60,15 @@ class Router {
               shouldPushInfo: args.shouldPushInfo,
               profPic: args.profPic,
             ));
+      case '/ranked_list_edit':
+        final RankedListEditScreenArgs args = settings.arguments;
+        return CircularReveal(
+            centerAlignment: Alignment.center,
+            maxRadius: 800,
+            page: RankedListEditScreen(
+                listId: args.listId,
+                isNew: args.isNew,
+                listTitle: args.listTitle));
       case '/user_comments_screen':
         return CircularReveal(
             centerAlignment: Alignment.center,

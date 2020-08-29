@@ -12,6 +12,7 @@ import 'package:rank_ten/models/ranked_list.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
+import 'package:rank_ten/routes/ranked_list_edit_screen.dart';
 
 class RankedListViewScreen extends StatefulWidget {
   final String listId, listTitle, profPic;
@@ -48,6 +49,20 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
           elevation: 0.0,
           brightness: isDark ? Brightness.dark : Brightness.light,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          actions: [
+            widget.isMain
+                ? IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/ranked_list_edit',
+                          arguments: RankedListEditScreenArgs(
+                              listId: widget.listId,
+                              listTitle: widget.listTitle,
+                              isNew: false));
+                    },
+                    icon: Icon(Icons.edit))
+                : SizedBox()
+          ],
           title: Text(widget.listTitle,
               style: Theme.of(context).primaryTextTheme.headline5),
         ),

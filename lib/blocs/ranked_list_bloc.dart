@@ -47,6 +47,27 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
 
       final RankItem rankItem = model.rankList.removeAt(oldIndex);
       model.rankList.insert(newIndex, rankItem);
+      for (int i = 0; i < model.rankList.length; i++) {
+        model.rankList[i].rank = i + 1;
+      }
+
+      modelStateSink.add(model);
+    } else if (event is RankedListItemCreateEvent) {
+      var rankItem = RankItem(
+          private: model.private,
+          parentTitle: model.title,
+          description: event.itemDescription,
+          itemName: event.itemName,
+          picture: event.imageUrl,
+          rank: model.rankList.length + 1);
+
+      model.rankList.add(rankItem);
+      modelStateSink.add(model);
+    } else if (event is RankedListItemDeleteEvent) {
+      model.rankList.removeAt(event.index);
+      for (int i = 0; i < model.rankList.length; i++) {
+        model.rankList[i].rank = i + 1;
+      }
 
       modelStateSink.add(model);
     }
