@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:rank_ten/models/ranked_list.dart';
 
 abstract class RankedListEvent {}
@@ -25,31 +26,36 @@ class RankedListItemUpdateEvent extends RankedListEvent {
   final String itemName, itemDescription, imageUrl;
 
   RankedListItemUpdateEvent(
-      this.index, this.itemName, this.itemDescription, this.imageUrl);
+      {@required this.index,
+      @required this.itemName,
+      @required this.itemDescription,
+      @required this.imageUrl});
 }
 
 class RankedListReorderEvent extends RankedListEvent {
   final int previousPosition, newPosition;
 
-  RankedListReorderEvent(this.previousPosition, this.newPosition);
+  RankedListReorderEvent(
+      {@required this.previousPosition, @required this.newPosition});
 }
 
 class CreateRankedListEvent extends RankedListEvent {
   final RankedList rankedList;
   final String token;
 
-  CreateRankedListEvent(this.rankedList, this.token);
+  CreateRankedListEvent({@required this.rankedList, @required this.token});
 }
 
 class UpdateRankedListEvent extends RankedListEvent {
   final RankedList rankedList;
   final String token, listId;
 
-  UpdateRankedListEvent(this.rankedList, this.token, this.listId);
+  UpdateRankedListEvent(
+      {@required this.rankedList, @required this.token, @required this.listId});
 }
 
 class DeleteRankedListEvent extends RankedListEvent {
   final String token, listId;
 
-  DeleteRankedListEvent(this.token, this.listId);
+  DeleteRankedListEvent({@required this.token, @required this.listId});
 }

@@ -11,14 +11,14 @@ class RankedList {
   bool private;
 
   RankedList(
-      {this.id,
-      this.dateCreated,
-      this.userName,
-      this.title,
+      {this.id = "",
+      this.dateCreated = 0,
+      this.userName = "",
+      this.title = "Title",
       this.rankList,
-      this.numLikes,
-      this.numComments,
-      this.private});
+      this.numLikes = 0,
+      this.numComments = 0,
+      this.private = false});
 
   RankedList.fromJson(Map<String, dynamic> json) {
     id = json['_id'][r'$oid'];
