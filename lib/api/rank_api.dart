@@ -16,7 +16,6 @@ class RankApi {
 
       isValid = res.statusCode == 200 &&
           res.headers['content-type'].contains("image");
-      print("Image is valid: $isValid");
     } on SocketException {
       throw DefaultError('No network connection');
     }
@@ -67,6 +66,7 @@ class RankApi {
     if (data == null) {
       data = Map<String, String>();
     }
+
     var jsonResponse;
 
     try {
@@ -109,7 +109,7 @@ class RankApi {
           };
   }
 
-  dynamic _parseResponse(http.Response res) {
+  _parseResponse(http.Response res) {
     switch (res.statusCode) {
       case 200:
         return json.decode(res.body.toString());
