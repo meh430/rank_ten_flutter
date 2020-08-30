@@ -136,13 +136,13 @@ class RankListBottomBar extends StatelessWidget {
           ),
           editing
               ? RaisedButton(
-            padding: const EdgeInsets.all(0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0)),
-            color: paraPink,
-            onPressed: onAdded,
-            child: Icon(Icons.add, color: palePurple),
-          )
+                  padding: const EdgeInsets.all(0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
+                  color: paraPink,
+                  onPressed: onAdded,
+                  child: Icon(Icons.add, color: palePurple),
+                )
               : SizedBox(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14),

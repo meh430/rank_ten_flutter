@@ -66,16 +66,12 @@ class RankedListCardWidget extends StatelessWidget {
                 profPicUrl: listCard.profPic,
                 dateCreated: listCard.dateCreated),
             GestureDetector(
-              onTap: () =>
-                  launchRankListViewScreen(
-                      context: context,
-                      listCard: listCard,
-                      shouldPushInfo: shouldPushInfo),
+              onTap: () => launchRankListViewScreen(
+                  context: context,
+                  listCard: listCard,
+                  shouldPushInfo: shouldPushInfo),
               child: Text(listCard.title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline4,
+                  style: Theme.of(context).textTheme.headline4,
                   textAlign: TextAlign.center),
             ),
             const SizedBox(height: 10),
@@ -465,7 +461,10 @@ class CommentPreviewCard extends StatelessWidget {
         margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Container(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

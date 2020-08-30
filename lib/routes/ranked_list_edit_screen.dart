@@ -17,14 +17,10 @@ import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 
 class RankedListEditScreen extends StatefulWidget {
   final String listId, listTitle;
-  final bool isNew, isPrivate;
+  final bool isNew;
 
   const RankedListEditScreen(
-      {Key key,
-      this.listId = "",
-      this.listTitle = "Title",
-      this.isNew = false,
-      this.isPrivate = false})
+      {Key key, this.listId = "", this.listTitle = "Title", this.isNew = false})
       : super(key: key);
 
   @override
@@ -58,26 +54,35 @@ Future<bool> showErrorDialog(
 
 class _RankedListEditScreenState extends State<RankedListEditScreen> {
   RankedListBloc _rankedListBloc;
-  bool _isPrivate;
+  bool _isPrivate = false;
   String _listTitle;
   TextEditingController _titleController;
+  MainUserProvider userProvider;
 
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<MainUserProvider>(context, listen: false);
+    initPrivate();
     _rankedListBloc = RankedListBloc();
     _rankedListBloc.modelEventSink.add(GetRankedListEvent(widget.listId));
-    _isPrivate = widget.isPrivate;
     _listTitle = widget.listTitle;
     _titleController = TextEditingController(text: _listTitle);
   }
 
+  void initPrivate() async {
+    if (!widget.isNew) {
+      var val = await RankedListRepository()
+          .getPrivate(listId: widget.listId, token: userProvider.jwtToken);
+      setState(() {
+        _isPrivate = val;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider
-        .of<DarkThemeProvider>(context, listen: false)
-        .isDark;
-    var userProvider = Provider.of<MainUserProvider>(context, listen: false);
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     return WillPopScope(
       onWillPop: () {
         if (_titleController.text.isEmpty) {

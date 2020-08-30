@@ -38,4 +38,10 @@ class RankedListRepository {
         await _api.delete(endpoint: '/rankedlist/$listId', bearerToken: token);
     return response;
   }
+
+  Future<bool> getPrivate({String listId, String token}) async {
+    var response =
+        await _api.get(endpoint: '/is_private/$listId', bearerToken: token);
+    return response;
+  }
 }
