@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:rank_ten/api/rank_api.dart';
-import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 
 //page, sort
@@ -48,7 +47,8 @@ class RankedListPreviewRepository {
         endpoint += '/$page/$sort';
         break;
       case USER_TOP_LISTS:
-        endpoint = '/rankedlists/$name/1/$LIKES_DESC';
+        endpoint =
+            '/rankedlists${token.isNotEmpty ? 'p' : ''}/${token.isEmpty ? name + '/' : ''}1/$sort';
         break;
       case SEARCH_LISTS:
         query = query.replaceAll(" ", "+");

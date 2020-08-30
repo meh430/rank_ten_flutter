@@ -9,10 +9,12 @@ import 'package:rank_ten/components/user_top_lists.dart';
 import 'package:rank_ten/events/ranked_list_preview_events.dart';
 import 'package:rank_ten/events/user_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
+import 'package:rank_ten/routes/main_screen.dart';
 
 class UserInfoScreen extends StatefulWidget {
   final String name;
@@ -51,13 +53,28 @@ class UserInfoBuilder extends StatefulWidget {
 class _UserInfoBuilderState extends State<UserInfoBuilder> {
   UserBloc _userBloc;
   PreviewListsBloc _listsBloc;
+  var _sortOption = LIKES_DESC;
+
+  void _sortCallback(String option) {
+    print(option);
+    if (option.contains("like")) {
+      _sortOption = LIKES_DESC;
+    } else if (option.contains("newest")) {
+      _sortOption = DATE_DESC;
+    } else if (option.contains("oldest")) {
+      _sortOption = DATE_ASC;
+    }
+    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+        name: widget.name, refresh: true, sort: _sortOption));
+  }
 
   @override
   void initState() {
     super.initState();
     _userBloc = UserBloc(name: widget.name);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
-    _listsBloc.modelEventSink.add(RankedListPreviewEvent(name: widget.name));
+    _listsBloc.modelEventSink
+        .add(RankedListPreviewEvent(name: widget.name, sort: _sortOption));
   }
 
   Widget builderFunction(
@@ -95,8 +112,8 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     return RefreshIndicator(
       onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
         _userBloc.userEventSink.add(GetUserEvent(widget.name));
-        _listsBloc.modelEventSink
-            .add(RankedListPreviewEvent(name: widget.name, refresh: true));
+        _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+            name: widget.name, sort: _sortOption, refresh: true));
       }),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
@@ -108,7 +125,31 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
             stream: _listsBloc.modelStateStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return UserTopLists(name: widget.name, topLists: snapshot.data);
+                return Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: Row(
+                          children: [
+                            Text("${widget.name}'s Lists",
+                                style: Theme.of(context).textTheme.headline4),
+                            getSortAction(
+                                context: context,
+                                isDark: Provider.of<DarkThemeProvider>(context,
+                                        listen: false)
+                                    .isDark,
+                                sortCallback: _sortCallback)
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        )),
+                    UserTopLists(
+                        key: UniqueKey(),
+                        name: widget.name,
+                        topLists: snapshot.data),
+                  ],
+                );
               } else if (snapshot.hasError) {
                 return Text("Error getting top lists",
                     style: Theme.of(context).textTheme.headline5);

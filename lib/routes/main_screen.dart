@@ -220,16 +220,12 @@ class _SearchAppBarState extends State<SearchAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider
-        .of<DarkThemeProvider>(context)
-        .isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
 
     return AppBar(
         elevation: 0.0,
         brightness: isDark ? Brightness.dark : Brightness.light,
-        backgroundColor: Theme
-            .of(context)
-            .scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           getSortAction(
               context: context,
@@ -240,9 +236,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
         bottom: TabBar(
           controller: widget.tabController,
           indicatorSize: TabBarIndicatorSize.label,
-          indicatorColor: Theme
-              .of(context)
-              .accentColor,
+          indicatorColor: Theme.of(context).accentColor,
           tabs: [
             Tab(
               text: 'Lists',

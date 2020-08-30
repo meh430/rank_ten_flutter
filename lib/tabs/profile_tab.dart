@@ -9,10 +9,13 @@ import 'package:rank_ten/components/user_top_lists.dart';
 import 'package:rank_ten/events/ranked_list_preview_events.dart';
 import 'package:rank_ten/events/user_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/models/user.dart';
+import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
+import 'package:rank_ten/routes/main_screen.dart';
 
 class ProfileTab extends StatelessWidget {
   @override
@@ -29,6 +32,23 @@ class MainUserInfoBuilder extends StatefulWidget {
 class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
   MainUserProvider _userProvider;
   PreviewListsBloc _listsBloc;
+  var _sortOption = LIKES_DESC;
+
+  void _sortCallback(String option) {
+    print(option);
+    if (option.contains("like")) {
+      _sortOption = LIKES_DESC;
+    } else if (option.contains("newest")) {
+      _sortOption = DATE_DESC;
+    } else if (option.contains("oldest")) {
+      _sortOption = DATE_ASC;
+    }
+    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+        name: _userProvider.mainUser.userName,
+        token: _userProvider.jwtToken,
+        refresh: true,
+        sort: _sortOption));
+  }
 
   @override
   void initState() {
@@ -36,8 +56,10 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
 
-    _listsBloc.modelEventSink
-        .add(RankedListPreviewEvent(name: _userProvider.mainUser.userName));
+    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+        name: _userProvider.mainUser.userName,
+        token: _userProvider.jwtToken,
+        sort: _sortOption));
   }
 
   @override
@@ -85,7 +107,10 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
         _userProvider.addUserEvent(GetUserEvent(_userProvider.mainUser.userName,
             token: _userProvider.jwtToken));
         _listsBloc.modelEventSink.add(RankedListPreviewEvent(
-            name: _userProvider.mainUser.userName, refresh: true));
+            token: _userProvider.jwtToken,
+            sort: _sortOption,
+            name: _userProvider.mainUser.userName,
+            refresh: true));
       }),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
@@ -97,11 +122,34 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
               builder: builderFunction),
           StreamBuilder<List<RankedListCard>>(
             stream: _listsBloc.modelStateStream,
+            key: UniqueKey(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return UserTopLists(
-                    name: _userProvider.mainUser.userName,
-                    topLists: snapshot.data);
+                return Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: Row(
+                          children: [
+                            Text("${_userProvider.mainUser.userName}'s Lists",
+                                style: Theme.of(context).textTheme.headline4),
+                            getSortAction(
+                                context: context,
+                                isDark: Provider.of<DarkThemeProvider>(context,
+                                        listen: false)
+                                    .isDark,
+                                sortCallback: _sortCallback)
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        )),
+                    UserTopLists(
+                        key: UniqueKey(),
+                        name: _userProvider.mainUser.userName,
+                        topLists: snapshot.data),
+                  ],
+                );
               } else if (snapshot.hasError) {
                 return Text("Error getting top lists",
                     style: Theme.of(context).textTheme.headline5);
