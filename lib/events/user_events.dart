@@ -12,24 +12,6 @@ class UpdateProfilePicEvent extends UserEvent {
   UpdateProfilePicEvent({this.profPic, this.token});
 }
 
-class FollowEvent extends UserEvent {
-  final String name, token;
-
-  FollowEvent({this.name, this.token});
-}
-
-class LikeListEvent extends UserEvent {
-  final String id, token;
-
-  LikeListEvent({this.id, this.token});
-}
-
-class LikeCommentEvent extends UserEvent {
-  final String id, token;
-
-  LikeCommentEvent({this.id, this.token});
-}
-
 class GetUserEvent extends UserEvent {
   final String name;
   final String token;

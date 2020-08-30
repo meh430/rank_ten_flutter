@@ -18,7 +18,7 @@ class UserPreviewBloc extends Bloc<List<UserPreview>, UserPreviewEvent> {
   void eventToState(event) async {
     super.eventToState(event);
     if (event is UserPreviewEvent) {
-      await paginate(
+      paginate(
           _userPreviewRepository.getUserPreview(
               endpointBase: endpointBase,
               name: event.name,

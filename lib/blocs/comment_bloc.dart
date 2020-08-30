@@ -17,7 +17,7 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
   void eventToState(event) async {
     super.eventToState(event);
     if (event is GetListCommentsEvent) {
-      await paginate(
+      paginate(
           _commentsRepository.getListComments(
               listId: event.listId,
               page: currentPage,
@@ -25,7 +25,7 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
               refresh: event.refresh),
           event);
     } else if (event is GetUserCommentsEvent) {
-      await paginate(
+      paginate(
           _commentsRepository.getUserComments(
               token: event.token,
               page: currentPage,

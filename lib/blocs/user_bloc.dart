@@ -26,6 +26,8 @@ class UserBloc {
   UserBloc({String name, bool isMain = false, User mainUser}) {
     this.isMain = isMain;
     _userRepository = UserRepository();
+
+    //broadcast stream if main because there are multiple listeners
     if (isMain) {
       _userStateController = StreamController<Response<User>>.broadcast();
     } else {
@@ -68,34 +70,6 @@ class UserBloc {
             profPic: event.profPic, token: event.token);
 
         _user.profPic = event.profPic;
-        _userStateSink.add(Response.completed(_user));
-      } else if (event is FollowEvent) {
-        _userStateSink.add(Response.loading("Follow event"));
-
-        final action = await _userRepository.followUser(
-            name: event.name, token: event.token);
-        if (action == "FOLLOW") {
-          _user.numFollowers += 1;
-        } else {
-          _user.numFollowers -= 1;
-        }
-
-        _userStateSink.add(Response.completed(_user));
-      } else if (event is LikeListEvent) {
-        _userStateSink.add(Response.loading("Liking list"));
-
-        await _userRepository.likeList(listId: event.id, token: event.token);
-
-        if (_user.likedLists.contains(event.id)) {
-          _user.likedLists.remove(event.id);
-        } else {
-          _user.likedLists.add(event.id);
-        }
-        _userStateSink.add(Response.completed(_user));
-      } else if (event is LikeCommentEvent) {
-        _userStateSink.add(Response.loading("Liking comment"));
-        await _userRepository.likeComment(
-            commentId: event.id, token: event.token);
         _userStateSink.add(Response.completed(_user));
       }
     } catch (e) {

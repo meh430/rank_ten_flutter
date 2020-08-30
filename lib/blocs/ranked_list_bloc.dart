@@ -13,6 +13,13 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
     initEventListener();
   }
 
+  void _updateParentProperties() {
+    for (var rankItem in model.rankList) {
+      rankItem.private = model.private;
+      rankItem.parentTitle = model.title;
+    }
+  }
+
   @override
   void eventToState(event) async {
     super.eventToState(event);
@@ -23,20 +30,18 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
       modelStateSink.add(model);
     } else if (event is RankedListTitleEvent) {
       model.title = event.title;
+      _updateParentProperties();
       modelStateSink.add(model);
     } else if (event is RankedListPrivateEvent) {
       model.private = event.private;
-      for (var rankItem in model.rankList) {
-        rankItem.private = event.private;
-      }
+      _updateParentProperties();
       modelStateSink.add(model);
     } else if (event is RankedListItemUpdateEvent) {
-      print(event.index);
       var rankItem = model.rankList[event.index];
       rankItem.itemName = event.itemName;
       rankItem.description = event.itemDescription;
       rankItem.picture = event.imageUrl;
-
+      _updateParentProperties();
       modelStateSink.add(model);
     } else if (event is RankedListReorderEvent) {
       int oldIndex = event.previousPosition;
@@ -51,6 +56,7 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
       for (int i = 0; i < model.rankList.length; i++) {
         model.rankList[i].rank = i + 1;
       }
+      _updateParentProperties();
 
       modelStateSink.add(model);
     } else if (event is RankedListItemCreateEvent) {
@@ -63,13 +69,14 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
           rank: model.rankList.length + 1);
 
       model.rankList.add(rankItem);
+      _updateParentProperties();
       modelStateSink.add(model);
     } else if (event is RankedListItemDeleteEvent) {
       model.rankList.removeAt(event.index);
       for (int i = 0; i < model.rankList.length; i++) {
         model.rankList[i].rank = i + 1;
       }
-
+      _updateParentProperties();
       modelStateSink.add(model);
     }
   }

@@ -20,7 +20,7 @@ class PreviewListsBloc
   Future<void> eventToState(event) async {
     super.eventToState(event);
     if (event is RankedListPreviewEvent) {
-      await paginate(
+      paginate(
           _previewRepository.getRankedListPreview(
               endpointBase: endpointBase,
               name: event.name,

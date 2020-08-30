@@ -41,8 +41,8 @@ class AppTheme {
         accentTextTheme: getTextTheme(isDark, base.accentTextTheme),
         iconTheme:
             base.iconTheme.copyWith(color: isDark ? palePurple : Colors.black),
-        accentIconTheme:
-            base.iconTheme.copyWith(color: isDark ? palePurple : Colors.black),
+        floatingActionButtonTheme: base.floatingActionButtonTheme
+            .copyWith(foregroundColor: isDark ? palePurple : Colors.black),
         primaryIconTheme:
             base.iconTheme.copyWith(color: isDark ? palePurple : Colors.black),
         accentColor: lavender,
