@@ -29,7 +29,7 @@ class RankedListCard {
     userName = json['user_name'];
     profPic = json['prof_pic'];
     title = json['title'];
-    dateCreated = ((json['date_created'][r'$date'] as int) / 1000).floor();
+    dateCreated = json['date_created'][r'$date'];
     numLikes = json['num_likes'];
     numItems = json['num_rank_items'];
     numComments = json['num_comments'];
@@ -57,7 +57,7 @@ class CommentPreview {
   CommentPreview.fromJson(Map<String, dynamic> json) {
     comment = json['comment'];
     userName = json['user_name'];
-    dateCreated = ((json['date_created'] as int) / 1000).floor();
+    dateCreated = json['date_created'];
     profPic = json['prof_pic'];
   }
 }

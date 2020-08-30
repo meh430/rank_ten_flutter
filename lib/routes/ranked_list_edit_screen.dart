@@ -106,8 +106,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
         } else {
           return showDialog(
               context: context,
-              builder: (context) =>
-                  ListFutureDialog(
+              builder: (context) => ListFutureDialog(
                     listFuture: RankedListRepository().updateRankedList(
                         rankedList: _rankedListBloc.model,
                         listId: _rankedListBloc.model.id,
@@ -172,6 +171,10 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                   for (int i = 0; i < snapshot.data.rankList.length; i++) {
                     var rItem = snapshot.data.rankList[i];
                     listChildren.add(Dismissible(
+                      onDismissed: (direction) {
+                        _rankedListBloc.modelEventSink
+                            .add(RankedListItemDeleteEvent(i));
+                      },
                       key: ObjectKey(rItem),
                       background: Container(color: Colors.red),
                       child: RankItemViewCard(

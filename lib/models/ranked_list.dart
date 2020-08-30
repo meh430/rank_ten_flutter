@@ -22,7 +22,7 @@ class RankedList {
 
   RankedList.fromJson(Map<String, dynamic> json) {
     id = json['_id'][r'$oid'];
-    dateCreated = ((json['date_created'][r'$date'] as int) / 1000).floor();
+    dateCreated = json['date_created'][r'$date'];
     userName = json['user_name'];
     title = json['title'];
     if (json['rank_list'] != null) {

@@ -32,7 +32,8 @@ class RankItemViewCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 20, top: 20, left: 10),
+                  padding: const EdgeInsets.only(
+                      right: 20, top: 20, left: 10, bottom: 10),
                   child: RankCircle(
                     rank: rankItem.rank,
                     margin: 0,
