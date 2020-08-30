@@ -90,9 +90,9 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
               context: context, error: "Title cannot be empty");
         }
 
-        if (_rankedListBloc.model.rankList.length < 3) {
+        if (_rankedListBloc.model.rankList.length < 1) {
           return showErrorDialog(
-              context: context, error: "List should have at least 3 items");
+              context: context, error: "List should have at least 1 items");
         }
 
         if (widget.isNew) {
