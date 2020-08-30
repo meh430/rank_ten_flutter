@@ -5,7 +5,6 @@ import 'package:rank_ten/blocs/ranked_list_bloc.dart';
 import 'package:rank_ten/components/login.dart';
 import 'package:rank_ten/events/ranked_list_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
-import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/rank_item.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 
@@ -29,7 +28,7 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
   TextEditingController _nameController;
   TextEditingController _descController;
   TextEditingController _urlController;
-  bool validImage = false;
+  bool validImage = false, validName = true;
   String imageUrl = "";
 
   void _setValid(bool valid) {
@@ -109,11 +108,14 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
                   const SizedBox(height: 10),
                   _buildEditField(
                       controller: _nameController,
+                      key: ValueKey("ItemName$validName"),
                       isDark: isDark,
                       context: context,
+                      errorText: validName ? null : "Name cannot by empty",
                       label: "Item Name"),
                   _buildEditField(
                       controller: _descController,
+                      key: ValueKey("Description"),
                       isDark: isDark,
                       context: context,
                       label: "Description"),
@@ -125,11 +127,11 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
                         var itemName = _nameController.text;
                         var description = _descController.text;
 
-                        if (itemName.isEmpty || description.isEmpty) {
-                          Scaffold.of(context).hideCurrentSnackBar();
-                          Scaffold.of(context).showSnackBar(
-                              Utils.getSB('Cannot have empty fields'));
+                        if (itemName.isEmpty) {
+                          setState(() => validName = false);
                           return;
+                        } else {
+                          setState(() => validName = true);
                         }
 
                         if (widget.isNew) {
@@ -161,23 +163,34 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
   }
 }
 
-Widget _buildEditField(
-    {@required BuildContext context,
-    @required TextEditingController controller,
-    @required bool isDark,
-    @required String label}) {
+Widget _buildEditField({@required BuildContext context,
+  @required TextEditingController controller,
+  @required bool isDark,
+  @required String label,
+  Key key,
+  String errorText}) {
   return Padding(
+    key: key,
     padding: const EdgeInsets.all(12),
     child: TextField(
         textInputAction: TextInputAction.done,
-        style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 16),
+        style: Theme
+            .of(context)
+            .textTheme
+            .headline6
+            .copyWith(fontSize: 16),
         controller: controller,
         maxLines: null,
         decoration: InputDecoration(
+            errorText: errorText,
             labelText: label,
             contentPadding: const EdgeInsets.all(20.0),
             labelStyle:
-                Theme.of(context).textTheme.headline6.copyWith(fontSize: 16),
+            Theme
+                .of(context)
+                .textTheme
+                .headline6
+                .copyWith(fontSize: 16),
             border: getInputStyle(isDark),
             enabledBorder: getInputStyle(isDark),
             focusedBorder: getInputStyle(isDark))),
