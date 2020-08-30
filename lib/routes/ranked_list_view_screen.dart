@@ -81,22 +81,18 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                       dateCreated: snapshot.data.dateCreated),
                 ));
                 snapshot.data.rankList
-                    .forEach((rItem) =>
-                    listChildren.add(RankItemViewCard(
-                      rankItem: rItem,
-                    )));
+                    .forEach((rItem) => listChildren.add(RankItemViewCard(
+                          rankItem: rItem,
+                        )));
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: () =>
-                            Future.delayed(
-                                Duration(milliseconds: 0),
-                                    () =>
-                                    _rankedListBloc.modelEventSink
-                                        .add(GetRankedListEvent(widget
-                                        .listId))),
+                        onRefresh: () => Future.delayed(
+                            Duration(milliseconds: 0),
+                            () => _rankedListBloc.modelEventSink
+                                .add(GetRankedListEvent(widget.listId))),
                         child: ListView(
                             physics: const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
@@ -118,8 +114,12 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
 
 class RankListBottomBar extends StatelessWidget {
   final RankedList rankedList;
+  final bool editing;
+  final VoidCallback onAdded;
 
-  RankListBottomBar({Key key, this.rankedList}) : super(key: key);
+  RankListBottomBar(
+      {Key key, this.rankedList, this.editing = false, this.onAdded})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +134,16 @@ class RankListBottomBar extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: LikeWidget(rankedList: rankedList),
           ),
+          editing
+              ? RaisedButton(
+            padding: const EdgeInsets.all(0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)),
+            color: paraPink,
+            onPressed: onAdded,
+            child: Icon(Icons.add, color: palePurple),
+          )
+              : SizedBox(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14),
             child: Row(

@@ -92,21 +92,17 @@ class _PicChooserState extends State<PicChooser> {
                         focusedBorder: getInputStyle(isDark))),
               ),
               const SizedBox(height: 10),
-              RaisedButton(
-                child: Text("Set Image",
-                    style: textTheme.headline6.copyWith(color: palePurple)),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                color: paraPink,
-                onPressed: () {
-                  if (validImage) {
-                    widget.setImage(_currImage);
-                  } else {
-                    widget.setImage(widget.prevImage);
-                  }
-                  Navigator.pop(context);
-                },
-              )
+              buildDialogButton(
+                  label: "Set Image",
+                  context: context,
+                  onPressed: () {
+                    if (validImage) {
+                      widget.setImage(_currImage);
+                    } else {
+                      widget.setImage(widget.prevImage);
+                    }
+                    Navigator.pop(context);
+                  }),
             ],
           ),
         ),
@@ -200,4 +196,19 @@ class _PreviewImageState extends State<PreviewImage> {
       },
     );
   }
+}
+
+RaisedButton buildDialogButton(
+    {@required String label,
+    @required BuildContext context,
+    @required VoidCallback onPressed}) {
+  return RaisedButton(
+      child: Text(label,
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              .copyWith(color: palePurple)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+      color: paraPink,
+      onPressed: onPressed);
 }

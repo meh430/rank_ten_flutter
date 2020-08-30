@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/components/choose_pic.dart';
 import 'package:rank_ten/components/login.dart';
 import 'package:rank_ten/components/ranked_list_card_widget.dart';
-import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/models/comment.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
@@ -73,15 +72,13 @@ class _CommentCardState extends State<CommentCard> {
 void editCommentDialog(
     {BuildContext context, String comment, dynamic editCallback}) {
   var commentController = TextEditingController(text: comment);
-  var isDark = Provider
-      .of<DarkThemeProvider>(context, listen: false)
-      .isDark;
+  var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
   showDialog(
       context: context,
       builder: (context) {
         return Dialog(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -91,10 +88,7 @@ void editCommentDialog(
                   padding: const EdgeInsets.all(12),
                   child: Text(
                     "Edit comment",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5,
+                    style: Theme.of(context).textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -122,21 +116,14 @@ void editCommentDialog(
                           focusedBorder: getInputStyle(isDark))),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: FlatButton(
-                    color: hanPurple,
-                    onPressed: () {
-                      editCallback(commentController.text);
-                      Navigator.pop(context);
-                    },
-                    child: Text("Done",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(color: palePurple)),
-                  ),
-                )
+                    padding: const EdgeInsets.only(top: 12),
+                    child: buildDialogButton(
+                        context: context,
+                        label: "Done",
+                        onPressed: () {
+                          editCallback(commentController.text);
+                          Navigator.pop(context);
+                        }))
               ],
             ),
           ),

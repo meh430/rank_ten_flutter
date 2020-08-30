@@ -121,41 +121,36 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
                       label: "Description"),
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: FlatButton(
-                      color: hanPurple,
-                      onPressed: () {
-                        var itemName = _nameController.text;
-                        var description = _descController.text;
+                    child: buildDialogButton(
+                        onPressed: () {
+                          var itemName = _nameController.text;
+                          var description = _descController.text;
 
-                        if (itemName.isEmpty) {
-                          setState(() => validName = false);
-                          return;
-                        } else {
-                          setState(() => validName = true);
-                        }
+                          if (itemName.isEmpty) {
+                            setState(() => validName = false);
+                            return;
+                          } else {
+                            setState(() => validName = true);
+                          }
 
-                        if (widget.isNew) {
-                          widget.rankedListBloc.modelEventSink.add(
-                              RankedListItemCreateEvent(
-                                  itemName: itemName,
-                                  itemDescription: description,
-                                  imageUrl: validImage ? imageUrl : ""));
-                        } else {
-                          widget.rankedListBloc.modelEventSink.add(
-                              RankedListItemUpdateEvent(
-                                  itemName: itemName,
-                                  itemDescription: description,
-                                  imageUrl: validImage ? imageUrl : "",
-                                  index: widget.index));
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: Text("Save Item",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              .copyWith(color: palePurple)),
-                    ),
+                          if (widget.isNew) {
+                            widget.rankedListBloc.modelEventSink.add(
+                                RankedListItemCreateEvent(
+                                    itemName: itemName,
+                                    itemDescription: description,
+                                    imageUrl: validImage ? imageUrl : ""));
+                          } else {
+                            widget.rankedListBloc.modelEventSink.add(
+                                RankedListItemUpdateEvent(
+                                    itemName: itemName,
+                                    itemDescription: description,
+                                    imageUrl: validImage ? imageUrl : "",
+                                    index: widget.index));
+                          }
+                          Navigator.pop(context);
+                        },
+                        context: context,
+                        label: "Save Item"),
                   )
                 ],
               ),
@@ -163,22 +158,19 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
   }
 }
 
-Widget _buildEditField({@required BuildContext context,
-  @required TextEditingController controller,
-  @required bool isDark,
-  @required String label,
-  Key key,
-  String errorText}) {
+Widget _buildEditField(
+    {@required BuildContext context,
+    @required TextEditingController controller,
+    @required bool isDark,
+    @required String label,
+    Key key,
+    String errorText}) {
   return Padding(
     key: key,
     padding: const EdgeInsets.all(12),
     child: TextField(
         textInputAction: TextInputAction.done,
-        style: Theme
-            .of(context)
-            .textTheme
-            .headline6
-            .copyWith(fontSize: 16),
+        style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 16),
         controller: controller,
         maxLines: null,
         decoration: InputDecoration(
@@ -186,11 +178,7 @@ Widget _buildEditField({@required BuildContext context,
             labelText: label,
             contentPadding: const EdgeInsets.all(20.0),
             labelStyle:
-            Theme
-                .of(context)
-                .textTheme
-                .headline6
-                .copyWith(fontSize: 16),
+                Theme.of(context).textTheme.headline6.copyWith(fontSize: 16),
             border: getInputStyle(isDark),
             enabledBorder: getInputStyle(isDark),
             focusedBorder: getInputStyle(isDark))),

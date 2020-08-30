@@ -5,6 +5,7 @@ import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
+import 'package:rank_ten/routes/ranked_list_edit_screen.dart';
 import 'package:rank_ten/tabs/discover_tab.dart';
 import 'package:rank_ten/tabs/feed_tab.dart';
 import 'package:rank_ten/tabs/profile_tab.dart';
@@ -104,7 +105,10 @@ class _MainScreenState extends State<MainScreen>
           tabController: _searchTabController),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/ranked_list_edit',
+              arguments: RankedListEditScreenArgs(isNew: true));
+        },
         backgroundColor: paraPink,
         tooltip: 'Add',
         child: const Icon(Icons.add, size: 35),
@@ -191,17 +195,12 @@ class _MainAppBarState extends State<MainAppBar> {
       automaticallyImplyLeading: false,
       elevation: 0.0,
       brightness: isDark ? Brightness.dark : Brightness.light,
-      backgroundColor: Theme
-          .of(context)
-          .scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       actions: [action],
       title: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
           child: Text(_appBarTitles[widget.index],
-              style: Theme
-                  .of(context)
-                  .primaryTextTheme
-                  .headline3)),
+              style: Theme.of(context).primaryTextTheme.headline3)),
     );
   }
 }
@@ -274,8 +273,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 }
 
-Widget getSortAction(
-    {@required BuildContext context, @required bool isDark, @required dynamic sortCallback}) {
+Widget getSortAction({@required BuildContext context,
+  @required bool isDark,
+  @required dynamic sortCallback}) {
   return IconButton(
     icon: Icon(Icons.sort, color: isDark ? lavender : darkSienna),
     onPressed: () {
