@@ -98,8 +98,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
         if (widget.isNew) {
           return showDialog(
               context: context,
-              builder: (context) =>
-                  ListFutureDialog(
+              builder: (context) => ListFutureDialog(
                     listFuture: RankedListRepository().createRankedList(
                         rankedList: _rankedListBloc.model,
                         token: userProvider.jwtToken),
@@ -134,7 +133,23 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                 },
               ),
               IconButton(
-                  icon: Icon(Icons.delete), onPressed: () => print("Delete"))
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    if (!widget.isNew) {
+                      Navigator.pop(context);
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              ListFutureDialog(
+                                listFuture: RankedListRepository()
+                                    .deleteRankedList(
+                                    listId: widget.listId,
+                                    token: userProvider.jwtToken),
+                              ));
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  })
             ],
             title: TextField(
               style: Theme

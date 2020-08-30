@@ -57,7 +57,11 @@ class RankedListPreviewRepository {
     }
 
     if (refresh) {
-      endpoint += '?re=True';
+      if (endpointBase == SEARCH_LISTS) {
+        endpoint += '&re=True';
+      } else {
+        endpoint += '?re=True';
+      }
     }
 
     final response = await _api.get(endpoint: endpoint, bearerToken: token);
