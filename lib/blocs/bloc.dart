@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:rank_ten/api/rank_exceptions.dart';
+import 'package:rank_ten/events/user_preview_events.dart';
+import 'package:rank_ten/repos/user_preview_repository.dart';
+
 abstract class Bloc<M, E> {
   M model;
 
@@ -13,6 +17,9 @@ abstract class Bloc<M, E> {
 
   StreamSink<E> get modelEventSink => modelEventController.sink;
 
+  int currentPage = 1;
+  bool hitMax;
+
   void eventToState(dynamic event) async {}
 
   Bloc() {
@@ -20,8 +27,48 @@ abstract class Bloc<M, E> {
     modelEventController = StreamController<E>();
   }
 
+  void paginate(Future<dynamic> query, dynamic event,
+      {String endpointBase = ""}) async {
+    if (hitMax && !event.refresh) {
+      return;
+    }
+
+    try {
+      if (event.refresh) {
+        currentPage = 1;
+        (model as List).clear();
+      } else {
+        currentPage += 1;
+      }
+
+      var pageContent = await query;
+
+      if (event is UserPreviewEvent &&
+          (endpointBase == SEARCH_USERS && pageContent.length < 100 ||
+              endpointBase == FOLLOWERS_USERS ||
+              endpointBase == FOLLOWING_USERS)) {
+        hitMax = true;
+      }
+
+      if (pageContent.length < 10) {
+        hitMax = true;
+      }
+
+      (model as List).addAll(pageContent);
+      updateState();
+    } on InvalidPageError {
+      hitMax = true;
+      currentPage -= 1;
+      modelStateSink.add(model);
+    }
+  }
+
   void initEventListener() {
     modelEventController.stream.listen(eventToState);
+  }
+
+  void addEvent(E event) {
+    modelEventSink.add(event);
   }
 
   void updateState() {

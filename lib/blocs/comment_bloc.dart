@@ -1,4 +1,3 @@
-import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/events/comments_event.dart';
 import 'package:rank_ten/models/comment.dart';
 import 'package:rank_ten/repos/comments_repository.dart';
@@ -7,9 +6,6 @@ import 'bloc.dart';
 
 class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
   CommentsRepository _commentsRepository;
-
-  int _currPage = 0;
-  bool hitMax = false;
 
   CommentBloc() : super() {
     model = [];
@@ -21,65 +17,21 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
   void eventToState(event) async {
     super.eventToState(event);
     if (event is GetListCommentsEvent) {
-      if (hitMax && !event.refresh) {
-        return;
-      }
-
-      try {
-        if (event.refresh) {
-          _currPage = 1;
-          model.clear();
-        } else {
-          _currPage += 1;
-        }
-
-        var pageContent = await _commentsRepository.getListComments(
-            listId: event.listId,
-            page: _currPage,
-            sort: event.sort,
-            refresh: event.refresh);
-
-        if (pageContent.length < 10) {
-          hitMax = true;
-        }
-
-        model.addAll(pageContent);
-        updateState();
-      } on InvalidPageError {
-        hitMax = true;
-        _currPage -= 1;
-        modelStateSink.add(model);
-      }
+      await paginate(
+          _commentsRepository.getListComments(
+              listId: event.listId,
+              page: currentPage,
+              sort: event.sort,
+              refresh: event.refresh),
+          event);
     } else if (event is GetUserCommentsEvent) {
-      if (hitMax && !event.refresh) {
-        return;
-      }
-
-      try {
-        if (event.refresh) {
-          _currPage = 1;
-          model.clear();
-        } else {
-          _currPage += 1;
-        }
-
-        var pageContent = await _commentsRepository.getUserComments(
-            token: event.token,
-            page: _currPage,
-            sort: event.sort,
-            refresh: event.refresh);
-
-        if (pageContent.length < 10) {
-          hitMax = true;
-        }
-
-        model.addAll(pageContent);
-        updateState();
-      } on InvalidPageError {
-        hitMax = true;
-        _currPage -= 1;
-        modelStateSink.add(model);
-      }
+      await paginate(
+          _commentsRepository.getUserComments(
+              token: event.token,
+              page: currentPage,
+              sort: event.sort,
+              refresh: event.refresh),
+          event);
     } else if (event is AddCommentEvent) {
       var newComment = await _commentsRepository.addComment(
           listId: event.listId, token: event.token, comment: event.comment);
