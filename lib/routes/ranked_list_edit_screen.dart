@@ -15,10 +15,14 @@ import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 
 class RankedListEditScreen extends StatefulWidget {
   final String listId, listTitle;
-  final bool isNew;
+  final bool isNew, isPrivate;
 
   const RankedListEditScreen(
-      {Key key, this.listId = "", this.listTitle = "Title", this.isNew = false})
+      {Key key,
+      this.listId = "",
+      this.listTitle = "Title",
+      this.isNew = false,
+      this.isPrivate = false})
       : super(key: key);
 
   @override
@@ -27,12 +31,14 @@ class RankedListEditScreen extends StatefulWidget {
 
 class _RankedListEditScreenState extends State<RankedListEditScreen> {
   RankedListBloc _rankedListBloc;
+  bool _isPrivate;
 
   @override
   void initState() {
     super.initState();
     _rankedListBloc = RankedListBloc();
     _rankedListBloc.modelEventSink.add(GetRankedListEvent(widget.listId));
+    _isPrivate = widget.isPrivate;
   }
 
   @override
@@ -43,9 +49,26 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
         appBar: AppBar(
           elevation: 0.0,
           brightness: isDark ? Brightness.dark : Brightness.light,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme
+              .of(context)
+              .scaffoldBackgroundColor,
+          actions: [
+            IconButton(
+              icon: Icon(_isPrivate ? Icons.visibility_off : Icons.visibility),
+              onPressed: () {
+                setState(() => _isPrivate = !_isPrivate);
+                _rankedListBloc.modelEventSink
+                    .add(RankedListPrivateEvent(_isPrivate));
+              },
+            ),
+            IconButton(
+                icon: Icon(Icons.delete), onPressed: () => print("Delete"))
+          ],
           title: Text(widget.listTitle,
-              style: Theme.of(context).primaryTextTheme.headline5),
+              style: Theme
+                  .of(context)
+                  .primaryTextTheme
+                  .headline5),
         ),
         body: StreamBuilder<RankedList>(
             stream: _rankedListBloc.modelStateStream,
