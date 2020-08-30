@@ -12,7 +12,7 @@ import 'package:rank_ten/routes/user_comments_screen.dart';
 import 'package:rank_ten/routes/user_info_screen.dart';
 import 'package:rank_ten/routes/user_preview_screen.dart';
 
-class Router {
+class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/splash':
@@ -21,38 +21,38 @@ class Router {
       case '/login_signup':
         return CircularReveal(
             centerAlignment: Alignment.center,
-            maxRadius: 800,
+            maxRadius: 1000,
             page: LoginSignup());
       case '/main':
         return CircularReveal(
             centerAlignment: Alignment.center,
-            maxRadius: 800,
+            maxRadius: 1000,
             page: MainScreen());
       case '/lists':
         final ListScreenArgs args = settings.arguments;
         return CircularReveal(
             centerAlignment: Alignment.center,
-            maxRadius: 800,
+            maxRadius: 1000,
             page: ListScreen(
                 listType: args.listType, name: args.name, token: args.token));
       case '/user_preview_list':
         final UserPreviewScreenArgs args = settings.arguments;
         return CircularReveal(
           centerAlignment: Alignment.center,
-          maxRadius: 800,
+          maxRadius: 1000,
           page: UserPreviewScreen(listType: args.listType, name: args.name),
         );
       case '/user_info_screen':
         final UserInfoScreenArgs args = settings.arguments;
         return CircularReveal(
             centerAlignment: Alignment.center,
-            maxRadius: 800,
+            maxRadius: 1000,
             page: UserInfoScreen(name: args.name));
       case '/ranked_list_view':
         final RankedListViewScreenArgs args = settings.arguments;
         return CircularReveal(
             centerAlignment: Alignment.center,
-            maxRadius: 800,
+            maxRadius: 1000,
             page: RankedListViewScreen(
               listId: args.listId,
               listTitle: args.listTitle,
@@ -64,7 +64,7 @@ class Router {
         final RankedListEditScreenArgs args = settings.arguments;
         return CircularReveal(
             centerAlignment: Alignment.center,
-            maxRadius: 800,
+            maxRadius: 1000,
             page: RankedListEditScreen(
                 listId: args.listId,
                 isNew: args.isNew,
@@ -72,7 +72,7 @@ class Router {
       case '/user_comments_screen':
         return CircularReveal(
             centerAlignment: Alignment.center,
-            maxRadius: 800,
+            maxRadius: 1000,
             page: UserCommentsScreen());
     }
   }

@@ -40,12 +40,7 @@ class _AppState extends State<App> {
           darkTheme: AppTheme.getAppTheme(themeProvider.isDark),
           debugShowCheckedModeBanner: false,
           initialRoute: '/splash',
-          onGenerateRoute: Router.generateRoute,
-          /*routes: {
-            '/splash': (context) => Splash(),
-            '/login_signup': (context) => LoginSignup(),
-            '/main': (context) => MainScreen()
-          },*/
+          onGenerateRoute: RouteGenerator.generateRoute,
         );
       }),
     );

@@ -322,8 +322,8 @@ class _CardFooterState extends State<CardFooter> {
                         splashColor: Colors.transparent,
                         icon: Icon(
                             liked ? Icons.favorite : Icons.favorite_border,
-                            color: Colors.red,
-                            size: 55),
+                            color: Colors.red),
+                        iconSize: 55,
                         onPressed: () {
                           setState(() {
                             likeFuture = widget.isList
@@ -347,7 +347,6 @@ class _CardFooterState extends State<CardFooter> {
                       ])
                     ],
                   ),
-                  SizedBox(height: 10)
                 ],
               ),
             );
