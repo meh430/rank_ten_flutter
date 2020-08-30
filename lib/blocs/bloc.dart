@@ -18,7 +18,7 @@ abstract class Bloc<M, E> {
   StreamSink<E> get modelEventSink => modelEventController.sink;
 
   int currentPage = 1;
-  bool hitMax;
+  bool hitMax = false;
 
   void eventToState(dynamic event) async {}
 
@@ -48,9 +48,7 @@ abstract class Bloc<M, E> {
               endpointBase == FOLLOWERS_USERS ||
               endpointBase == FOLLOWING_USERS)) {
         hitMax = true;
-      }
-
-      if (pageContent.length < 10) {
+      } else if (pageContent.length < 10) {
         hitMax = true;
       }
 
