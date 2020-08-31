@@ -29,13 +29,15 @@ class GenericListPreviewWidget extends StatefulWidget {
 class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
   PreviewListsBloc _listsBloc;
   ScrollController _scrollController;
+  int sort;
 
   @override
   void initState() {
     super.initState();
     _listsBloc = PreviewListsBloc(endpointBase: widget.listType);
+    sort = widget.sort;
     _listsBloc.modelEventSink.add(RankedListPreviewEvent(
-        sort: widget.sort,
+        sort: sort,
         name: widget.name,
         token: widget.token,
         query: widget.query));
@@ -54,7 +56,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
         _scrollController.position.maxScrollExtent) {
       if (!_listsBloc.hitMax) {
         _listsBloc.modelEventSink.add(RankedListPreviewEvent(
-            sort: widget.sort,
+            sort: sort,
             name: widget.name,
             token: widget.token,
             query: widget.query));
@@ -74,7 +76,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
               return Future.delayed(Duration(milliseconds: 0), () {
                 print("Refreshing list");
                 _listsBloc.modelEventSink.add(RankedListPreviewEvent(
-                    sort: widget.sort,
+                    sort: sort,
                     name: widget.name,
                     token: widget.token,
                     query: widget.query,

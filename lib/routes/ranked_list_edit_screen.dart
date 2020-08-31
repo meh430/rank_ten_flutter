@@ -13,7 +13,6 @@ import 'package:rank_ten/models/ranked_list.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/ranked_list_repository.dart';
-import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 
 class RankedListEditScreen extends StatefulWidget {
   final String listId, listTitle;
@@ -118,13 +117,11 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
           appBar: AppBar(
             elevation: 0.0,
             brightness: isDark ? Brightness.dark : Brightness.light,
-            backgroundColor: Theme
-                .of(context)
-                .scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             actions: [
               IconButton(
                 icon:
-                Icon(_isPrivate ? Icons.visibility_off : Icons.visibility),
+                    Icon(_isPrivate ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() => _isPrivate = !_isPrivate);
                   _rankedListBloc.modelEventSink
@@ -210,17 +207,25 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                                       previousPosition: oldIndex,
                                       newPosition: newIndex));
                             },
-                            children: listChildren),
+                            children: listChildren
+                        ),
                       ),
-                      RankListBottomBar(
-                          rankedList: snapshot.data,
-                          editing: true,
-                          onAdded: () =>
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 2),
+                        child: RaisedButton(
+                          padding: const EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          color: paraPink,
+                          onPressed: () =>
                               showRankItemEditDialog(
                                 isNew: true,
                                 context: context,
                                 rankedListBloc: _rankedListBloc,
-                              )),
+                              ),
+                          child: Icon(Icons.add, color: palePurple),
+                        ),
+                      )
                     ],
                   );
                 }

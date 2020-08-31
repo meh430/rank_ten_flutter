@@ -178,7 +178,7 @@ class _MainAppBarState extends State<MainAppBar> {
 
     var action;
 
-    if (widget.index == 0 || widget.index == 1) {
+    if (widget.index == 1) {
       action = getSortAction(
           context: context, isDark: isDark, sortCallback: widget.sortCallback);
     } else if (widget.index == 3) {
@@ -196,7 +196,7 @@ class _MainAppBarState extends State<MainAppBar> {
       elevation: 0.0,
       brightness: isDark ? Brightness.dark : Brightness.light,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      actions: [action],
+      actions: action != null ? [action] : null,
       title: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
           child: Text(_appBarTitles[widget.index],
