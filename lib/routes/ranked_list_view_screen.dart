@@ -38,7 +38,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
   void initState() {
     super.initState();
     _rankedListBloc = RankedListBloc();
-    _rankedListBloc.modelEventSink.add(GetRankedListEvent(widget.listId));
+    _rankedListBloc.addEvent(GetRankedListEvent(widget.listId));
   }
 
   @override
@@ -91,8 +91,8 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                       child: RefreshIndicator(
                         onRefresh: () => Future.delayed(
                             Duration(milliseconds: 0),
-                            () => _rankedListBloc.modelEventSink
-                                .add(GetRankedListEvent(widget.listId))),
+                            () => _rankedListBloc
+                                .addEvent(GetRankedListEvent(widget.listId))),
                         child: ListView(
                             physics: const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
@@ -107,7 +107,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                 );
               }
 
-              return SpinKitRipple(size: 50, color: hanPurple);
+              return const SpinKitRipple(size: 50, color: hanPurple);
             }));
   }
 }
@@ -183,7 +183,6 @@ class LikeWidget extends StatefulWidget {
 
 class _LikeWidgetState extends State<LikeWidget> {
   int _numLikes;
-  bool _isLiked;
   Future<String> _likeFuture;
   MainUserProvider _userProvider;
 
@@ -192,7 +191,6 @@ class _LikeWidgetState extends State<LikeWidget> {
     super.initState();
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
     _numLikes = widget.rankedList.numLikes;
-    _isLiked = _userProvider.mainUser.likedLists.contains(widget.rankedList.id);
     _likeFuture = Future.delayed(Duration(milliseconds: 5), () => "INIT");
   }
 
@@ -200,8 +198,7 @@ class _LikeWidgetState extends State<LikeWidget> {
   Widget build(BuildContext context) {
     var loading = Padding(
         padding: const EdgeInsets.all(15),
-        child: SpinKitFoldingCube(size: 30, color: hanPurple));
-    var userProvider = Provider.of<MainUserProvider>(context, listen: false);
+        child: const SpinKitFoldingCube(size: 30, color: hanPurple));
 
     return FutureBuilder<String>(
         future: _likeFuture,
@@ -239,7 +236,8 @@ class _LikeWidgetState extends State<LikeWidget> {
                       color: Colors.red),
                   onPressed: () {
                     setState(() {
-                      _likeFuture = userProvider.likeList(widget.rankedList.id);
+                      _likeFuture =
+                          _userProvider.likeList(widget.rankedList.id);
                     });
                   },
                 ),

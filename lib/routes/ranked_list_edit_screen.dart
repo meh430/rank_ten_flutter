@@ -64,7 +64,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
     userProvider = Provider.of<MainUserProvider>(context, listen: false);
     initPrivate();
     _rankedListBloc = RankedListBloc();
-    _rankedListBloc.modelEventSink.add(GetRankedListEvent(widget.listId));
+    _rankedListBloc.addEvent(GetRankedListEvent(widget.listId));
     _listTitle = widget.listTitle;
     _titleController = TextEditingController(text: _listTitle);
   }
@@ -124,8 +124,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                     Icon(_isPrivate ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() => _isPrivate = !_isPrivate);
-                  _rankedListBloc.modelEventSink
-                      .add(RankedListPrivateEvent(_isPrivate));
+                  _rankedListBloc.addEvent(RankedListPrivateEvent(_isPrivate));
                 },
               ),
               IconButton(
@@ -135,12 +134,11 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                       Navigator.pop(context);
                       showDialog(
                           context: context,
-                          builder: (context) =>
-                              ListFutureDialog(
+                          builder: (context) => ListFutureDialog(
                                 listFuture: RankedListRepository()
                                     .deleteRankedList(
-                                    listId: widget.listId,
-                                    token: userProvider.jwtToken),
+                                        listId: widget.listId,
+                                        token: userProvider.jwtToken),
                               ));
                     } else {
                       Navigator.pop(context);
@@ -155,8 +153,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
               controller: _titleController,
               textInputAction: TextInputAction.done,
               onSubmitted: (value) =>
-                  _rankedListBloc.modelEventSink
-                      .add(RankedListTitleEvent(value)),
+                  _rankedListBloc.addEvent(RankedListTitleEvent(value)),
             ),
           ),
           body: StreamBuilder<RankedList>(
@@ -169,8 +166,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                     var rItem = snapshot.data.rankList[i];
                     listChildren.add(Dismissible(
                       onDismissed: (direction) {
-                        _rankedListBloc.modelEventSink
-                            .add(RankedListItemDeleteEvent(i));
+                        _rankedListBloc.addEvent(RankedListItemDeleteEvent(i));
                       },
                       key: ObjectKey(rItem),
                       background: Container(color: Colors.red),
@@ -202,13 +198,11 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                                   dateCreated: snapshot.data.dateCreated),
                             ),
                             onReorder: (int oldIndex, int newIndex) {
-                              _rankedListBloc.modelEventSink.add(
-                                  RankedListReorderEvent(
-                                      previousPosition: oldIndex,
-                                      newPosition: newIndex));
+                              _rankedListBloc.addEvent(RankedListReorderEvent(
+                                  previousPosition: oldIndex,
+                                  newPosition: newIndex));
                             },
-                            children: listChildren
-                        ),
+                            children: listChildren),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 2),
@@ -230,7 +224,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                   );
                 }
 
-                return SpinKitRipple(size: 50, color: hanPurple);
+                return const SpinKitRipple(size: 50, color: hanPurple);
               })),
     );
   }

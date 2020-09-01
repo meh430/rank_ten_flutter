@@ -43,7 +43,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
     } else if (option.contains("oldest")) {
       _sortOption = DATE_ASC;
     }
-    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+    _listsBloc.addEvent(RankedListPreviewEvent(
         name: _userProvider.mainUser.userName,
         token: _userProvider.jwtToken,
         refresh: true,
@@ -56,7 +56,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
 
-    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+    _listsBloc.addEvent(RankedListPreviewEvent(
         name: _userProvider.mainUser.userName,
         token: _userProvider.jwtToken,
         sort: _sortOption));
@@ -106,7 +106,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
       onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
         _userProvider.addUserEvent(GetUserEvent(_userProvider.mainUser.userName,
             token: _userProvider.jwtToken));
-        _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+        _listsBloc.addEvent(RankedListPreviewEvent(
             token: _userProvider.jwtToken,
             sort: _sortOption,
             name: _userProvider.mainUser.userName,

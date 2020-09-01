@@ -39,7 +39,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       if (!_commentBloc.hitMax) {
-        _commentBloc.modelEventSink.add(GetUserCommentsEvent(
+        _commentBloc.addEvent(GetUserCommentsEvent(
             sort: _sortOption, token: _userProvider.jwtToken));
       }
     }
@@ -53,13 +53,12 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
 
     _commentBloc = CommentBloc();
-    _commentBloc.modelEventSink
-        .add(GetUserCommentsEvent(token: _userProvider.jwtToken));
+    _commentBloc.addEvent(GetUserCommentsEvent(token: _userProvider.jwtToken));
   }
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
 
     return Scaffold(
         appBar: AppBar(
@@ -81,7 +80,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                 onRefresh: () {
                   return Future.delayed(Duration(milliseconds: 0), () {
                     print("Refreshing list");
-                    _commentBloc.modelEventSink.add(GetUserCommentsEvent(
+                    _commentBloc.addEvent(GetUserCommentsEvent(
                         sort: _sortOption,
                         token: _userProvider.jwtToken,
                         refresh: true));

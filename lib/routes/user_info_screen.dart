@@ -28,7 +28,7 @@ class UserInfoScreen extends StatefulWidget {
 class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -64,7 +64,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     } else if (option.contains("oldest")) {
       _sortOption = DATE_ASC;
     }
-    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+    _listsBloc.addEvent(RankedListPreviewEvent(
         name: widget.name, refresh: true, sort: _sortOption));
   }
 
@@ -73,8 +73,8 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     super.initState();
     _userBloc = UserBloc(name: widget.name);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
-    _listsBloc.modelEventSink
-        .add(RankedListPreviewEvent(name: widget.name, sort: _sortOption));
+    _listsBloc
+        .addEvent(RankedListPreviewEvent(name: widget.name, sort: _sortOption));
   }
 
   Widget builderFunction(
@@ -112,7 +112,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
     return RefreshIndicator(
       onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
         _userBloc.userEventSink.add(GetUserEvent(widget.name));
-        _listsBloc.modelEventSink.add(RankedListPreviewEvent(
+        _listsBloc.addEvent(RankedListPreviewEvent(
             name: widget.name, sort: _sortOption, refresh: true));
       }),
       child: SingleChildScrollView(

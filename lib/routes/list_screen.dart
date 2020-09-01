@@ -42,7 +42,7 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

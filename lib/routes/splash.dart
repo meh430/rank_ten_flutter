@@ -18,10 +18,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    /*Future.delayed(Duration(milliseconds: 3000), () {
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '/main');
-    });*/
+
     startUpFlow();
   }
 
