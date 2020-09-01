@@ -98,7 +98,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                             padding: const EdgeInsets.all(20),
                             child: Text(
                               widget.emptyMessage,
-                              style: Theme.of(context).textTheme.headline4,
+                              style: Theme.of(context).textTheme.headline6,
                               textAlign: TextAlign.center,
                             )));
                   }
@@ -126,7 +126,12 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                 }),
           );
         } else if (snapshot.hasError) {
-          return Text("Error retrieving items...");
+          return Text("Error retrieving items...",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6,
+              textAlign: TextAlign.center);
         }
 
         return const SpinKitRipple(size: 50, color: hanPurple);

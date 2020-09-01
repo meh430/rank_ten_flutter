@@ -187,7 +187,12 @@ class _MainAppBarState extends State<MainAppBar> {
       actions: action != null ? [action] : null,
       title: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
-          child: Text(_appBarTitles[widget.index],
+          child: Text(
+              widget.index == 3
+                  ? Provider.of<MainUserProvider>(context, listen: false)
+                      .mainUser
+                      .userName
+                  : _appBarTitles[widget.index],
               style: Theme.of(context).primaryTextTheme.headline3)),
     );
   }
