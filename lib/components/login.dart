@@ -21,31 +21,32 @@ class SubmitButton extends StatelessWidget {
   final bool isLoading;
   final bool isLogin;
 
-  SubmitButton({@required this.submitData,
-    @required this.isLoading,
-    @required this.isLogin});
+  SubmitButton(
+      {@required this.submitData,
+      @required this.isLoading,
+      @required this.isLogin});
 
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? const SpinKitDoubleBounce(
-      color: hanPurple,
-      size: 50.0,
-    )
+            color: hanPurple,
+            size: 50.0,
+          )
         : RaisedButton(
-      padding: const EdgeInsets.only(
-          left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
-      color: paraPink,
-      onPressed: () => submitData(context),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(40.0),
-      ),
-      child: Text(isLogin ? "Login" : "Sign Up",
-          style: Theme.of(context)
+            padding: const EdgeInsets.only(
+                left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
+            color: paraPink,
+            onPressed: () => submitData(context),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40.0),
+            ),
+            child: Text(isLogin ? "Login" : "Sign Up",
+                style: Theme.of(context)
                     .textTheme
                     .headline3
-              .copyWith(color: palePurple)),
-    );
+                    .copyWith(color: palePurple)),
+          );
   }
 }
 
@@ -53,7 +54,7 @@ String validatePwd(String value) {
   final pwdPattern = RegExp(
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$');
   if (!pwdPattern.hasMatch(value)) {
-    return "Invalid password";
+    return "Password needs an uppercase letter, a number, and a character";
   }
 
   return null;

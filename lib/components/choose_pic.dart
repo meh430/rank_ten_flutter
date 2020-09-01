@@ -28,7 +28,7 @@ class PicChooser extends StatefulWidget {
 class _PicChooserState extends State<PicChooser> {
   String _currImage;
   TextEditingController _urlController;
-  bool validImage = false;
+  bool _validImage = false;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _PicChooserState extends State<PicChooser> {
   }
 
   void _setValid(bool valid) {
-    validImage = valid;
+    _validImage = valid;
   }
 
   @override
@@ -96,7 +96,7 @@ class _PicChooserState extends State<PicChooser> {
                   label: "Set Image",
                   context: context,
                   onPressed: () {
-                    if (validImage) {
+                    if (_validImage) {
                       widget.setImage(_currImage);
                     } else {
                       widget.setImage(widget.prevImage);
@@ -116,14 +116,6 @@ void showProfilePicker({BuildContext context, String url, SetImage setImage}) {
       context: context,
       builder: (context) =>
           PicChooser(profilePicker: true, prevImage: url, setImage: setImage));
-}
-
-void showItemImagePicker(
-    {BuildContext context, String url, SetImage setImage}) {
-  showDialog(
-      context: context,
-      builder: (context) =>
-          PicChooser(profilePicker: false, prevImage: url, setImage: setImage));
 }
 
 class RankItemImage extends StatelessWidget {
@@ -192,7 +184,7 @@ class _PreviewImageState extends State<PreviewImage> {
           return inValid;
         }
 
-        return SpinKitRipple(size: 50, color: hanPurple);
+        return const SpinKitRipple(size: 50, color: hanPurple);
       },
     );
   }

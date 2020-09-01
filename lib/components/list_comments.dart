@@ -31,8 +31,7 @@ class _ListCommentsState extends State<ListComments> {
     super.initState();
     _commentBloc = CommentBloc();
     _commentController = TextEditingController();
-    _commentBloc.modelEventSink
-        .add(GetListCommentsEvent(listId: widget.listId));
+    _commentBloc.addEvent(GetListCommentsEvent(listId: widget.listId));
     _scrollController = ScrollController()..addListener(_onScrollListener);
   }
 
@@ -40,7 +39,7 @@ class _ListCommentsState extends State<ListComments> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       if (!_commentBloc.hitMax) {
-        _commentBloc.modelEventSink.add(
+        _commentBloc.addEvent(
             GetListCommentsEvent(listId: widget.listId, sort: _sortOption));
       }
     }
@@ -63,7 +62,7 @@ class _ListCommentsState extends State<ListComments> {
       _sortOption = DATE_ASC;
     }
 
-    _commentBloc.modelEventSink.add(GetListCommentsEvent(
+    _commentBloc.addEvent(GetListCommentsEvent(
         listId: widget.listId, sort: _sortOption, refresh: true));
   }
 
@@ -105,7 +104,7 @@ class _ListCommentsState extends State<ListComments> {
                   textInputAction: TextInputAction.done,
                   onSubmitted: (value) {
                     if (value.isNotEmpty) {
-                      _commentBloc.modelEventSink.add(AddCommentEvent(
+                      _commentBloc.addEvent(AddCommentEvent(
                           token: userProvider.jwtToken,
                           listId: widget.listId,
                           comment: value));
@@ -124,7 +123,7 @@ class _ListCommentsState extends State<ListComments> {
                     onPressed: () {
                       var value = _commentController.text;
                       if (value.isNotEmpty) {
-                        _commentBloc.modelEventSink.add(AddCommentEvent(
+                        _commentBloc.addEvent(AddCommentEvent(
                             token: userProvider.jwtToken,
                             listId: widget.listId,
                             comment: value));
@@ -142,7 +141,7 @@ class _ListCommentsState extends State<ListComments> {
                       onRefresh: () {
                         return Future.delayed(Duration(milliseconds: 0), () {
                           print("Refreshing list");
-                          _commentBloc.modelEventSink.add(GetListCommentsEvent(
+                          _commentBloc.addEvent(GetListCommentsEvent(
                               listId: widget.listId,
                               refresh: true,
                               sort: _sortOption));
@@ -175,7 +174,7 @@ class _ListCommentsState extends State<ListComments> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                SpinKitWave(size: 50, color: hanPurple),
+                                const SpinKitWave(size: 50, color: hanPurple),
                                 SizedBox(
                                   height: 5,
                                 )
@@ -186,22 +185,19 @@ class _ListCommentsState extends State<ListComments> {
 
                             var isMain = snapshot.data[index].userName ==
                                 userProvider.mainUser.userName;
-
                             return isMain
                                 ? Dismissible(
                               background: Container(color: Colors.red),
                               key: ObjectKey(snapshot.data[index]),
                               onDismissed: (direction) {
-                                _commentBloc.modelEventSink.add(
-                                    DeleteCommentEvent(
-                                        token: userProvider.jwtToken,
-                                        commentId:
-                                        snapshot.data[index].id));
+                                _commentBloc.addEvent(DeleteCommentEvent(
+                                    token: userProvider.jwtToken,
+                                    commentId: snapshot.data[index].id));
                               },
                               child: CommentCard(
                                   editCallback: (value) {
                                     if (value.isNotEmpty) {
-                                      _commentBloc.modelEventSink.add(
+                                      _commentBloc.addEvent(
                                           UpdateCommentEvent(
                                               commentId:
                                               snapshot.data[index].id,
@@ -222,7 +218,7 @@ class _ListCommentsState extends State<ListComments> {
                     return Text("Error retrieving items...");
                   }
 
-                  return SpinKitRipple(size: 50, color: hanPurple);
+                  return const SpinKitRipple(size: 50, color: hanPurple);
                 },
                 stream: _commentBloc.modelStateStream),
           )

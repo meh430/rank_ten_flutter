@@ -210,7 +210,8 @@ class _LikeWidgetState extends State<LikeWidget> {
           if (snapshot.hasData) {
             bool liked;
             if (snapshot.data == "INIT") {
-              liked = _isLiked;
+              liked = _userProvider.mainUser.likedLists
+                  .contains(widget.rankedList.id);
             } else if (snapshot.data == "LIKED") {
               liked = true;
               _numLikes += 1;
@@ -220,6 +221,9 @@ class _LikeWidgetState extends State<LikeWidget> {
             } else {
               return loading;
             }
+
+            _likeFuture =
+                Future.delayed(Duration(milliseconds: 5), () => "INIT");
 
             if (_numLikes < 0) {
               _numLikes = 0;
@@ -260,11 +264,12 @@ class RankedListViewScreenArgs {
   final String listId, listTitle, profPic;
   final bool isMain, shouldPushInfo;
 
-  RankedListViewScreenArgs({@required this.profPic,
-    @required this.shouldPushInfo,
-    @required this.listId,
-    @required this.listTitle,
-    this.isMain = false});
+  RankedListViewScreenArgs(
+      {@required this.profPic,
+      @required this.shouldPushInfo,
+      @required this.listId,
+      @required this.listTitle,
+      this.isMain = false});
 }
 
 void showLikedUsers({BuildContext context, String listId}) {

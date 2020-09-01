@@ -18,7 +18,7 @@ class ListFutureDialog extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.hasData) {
               Navigator.of(context).pop(true);
-              return SizedBox();
+              return const SizedBox();
             } else if (snapshot.hasError) {
               return Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -47,7 +47,8 @@ class ListFutureDialog extends StatelessWidget {
             }
 
             return Container(
-                height: 200, child: SpinKitWave(size: 50, color: hanPurple));
+                height: 200,
+                child: const SpinKitWave(size: 50, color: hanPurple));
           },
         ));
   }

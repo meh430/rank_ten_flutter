@@ -29,18 +29,19 @@ class GenericListPreviewWidget extends StatefulWidget {
 class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
   PreviewListsBloc _listsBloc;
   ScrollController _scrollController;
-  int sort;
+  int _sort;
 
   @override
   void initState() {
     super.initState();
     _listsBloc = PreviewListsBloc(endpointBase: widget.listType);
-    sort = widget.sort;
-    _listsBloc.modelEventSink.add(RankedListPreviewEvent(
-        sort: sort,
+    _sort = widget.sort;
+    _listsBloc.addEvent(RankedListPreviewEvent(
+        sort: _sort,
         name: widget.name,
         token: widget.token,
-        query: widget.query));
+        query: widget.query,
+        refresh: false));
     _scrollController = ScrollController()..addListener(_onScrollListener);
   }
 
@@ -55,11 +56,12 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       if (!_listsBloc.hitMax) {
-        _listsBloc.modelEventSink.add(RankedListPreviewEvent(
-            sort: sort,
+        _listsBloc.addEvent(RankedListPreviewEvent(
+            sort: _sort,
             name: widget.name,
             token: widget.token,
-            query: widget.query));
+            query: widget.query,
+            refresh: false));
       }
     }
   }
@@ -75,8 +77,8 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
                 print("Refreshing list");
-                _listsBloc.modelEventSink.add(RankedListPreviewEvent(
-                    sort: sort,
+                _listsBloc.addEvent(RankedListPreviewEvent(
+                    sort: _sort,
                     name: widget.name,
                     token: widget.token,
                     query: widget.query,
@@ -106,7 +108,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                       SizedBox(
                         height: 10,
                       ),
-                      SpinKitWave(size: 50, color: hanPurple),
+                      const SpinKitWave(size: 50, color: hanPurple),
                       SizedBox(
                         height: 5,
                       )
@@ -127,7 +129,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
           return Text("Error retrieving items...");
         }
 
-        return SpinKitRipple(size: 50, color: hanPurple);
+        return const SpinKitRipple(size: 50, color: hanPurple);
       },
     );
   }

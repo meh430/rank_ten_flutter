@@ -32,8 +32,11 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
   void initState() {
     super.initState();
     _userPreviewBloc = UserPreviewBloc(endpointBase: widget.listType);
-    _userPreviewBloc.modelEventSink.add(UserPreviewEvent(
-        sort: widget.sort, name: widget.name, query: widget.query));
+    _userPreviewBloc.addEvent(UserPreviewEvent(
+        refresh: false,
+        sort: widget.sort,
+        name: widget.name,
+        query: widget.query));
     _scrollController = ScrollController()..addListener(_onScrollListener);
   }
 
@@ -48,8 +51,11 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       if (!_userPreviewBloc.hitMax) {
-        _userPreviewBloc.modelEventSink.add(UserPreviewEvent(
-            sort: widget.sort, name: widget.name, query: widget.query));
+        _userPreviewBloc.addEvent(UserPreviewEvent(
+            refresh: false,
+            sort: widget.sort,
+            name: widget.name,
+            query: widget.query));
       }
     }
   }
@@ -69,7 +75,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
                 print("Refreshing list");
-                _userPreviewBloc.modelEventSink.add(UserPreviewEvent(
+                _userPreviewBloc.addEvent(UserPreviewEvent(
                     sort: widget.sort,
                     name: widget.name,
                     query: widget.query,
@@ -100,7 +106,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
                       SizedBox(
                         height: 10,
                       ),
-                      SpinKitWave(size: 50, color: hanPurple),
+                      const SpinKitWave(size: 50, color: hanPurple),
                       SizedBox(
                         height: 5,
                       )
@@ -118,7 +124,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
           return Text("Error retrieving items...");
         }
 
-        return SpinKitRipple(size: 50, color: hanPurple);
+        return const SpinKitRipple(size: 50, color: hanPurple);
       },
     );
   }

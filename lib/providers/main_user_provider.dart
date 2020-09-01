@@ -12,7 +12,6 @@ class MainUserProvider with ChangeNotifier {
 
   Stream<Response<User>> get mainUserState => mainUserBloc.userStateStream;
 
-
   Future<void> initMainUser(User user) async {
     mainUserBloc = UserBloc(isMain: true, mainUser: user);
     mainUser = user;
@@ -22,9 +21,6 @@ class MainUserProvider with ChangeNotifier {
     mainUserState.listen((Response response) async {
       if (response.status == Status.COMPLETED) {
         mainUser = response.value;
-
-        //mainUser.likedLists = await UserRepository()
-        //    .getLikedListIds(name: mainUser.userName, token: jwtToken);
         notifyListeners();
       }
     });

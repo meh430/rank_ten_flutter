@@ -28,26 +28,26 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
   TextEditingController _nameController;
   TextEditingController _descController;
   TextEditingController _urlController;
-  bool validImage = false, validName = true;
-  String imageUrl = "";
+  bool _validImage = false, _validName = true;
+  String _imageUrl = "";
 
   void _setValid(bool valid) {
-    validImage = valid;
+    _validImage = valid;
   }
 
   @override
   void initState() {
     super.initState();
     if (!widget.isNew) {
-      imageUrl = widget.rankItem.picture;
+      _imageUrl = widget.rankItem.picture;
       _nameController = widget.rankItem.itemName.isNotEmpty
           ? TextEditingController(text: widget.rankItem.itemName)
           : TextEditingController();
       _descController = widget.rankItem.description.isNotEmpty
           ? TextEditingController(text: widget.rankItem.description)
           : TextEditingController();
-      _urlController = imageUrl.isNotEmpty
-          ? TextEditingController(text: imageUrl)
+      _urlController = _imageUrl.isNotEmpty
+          ? TextEditingController(text: _imageUrl)
           : TextEditingController();
     } else {
       _nameController = TextEditingController();
@@ -78,17 +78,17 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
                   ),
                   PreviewImage(
                       imageValid: _setValid,
-                      imageUrl: imageUrl,
+                      imageUrl: _imageUrl,
                       profilePicker: false),
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: TextField(
                         textInputAction: TextInputAction.done,
                         onSubmitted: (value) =>
-                            setState(() => imageUrl = value),
+                            setState(() => _imageUrl = value),
                         style: textTheme.headline6.copyWith(fontSize: 16),
                         controller: _urlController,
-                        onChanged: (value) => setState(() => imageUrl = value),
+                        onChanged: (value) => setState(() => _imageUrl = value),
                         decoration: InputDecoration(
                             suffixIcon: GestureDetector(
                               dragStartBehavior: DragStartBehavior.down,
@@ -108,10 +108,10 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
                   const SizedBox(height: 10),
                   _buildEditField(
                       controller: _nameController,
-                      key: ValueKey("ItemName$validName"),
+                      key: ValueKey("ItemName$_validName"),
                       isDark: isDark,
                       context: context,
-                      errorText: validName ? null : "Name cannot by empty",
+                      errorText: _validName ? null : "Name cannot by empty",
                       label: "Item Name"),
                   _buildEditField(
                       controller: _descController,
@@ -127,24 +127,24 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
                           var description = _descController.text;
 
                           if (itemName.isEmpty) {
-                            setState(() => validName = false);
+                            setState(() => _validName = false);
                             return;
                           } else {
-                            setState(() => validName = true);
+                            setState(() => _validName = true);
                           }
 
                           if (widget.isNew) {
-                            widget.rankedListBloc.modelEventSink.add(
+                            widget.rankedListBloc.addEvent(
                                 RankedListItemCreateEvent(
                                     itemName: itemName,
                                     itemDescription: description,
-                                    imageUrl: validImage ? imageUrl : ""));
+                                    imageUrl: _validImage ? _imageUrl : ""));
                           } else {
-                            widget.rankedListBloc.modelEventSink.add(
+                            widget.rankedListBloc.addEvent(
                                 RankedListItemUpdateEvent(
                                     itemName: itemName,
                                     itemDescription: description,
-                                    imageUrl: validImage ? imageUrl : "",
+                                    imageUrl: _validImage ? _imageUrl : "",
                                     index: widget.index));
                           }
                           Navigator.pop(context);

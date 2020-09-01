@@ -16,7 +16,7 @@ class RankItemViewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
-    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     var rankItemCard = Card(
       elevation: 4,
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),

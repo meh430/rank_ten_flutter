@@ -13,12 +13,6 @@ import 'package:rank_ten/tabs/search_tab.dart';
 
 var _appBarTitles = ["Feed", "Discover", "Search"];
 
-Center getTempDest(int index) {
-  return Center(
-    child: Text(_appBarTitles[index]),
-  );
-}
-
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -29,7 +23,6 @@ class _MainScreenState extends State<MainScreen>
   int _currIndex = 0;
   int _sortOption = LIKES_DESC;
   String _query = "";
-  List<Widget> _destinations = [];
 
   TabController _searchTabController;
 
@@ -39,11 +32,6 @@ class _MainScreenState extends State<MainScreen>
     _appBarTitles.add(Provider.of<MainUserProvider>(context, listen: false)
         .mainUser
         .userName);
-
-    _destinations.add(FeedTab(sort: _sortOption));
-    _destinations.add(DiscoverTab(sort: _sortOption));
-    _destinations.add(getTempDest(2));
-    _destinations.add(ProfileTab());
     _searchTabController = TabController(length: 2, vsync: this);
   }
 

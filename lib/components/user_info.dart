@@ -123,7 +123,7 @@ class _FollowButtonState extends State<FollowButton> {
     var userProvider = Provider.of<MainUserProvider>(context);
     var loading = Padding(
       padding: const EdgeInsets.all(10),
-      child: SpinKitDoubleBounce(size: 50, color: hanPurple),
+      child: const SpinKitDoubleBounce(size: 50, color: hanPurple),
     );
 
     return FutureBuilder<String>(

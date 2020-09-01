@@ -77,12 +77,11 @@ class RankedListCardWidget extends StatelessWidget {
             const SizedBox(height: 10),
             listCard.picture.isNotEmpty
                 ? GestureDetector(
-                onTap: () =>
-                    launchRankListViewScreen(
+                    onTap: () => launchRankListViewScreen(
                         context: context,
                         listCard: listCard,
                         shouldPushInfo: shouldPushInfo),
-                child: RankItemImage(imageUrl: listCard.picture))
+                    child: RankItemImage(imageUrl: listCard.picture))
                 : SizedBox(),
             GestureDetector(
                 onTap: () =>
@@ -140,17 +139,18 @@ class CardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
-    var textTheme = Theme.of(context)
+    var isDark = Provider
+        .of<DarkThemeProvider>(context)
+        .isDark;
+    var userProvider = Provider.of<MainUserProvider>(context, listen: false);
+    var textTheme = Theme
+        .of(context)
         .textTheme
         .headline6
         .copyWith(color: isDark ? white : secondText);
     return GestureDetector(
       onTap: () {
-        if (userName ==
-            Provider.of<MainUserProvider>(context, listen: false)
-                .mainUser
-                .userName) {
+        if (userName == userProvider.mainUser.userName) {
           Scaffold.of(context).showSnackBar(Utils.getSB("That's you!"));
           return;
         }
@@ -284,7 +284,7 @@ class _CardFooterState extends State<CardFooter> {
   Widget build(BuildContext context) {
     var loading = Padding(
         padding: const EdgeInsets.all(15),
-        child: SpinKitFoldingCube(size: 30, color: hanPurple));
+        child: const SpinKitFoldingCube(size: 30, color: hanPurple));
     var userProvider = Provider.of<MainUserProvider>(context, listen: false);
 
     return FutureBuilder<String>(
@@ -354,69 +354,6 @@ class _CardFooterState extends State<CardFooter> {
 
           return loading;
         });
-
-    /*return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
-      child: Column(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                splashColor: Colors.transparent,
-                icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.red, size: 55),
-                onPressed: () async {
-                  if (true) {
-                    _liking = true;
-                    var action;
-                    try {
-                      action = await widget.likePressed();
-                    } catch (e) {
-                      print(e);
-                    }
-
-
-                    if (action) {
-                      setState(() {
-                        _numLikes++;
-                        _isLiked = true;
-                      });
-                    } else {
-                      setState(() {
-                        _numLikes--;
-                        _isLiked = false;
-                      });
-                    }
-                    //Future.delayed(
-                    //    Duration(milliseconds: 1500), () => _liking = false);
-                  } else {
-                    Scaffold.of(context).hideCurrentSnackBar();
-                    Scaffold.of(context)
-                        .showSnackBar(Utils.getSB('Please wait'));
-                  }
-                },
-              ),
-              Column(children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "$_numLikes likes",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline5,
-                )
-              ])
-            ],
-          ),
-          SizedBox(height: 10)
-        ],
-      ),
-    );*/
   }
 }
 
@@ -450,9 +387,10 @@ class CommentPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Provider
-        .of<DarkThemeProvider>(context)
-        .isDark;
+    final isDark =
+        Provider
+            .of<DarkThemeProvider>(context, listen: false)
+            .isDark;
 
     return Card(
         color: isDark ? hanPurple : palePurple,

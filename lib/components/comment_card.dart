@@ -31,7 +31,7 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<MainUserProvider>(context);
+    var userProvider = Provider.of<MainUserProvider>(context, listen: false);
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       shape: RoundedRectangleBorder(
@@ -96,8 +96,7 @@ void editCommentDialog(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextField(
                       textInputAction: TextInputAction.done,
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .headline6
                           .copyWith(fontSize: 16),
