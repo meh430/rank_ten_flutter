@@ -15,8 +15,8 @@ class MainUserProvider with ChangeNotifier {
   Future<void> initMainUser(User user) async {
     mainUserBloc = UserBloc(isMain: true, mainUser: user);
     mainUser = user;
-    mainUser.likedLists = await UserRepository()
-        .getLikedListIds(name: mainUser.userName, token: jwtToken);
+    //mainUser.likedLists = await UserRepository()
+    //    .getLikedListIds(name: mainUser.userName, token: jwtToken);
 
     mainUserState.listen((Response response) async {
       if (response.status == Status.COMPLETED) {

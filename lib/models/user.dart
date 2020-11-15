@@ -55,6 +55,11 @@ class User {
       json['followers'].forEach((v) => followers.add(v[r'$oid']));
     }
 
+    if(json['liked_lists'] != null) {
+      likedLists = Set<String>();
+      json['liked_lists'].forEach((v) => followers.add(v[r'$oid']));
+    }
+
     listNum = json['list_num'];
     jwtToken = json['jwt_token'];
   }

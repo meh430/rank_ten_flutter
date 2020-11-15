@@ -34,6 +34,7 @@ abstract class Bloc<M, E> {
     }
 
     try {
+      print(event.refresh);
       if (event.refresh) {
         currentPage = 1;
         (model as List).clear();
@@ -56,7 +57,7 @@ abstract class Bloc<M, E> {
       updateState();
     } on InvalidPageError {
       hitMax = true;
-      currentPage -= 1;
+      currentPage = (currentPage <= 1) ? 1 : (currentPage - 1);
       modelStateSink.add(model);
     }
   }

@@ -51,10 +51,10 @@ class UserBloc {
         _userStateSink.add(Response.loading("Loading user"));
 
         _user = await _userRepository.getUser(event.name);
-        if (isMain) {
+        /*if (isMain) {
           _user.likedLists = await UserRepository()
               .getLikedListIds(name: event.name, token: event.token);
-        }
+        }*/
         _userStateSink.add(Response.completed(_user));
       } else if (event is UpdateBioEvent) {
         _userStateSink.add(Response.loading("Updating bio"));
