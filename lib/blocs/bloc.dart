@@ -28,7 +28,7 @@ abstract class Bloc<M, E> {
   }
 
   void paginate(Future<dynamic> query, dynamic event,
-      {String endpointBase = ""}) async {
+      {String endpointBase = "", Future<dynamic> nextQuery}) async {
     if (hitMax && !event.refresh) {
       return;
     }
@@ -51,6 +51,9 @@ abstract class Bloc<M, E> {
         hitMax = true;
       } else if (pageContent.length < 10) {
         hitMax = true;
+      } else if (pageContent.length == 10) {
+        var nextPage = await nextQuery;
+        hitMax = nextPage.length == 0;
       }
 
       (model as List).addAll(pageContent);

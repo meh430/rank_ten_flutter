@@ -29,7 +29,15 @@ class PreviewListsBloc
               token: event.token,
               query: event.query,
               refresh: event.refresh),
-          event);
+          event,
+          nextQuery: _previewRepository.getRankedListPreview(
+              endpointBase: endpointBase,
+              name: event.name,
+              page: currentPage + 1,
+              sort: event.sort,
+              token: event.token,
+              query: event.query,
+              refresh: event.refresh));
     }
   }
 }

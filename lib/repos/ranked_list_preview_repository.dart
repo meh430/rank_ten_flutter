@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:rank_ten/api/rank_api.dart';
+import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 
 //page, sort
@@ -64,8 +65,14 @@ class RankedListPreviewRepository {
       }
     }
 
+
+
     final response = await _api.get(endpoint: endpoint, bearerToken: token);
     var listPreviews = List<RankedListCard>();
+    if(response[0] is String && response[0].contains("page")) {
+      return [];
+    }
+
     response
         .forEach((rList) => listPreviews.add(RankedListCard.fromJson(rList)));
 

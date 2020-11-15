@@ -23,7 +23,12 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
               page: currentPage,
               sort: event.sort,
               refresh: event.refresh),
-          event);
+          event,
+          nextQuery: _commentsRepository.getListComments(
+              listId: event.listId,
+              page: currentPage + 1,
+              sort: event.sort,
+              refresh: event.refresh));
     } else if (event is GetUserCommentsEvent) {
       paginate(
           _commentsRepository.getUserComments(
@@ -31,7 +36,12 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
               page: currentPage,
               sort: event.sort,
               refresh: event.refresh),
-          event);
+          event,
+          nextQuery: _commentsRepository.getUserComments(
+              token: event.token,
+              page: currentPage + 1,
+              sort: event.sort,
+              refresh: event.refresh));
     } else if (event is AddCommentEvent) {
       var newComment = await _commentsRepository.addComment(
           listId: event.listId, token: event.token, comment: event.comment);
