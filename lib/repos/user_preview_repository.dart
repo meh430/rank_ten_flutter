@@ -44,6 +44,9 @@ class UserPreviewRepository {
     }
 
     final response = await _api.get(endpoint: endpoint);
+    if(endpointBase == SEARCH_USERS && response[0] is String && response[0].contains("page")) {
+      return [];
+    }
     var userPreviews = List<UserPreview>();
     response.forEach(
         (userPrev) => userPreviews.add(UserPreview.fromJson(userPrev)));

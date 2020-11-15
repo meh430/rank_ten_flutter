@@ -18,30 +18,24 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
     super.eventToState(event);
     if (event is GetListCommentsEvent) {
       paginate(
-          _commentsRepository.getListComments(
-              listId: event.listId,
-              page: currentPage,
-              sort: event.sort,
-              refresh: event.refresh),
-          event,
-          nextQuery: _commentsRepository.getListComments(
-              listId: event.listId,
-              page: currentPage + 1,
-              sort: event.sort,
-              refresh: event.refresh));
+          (pageNum) {
+            return _commentsRepository.getListComments(
+                listId: event.listId,
+                page: pageNum,
+                sort: event.sort,
+                refresh: event.refresh);
+          },
+          event);
     } else if (event is GetUserCommentsEvent) {
       paginate(
-          _commentsRepository.getUserComments(
-              token: event.token,
-              page: currentPage,
-              sort: event.sort,
-              refresh: event.refresh),
-          event,
-          nextQuery: _commentsRepository.getUserComments(
-              token: event.token,
-              page: currentPage + 1,
-              sort: event.sort,
-              refresh: event.refresh));
+          (pageNum) {
+            return _commentsRepository.getUserComments(
+                token: event.token,
+                page: currentPage,
+                sort: event.sort,
+                refresh: event.refresh);
+          },
+          event);
     } else if (event is AddCommentEvent) {
       var newComment = await _commentsRepository.addComment(
           listId: event.listId, token: event.token, comment: event.comment);

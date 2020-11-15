@@ -21,23 +21,17 @@ class PreviewListsBloc
     super.eventToState(event);
     if (event is RankedListPreviewEvent) {
       paginate(
-          _previewRepository.getRankedListPreview(
-              endpointBase: endpointBase,
-              name: event.name,
-              page: currentPage,
-              sort: event.sort,
-              token: event.token,
-              query: event.query,
-              refresh: event.refresh),
-          event,
-          nextQuery: _previewRepository.getRankedListPreview(
-              endpointBase: endpointBase,
-              name: event.name,
-              page: currentPage + 1,
-              sort: event.sort,
-              token: event.token,
-              query: event.query,
-              refresh: event.refresh));
+          (pageNum) {
+            return _previewRepository.getRankedListPreview(
+                endpointBase: endpointBase,
+                name: event.name,
+                page: pageNum,
+                sort: event.sort,
+                token: event.token,
+                query: event.query,
+                refresh: event.refresh);
+          },
+          event);
     }
   }
 }

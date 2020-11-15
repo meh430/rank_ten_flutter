@@ -19,13 +19,15 @@ class UserPreviewBloc extends Bloc<List<UserPreview>, UserPreviewEvent> {
     super.eventToState(event);
     if (event is UserPreviewEvent) {
       paginate(
-          _userPreviewRepository.getUserPreview(
-              endpointBase: endpointBase,
-              name: event.name,
-              page: currentPage,
-              sort: event.sort,
-              query: event.query,
-              refresh: event.refresh),
+          (pageNum) {
+            return _userPreviewRepository.getUserPreview(
+                endpointBase: endpointBase,
+                name: event.name,
+                page: pageNum,
+                sort: event.sort,
+                query: event.query,
+                refresh: event.refresh);
+          },
           event,
           endpointBase: endpointBase);
     }

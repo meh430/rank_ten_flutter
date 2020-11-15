@@ -30,7 +30,11 @@ class CommentsRepository {
     var response = await _api.get(endpoint: endpoint, bearerToken: token);
 
     var userComments = List<Comment>();
-    response.forEach((c) => userComments.add(Comment.fromJson(c)));
+    try {
+      response.forEach((c) => userComments.add(Comment.fromJson(c)));
+    } catch(e) {
+      return [];
+    }
     return userComments;
   }
 

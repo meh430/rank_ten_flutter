@@ -17,7 +17,7 @@ abstract class Bloc<M, E> {
 
   StreamSink<E> get modelEventSink => modelEventController.sink;
 
-  int currentPage = 1;
+  int currentPage = 0;
   bool hitMax = false;
 
   void eventToState(dynamic event) async {}
@@ -27,8 +27,8 @@ abstract class Bloc<M, E> {
     modelEventController = StreamController<E>();
   }
 
-  void paginate(Future<dynamic> query, dynamic event,
-      {String endpointBase = "", Future<dynamic> nextQuery}) async {
+  void paginate(dynamic query, dynamic event,
+      {String endpointBase = ""}) async {
     if (hitMax && !event.refresh) {
       return;
     }
@@ -42,17 +42,21 @@ abstract class Bloc<M, E> {
         currentPage += 1;
       }
 
-      var pageContent = await query;
+      var pageContent = await query(currentPage);
 
-      if (event is UserPreviewEvent &&
-          (endpointBase == SEARCH_USERS && pageContent.length < 100 ||
-              endpointBase == FOLLOWERS_USERS ||
-              endpointBase == FOLLOWING_USERS)) {
+      if (event is UserPreviewEvent && endpointBase == SEARCH_USERS) {
+        if(pageContent.length < 100) {
+          hitMax = true;
+        } else if(pageContent.length == 100) {
+          var nextPage = await query(currentPage+1);
+          hitMax = nextPage.length == 0;
+        }
+      } else if(event is UserPreviewEvent) {
         hitMax = true;
       } else if (pageContent.length < 10) {
         hitMax = true;
       } else if (pageContent.length == 10) {
-        var nextPage = await nextQuery;
+        var nextPage = await query(currentPage+1);
         hitMax = nextPage.length == 0;
       }
 
