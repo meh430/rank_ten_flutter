@@ -55,9 +55,10 @@ class User {
       json['followers'].forEach((v) => followers.add(v[r'$oid']));
     }
 
+    print(json['liked_lists']);
     if(json['liked_lists'] != null) {
       likedLists = Set<String>();
-      json['liked_lists'].forEach((v) => followers.add(v[r'$oid']));
+      json['liked_lists'].forEach((v) => likedLists.add(v[r'$oid']));
     }
 
     listNum = json['list_num'];
