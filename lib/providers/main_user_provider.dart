@@ -63,7 +63,7 @@ class MainUserProvider with ChangeNotifier {
     return action;
   }
 
-  Future<String> followUser({String name, String userId}) async {
+  Future<FollowResponse> followUser({String name, String userId}) async {
     var action = await UserRepository().followUser(name: name, token: jwtToken);
     if (mainUser.following.contains(userId)) {
       mainUser.following.remove(userId);

@@ -2,6 +2,10 @@ import 'package:rank_ten/api/rank_api.dart';
 
 import '../models/user.dart';
 
+enum LikeResponse { liked, unliked, init, error }
+
+enum FollowResponse { followed, unfollowed, init, error }
+
 class UserRepository {
   RankApi _api = RankApi();
 
@@ -22,14 +26,18 @@ class UserRepository {
     return response;
   }
 
-  Future<String> followUser({String name, String token}) async {
-    final response =
-        await _api.post(endpoint: '/follow/$name', bearerToken: token);
+  Future<FollowResponse> followUser({String name, String token}) async {
+    dynamic response;
+    try {
+      response = await _api.post(endpoint: '/follow/$name', bearerToken: token);
+    } catch (e) {
+      return FollowResponse.error;
+    }
 
     if (response['message'].contains("unfollow")) {
-      return "UNFOLLOW";
+      return FollowResponse.unfollowed;
     } else {
-      return "FOLLOW";
+      return FollowResponse.followed;
     }
   }
 

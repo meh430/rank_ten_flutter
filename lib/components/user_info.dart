@@ -9,6 +9,7 @@ import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
+import 'package:rank_ten/repos/user_repository.dart';
 import 'package:rank_ten/routes/list_screen.dart';
 import 'package:rank_ten/routes/user_preview_screen.dart';
 
@@ -109,13 +110,14 @@ class FollowButton extends StatefulWidget {
 
 class _FollowButtonState extends State<FollowButton> {
   bool _isFollowing;
-  Future<String> followFuture;
+  Future<FollowResponse> followFuture;
 
   @override
   void initState() {
     super.initState();
     _isFollowing = widget.isFollowing;
-    followFuture = Future.delayed(Duration(milliseconds: 5), () => "INIT");
+    followFuture =
+        Future.delayed(Duration(milliseconds: 5), () => FollowResponse.init);
   }
 
   @override
@@ -126,19 +128,23 @@ class _FollowButtonState extends State<FollowButton> {
       child: const SpinKitDoubleBounce(size: 50, color: hanPurple),
     );
 
-    return FutureBuilder<String>(
+    return FutureBuilder<FollowResponse>(
       future: followFuture,
       key: UniqueKey(),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<FollowResponse> snapshot) {
         var buttonText = "";
 
         if (snapshot.hasData) {
-          if (snapshot.data == "INIT") {
+          if (snapshot.data == FollowResponse.init) {
             buttonText = _isFollowing ? "Following" : "Follow";
-          } else if (snapshot.data == "FOLLOW") {
+          } else if (snapshot.data == FollowResponse.followed) {
             buttonText = "Following";
-          } else if (snapshot.data == "UNFOLLOW") {
+            _isFollowing = true;
+          } else if (snapshot.data == FollowResponse.unfollowed) {
             buttonText = "Follow";
+            _isFollowing = false;
+          } else if (snapshot.data == FollowResponse.error) {
+            buttonText = "Try Again";
           } else {
             return loading;
           }
