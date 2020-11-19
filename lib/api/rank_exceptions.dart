@@ -1,3 +1,5 @@
+const error = "E";
+
 class RankExceptions implements Exception {
   final errorMessage;
   final errorType;

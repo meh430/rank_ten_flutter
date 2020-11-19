@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/components/rank_item_view_card.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
@@ -270,6 +271,7 @@ class CardFooter extends StatefulWidget {
 class _CardFooterState extends State<CardFooter> {
   int _numLikes;
   bool _isLiked;
+  bool _error;
   Future<String> likeFuture;
 
   @override
@@ -277,6 +279,7 @@ class _CardFooterState extends State<CardFooter> {
     super.initState();
     _numLikes = widget.numLikes;
     _isLiked = widget.isLiked;
+    _error = false;
     likeFuture = Future.delayed(Duration(milliseconds: 5), () => "INIT");
   }
 
@@ -291,6 +294,7 @@ class _CardFooterState extends State<CardFooter> {
         future: likeFuture,
         key: UniqueKey(),
         builder: (context, snapshot) {
+          _error = false;
           if (snapshot.hasData) {
             bool liked;
             if (snapshot.data == "INIT") {
@@ -301,9 +305,14 @@ class _CardFooterState extends State<CardFooter> {
             } else if (snapshot.data == "UNLIKED") {
               liked = false;
               _numLikes -= 1;
+            } else if (snapshot.data == error) {
+              _error = true;
+              liked = _isLiked;
             } else {
               return loading;
             }
+
+            _isLiked = liked;
 
             if (_numLikes < 0) {
               _numLikes = 0;
@@ -326,6 +335,7 @@ class _CardFooterState extends State<CardFooter> {
                         iconSize: 55,
                         onPressed: () {
                           setState(() {
+                            _error = false;
                             likeFuture = widget.isList
                                 ? userProvider.likeList(widget.id)
                                 : userProvider.likeComment(widget.id);
@@ -340,7 +350,7 @@ class _CardFooterState extends State<CardFooter> {
                           onTap: () => showLikedUsers(
                               context: context, listId: widget.id),
                           child: Text(
-                            "$_numLikes likes",
+                            _error ? "Try Again" : "$_numLikes likes",
                             style: Theme.of(context).textTheme.headline5,
                           ),
                         )
