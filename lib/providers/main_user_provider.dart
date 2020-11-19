@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/blocs/user_bloc.dart';
 import 'package:rank_ten/events/user_events.dart';
@@ -33,26 +32,15 @@ class MainUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> likeComment(String commentId) async {
-    String action = "";
-    try {
-      action = await UserRepository()
-          .likeComment(commentId: commentId, token: jwtToken);
-    } catch (e) {
-      return error;
-    }
-
+  Future<LikeResponse> likeComment(String commentId) async {
+    LikeResponse action = await UserRepository()
+        .likeComment(commentId: commentId, token: jwtToken);
     return action;
   }
 
-  Future<String> likeList(String listId) async {
-    String action = "";
-
-    try {
-      action = await UserRepository().likeList(listId: listId, token: jwtToken);
-    } catch (e) {
-      return error;
-    }
+  Future<LikeResponse> likeList(String listId) async {
+    LikeResponse action =
+        await UserRepository().likeList(listId: listId, token: jwtToken);
 
     if (mainUser.likedLists.contains(listId)) {
       mainUser.likedLists.remove(listId);

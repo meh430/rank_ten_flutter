@@ -41,25 +41,36 @@ class UserRepository {
     }
   }
 
-  Future<String> likeList({String listId, String token}) async {
-    final response =
-        await _api.post(endpoint: '/like/$listId', bearerToken: token);
+  Future<LikeResponse> likeList({String listId, String token}) async {
+    dynamic response;
+
+    try {
+      response = await _api.post(endpoint: '/like/$listId', bearerToken: token);
+    } catch (e) {
+      return LikeResponse.error;
+    }
 
     if (response['message'].contains("unliked")) {
-      return "UNLIKED";
+      return LikeResponse.unliked;
     } else {
-      return "LIKED";
+      return LikeResponse.liked;
     }
   }
 
-  Future<String> likeComment({String commentId, String token}) async {
-    final response = await _api.post(
-        endpoint: '/like_comment/$commentId', bearerToken: token);
+  Future<LikeResponse> likeComment({String commentId, String token}) async {
+    dynamic response;
+
+    try {
+      response = await _api.post(
+          endpoint: '/like_comment/$commentId', bearerToken: token);
+    } catch (e) {
+      return LikeResponse.error;
+    }
 
     if (response['message'].contains("unliked")) {
-      return "UNLIKED";
+      return LikeResponse.unliked;
     } else {
-      return "LIKED";
+      return LikeResponse.liked;
     }
   }
 

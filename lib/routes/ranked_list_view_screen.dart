@@ -12,6 +12,7 @@ import 'package:rank_ten/models/ranked_list.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
+import 'package:rank_ten/repos/user_repository.dart';
 import 'package:rank_ten/routes/ranked_list_edit_screen.dart';
 
 class RankedListViewScreen extends StatefulWidget {
@@ -183,15 +184,19 @@ class LikeWidget extends StatefulWidget {
 
 class _LikeWidgetState extends State<LikeWidget> {
   int _numLikes;
-  Future<String> _likeFuture;
+  Future<LikeResponse> _likeFuture;
   MainUserProvider _userProvider;
+  bool _isLiked, _error;
 
   @override
   void initState() {
     super.initState();
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
     _numLikes = widget.rankedList.numLikes;
-    _likeFuture = Future.delayed(Duration(milliseconds: 5), () => "INIT");
+    _likeFuture =
+        Future.delayed(Duration(milliseconds: 5), () => LikeResponse.init);
+    _isLiked = _userProvider.mainUser.likedLists.contains(widget.rankedList.id);
+    _error = false;
   }
 
   @override
@@ -200,27 +205,32 @@ class _LikeWidgetState extends State<LikeWidget> {
         padding: const EdgeInsets.all(15),
         child: const SpinKitFoldingCube(size: 30, color: hanPurple));
 
-    return FutureBuilder<String>(
+    return FutureBuilder<LikeResponse>(
         future: _likeFuture,
         key: UniqueKey(),
         builder: (context, snapshot) {
+          _error = false;
           if (snapshot.hasData) {
             bool liked;
-            if (snapshot.data == "INIT") {
-              liked = _userProvider.mainUser.likedLists
-                  .contains(widget.rankedList.id);
-            } else if (snapshot.data == "LIKED") {
+            if (snapshot.data == LikeResponse.init) {
+              liked = _isLiked;
+            } else if (snapshot.data == LikeResponse.liked) {
               liked = true;
               _numLikes += 1;
-            } else if (snapshot.data == "UNLIKED") {
+            } else if (snapshot.data == LikeResponse.unliked) {
               liked = false;
               _numLikes -= 1;
+            } else if (snapshot.data == LikeResponse.error) {
+              liked = _isLiked;
+              _error = true;
             } else {
               return loading;
             }
 
-            _likeFuture =
-                Future.delayed(Duration(milliseconds: 5), () => "INIT");
+            _isLiked = liked;
+
+            _likeFuture = Future.delayed(
+                Duration(milliseconds: 5), () => LikeResponse.init);
 
             if (_numLikes < 0) {
               _numLikes = 0;
@@ -245,8 +255,11 @@ class _LikeWidgetState extends State<LikeWidget> {
                   onTap: () => showLikedUsers(
                       context: context, listId: widget.rankedList.id),
                   child: Text(
-                    "$_numLikes likes",
-                    style: Theme.of(context).textTheme.headline5,
+                    _error ? "Try Again" : "$_numLikes likes",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline5,
                   ),
                 )
               ],

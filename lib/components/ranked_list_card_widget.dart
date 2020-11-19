@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/components/rank_item_view_card.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
+import 'package:rank_ten/repos/user_repository.dart';
 import 'package:rank_ten/routes/ranked_list_view_screen.dart';
 import 'package:rank_ten/routes/user_info_screen.dart';
 
@@ -272,7 +272,7 @@ class _CardFooterState extends State<CardFooter> {
   int _numLikes;
   bool _isLiked;
   bool _error;
-  Future<String> likeFuture;
+  Future<LikeResponse> likeFuture;
 
   @override
   void initState() {
@@ -280,7 +280,8 @@ class _CardFooterState extends State<CardFooter> {
     _numLikes = widget.numLikes;
     _isLiked = widget.isLiked;
     _error = false;
-    likeFuture = Future.delayed(Duration(milliseconds: 5), () => "INIT");
+    likeFuture =
+        Future.delayed(Duration(milliseconds: 5), () => LikeResponse.init);
   }
 
   @override
@@ -290,22 +291,22 @@ class _CardFooterState extends State<CardFooter> {
         child: const SpinKitFoldingCube(size: 30, color: hanPurple));
     var userProvider = Provider.of<MainUserProvider>(context, listen: false);
 
-    return FutureBuilder<String>(
+    return FutureBuilder<LikeResponse>(
         future: likeFuture,
         key: UniqueKey(),
         builder: (context, snapshot) {
           _error = false;
           if (snapshot.hasData) {
             bool liked;
-            if (snapshot.data == "INIT") {
+            if (snapshot.data == LikeResponse.init) {
               liked = _isLiked;
-            } else if (snapshot.data == "LIKED") {
+            } else if (snapshot.data == LikeResponse.liked) {
               liked = true;
               _numLikes += 1;
-            } else if (snapshot.data == "UNLIKED") {
+            } else if (snapshot.data == LikeResponse.unliked) {
               liked = false;
               _numLikes -= 1;
-            } else if (snapshot.data == error) {
+            } else if (snapshot.data == LikeResponse.error) {
               _error = true;
               liked = _isLiked;
             } else {
