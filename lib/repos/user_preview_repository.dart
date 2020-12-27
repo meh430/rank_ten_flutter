@@ -2,21 +2,21 @@ import 'package:flutter/foundation.dart';
 import 'package:rank_ten/api/rank_api.dart';
 import 'package:rank_ten/models/user.dart';
 
-//id
+//listId
 const LIKED_USERS = 'like';
 //page, sort, query
 const SEARCH_USERS = 'search_users';
-//name
+//userId
 const FOLLOWING_USERS = 'following';
-//name
+//userId
 const FOLLOWERS_USERS = 'followers';
 
 class UserPreviewRepository {
   RankApi _api = RankApi();
 
-  Future<List<UserPreview>> getUserPreview(
+  Future<Map<String, dynamic>> getUserPreview(
       {@required String endpointBase,
-      String name,
+      int id,
       int page,
       int sort,
       String query,
@@ -25,32 +25,30 @@ class UserPreviewRepository {
 
     switch (endpointBase) {
       case LIKED_USERS:
-        endpoint += '/$name';
+        endpoint += '/$id';
         break;
       case FOLLOWERS_USERS:
-        endpoint += '/$name';
+        endpoint += '/$id';
         break;
       case FOLLOWING_USERS:
-        endpoint += '/$name';
+        endpoint += '/$id';
         break;
       case SEARCH_USERS:
         query = query.replaceAll(" ", "+");
         endpoint += '/$page/$sort?q=$query';
         break;
     }
-
-    if (refresh) {
+    if (refresh && endpointBase == SEARCH_USERS) {
+      endpointBase += '&re=True';
+    } else if (refresh) {
       endpoint += '?re=True';
     }
 
     final response = await _api.get(endpoint: endpoint);
-    if(endpointBase == SEARCH_USERS && response[0] is String && response[0].contains("page")) {
-      return [];
-    }
     var userPreviews = List<UserPreview>();
-    response.forEach(
+    response["items"].forEach(
         (userPrev) => userPreviews.add(UserPreview.fromJson(userPrev)));
-
-    return userPreviews;
+    response["items"] = userPreviews;
+    return response;
   }
 }

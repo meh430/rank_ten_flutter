@@ -6,8 +6,9 @@ import 'package:rank_ten/repos/user_preview_repository.dart';
 
 class UserPreviewScreen extends StatefulWidget {
   final String listType, name;
+  final int id;
 
-  UserPreviewScreen({Key key, @required this.listType, this.name})
+  UserPreviewScreen({Key key, @required this.listType, this.name, this.id})
       : super(key: key);
 
   @override
@@ -36,13 +37,14 @@ class _UserPreviewScreenState extends State<UserPreviewScreen> {
             style: Theme.of(context).primaryTextTheme.headline5),
       ),
       body: UserPreviewWidget(
-          key: UniqueKey(), listType: widget.listType, name: widget.name),
+          key: UniqueKey(), listType: widget.listType, id: widget.id),
     );
   }
 }
 
 class UserPreviewScreenArgs {
   final String listType, name;
+  final int id;
 
-  UserPreviewScreenArgs({@required this.listType, this.name = ""});
+  UserPreviewScreenArgs({@required this.listType, this.name = "", this.id});
 }

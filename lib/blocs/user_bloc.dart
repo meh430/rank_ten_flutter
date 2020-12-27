@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:rank_ten/api/auth.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/events/user_events.dart';
 import 'package:rank_ten/models/user.dart';
@@ -23,7 +24,7 @@ class UserBloc {
 
   StreamSink<UserEvent> get userEventSink => _userEventController.sink;
 
-  UserBloc({String name, bool isMain = false, User mainUser}) {
+  UserBloc({int userId, bool isMain = false, User mainUser}) {
     this.isMain = isMain;
     _userRepository = UserRepository();
 
@@ -40,7 +41,7 @@ class UserBloc {
     if (isMain) {
       _user = mainUser;
     } else {
-      userEventSink.add(GetUserEvent(name));
+      userEventSink.add(GetUserEvent(userId));
     }
   }
 
@@ -50,11 +51,12 @@ class UserBloc {
       if (event is GetUserEvent) {
         _userStateSink.add(Response.loading("Loading user"));
 
-        _user = await _userRepository.getUser(event.name);
-        /*if (isMain) {
-          _user.likedLists = await UserRepository()
-              .getLikedListIds(name: event.name, token: event.token);
-        }*/
+        if (isMain) {
+          _user = await Authorization.tokenValid(event.token);
+        } else {
+          _user = await _userRepository.getUser(event.userId);
+        }
+
         _userStateSink.add(Response.completed(_user));
       } else if (event is UpdateBioEvent) {
         _userStateSink.add(Response.loading("Updating bio"));
@@ -67,9 +69,9 @@ class UserBloc {
         _userStateSink.add(Response.loading("Updating profile pic"));
 
         await _userRepository.updateProfilePic(
-            profPic: event.profPic, token: event.token);
+            profPic: event.profilePic, token: event.token);
 
-        _user.profPic = event.profPic;
+        _user.profilePic = event.profilePic;
         _userStateSink.add(Response.completed(_user));
       }
     } catch (e) {

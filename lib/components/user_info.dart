@@ -26,16 +26,16 @@ class UserInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<MainUserProvider>(context);
     Widget profilePic =
-        RoundedImage(imageUrl: user.profPic, uInitial: user.userName[0]);
+        RoundedImage(imageUrl: user.profilePic, uInitial: user.username[0]);
     profilePic = isMain
         ? GestureDetector(
             child: profilePic,
             onTap: () => showProfilePicker(
                 context: context,
-                url: user.profPic,
+                url: user.profilePic,
                 setImage: (String imageUrl) {
                   userProvider.addUserEvent(UpdateProfilePicEvent(
-                      profPic: imageUrl, token: userProvider.jwtToken));
+                      profilePic: imageUrl, token: userProvider.jwtToken));
                 }))
         : profilePic;
 
@@ -77,9 +77,9 @@ class UserInfo extends StatelessWidget {
           ],
         ),
         FollowButton(
-            isFollowing: userProvider.mainUser.following.contains(user.id),
-            name: user.userName,
-            id: user.id)
+            isFollowing: userProvider.mainUser.following.contains(user.userId),
+            name: user.username,
+            userId: user.userId)
       ]);
     }
 
@@ -95,13 +95,14 @@ class UserInfo extends StatelessWidget {
 
 class FollowButton extends StatefulWidget {
   final bool isFollowing;
-  final String name, id;
+  final String name;
+  final int userId;
 
   FollowButton(
       {Key key,
       @required this.isFollowing,
       @required this.name,
-      @required this.id})
+      @required this.userId})
       : super(key: key);
 
   @override
@@ -166,8 +167,8 @@ class _FollowButtonState extends State<FollowButton> {
                     borderRadius: BorderRadius.circular(15)),
                 onPressed: () {
                   setState(() {
-                    followFuture = userProvider.followUser(
-                        name: widget.name, userId: widget.id);
+                    followFuture =
+                        userProvider.followUser(userId: widget.userId);
                   });
                 }),
           );
@@ -309,17 +310,20 @@ class UserStatRow extends StatelessWidget {
                         arguments: ListScreenArgs(
                             listType: USER_LISTS_ALL,
                             token: token,
-                            name: user.userName));
+                            userId: user.userId,
+                            name: user.username));
                   } else {
                     //public
                     Navigator.pushNamed(context, '/lists',
                         arguments: ListScreenArgs(
-                            listType: USER_LISTS, name: user.userName));
+                            listType: USER_LISTS,
+                            name: user.username,
+                            userId: user.userId));
                   }
                 },
                 child: UserStat(
                   statLabel: "Rank Lists",
-                  statCount: user.listNum,
+                  statCount: user.numLists,
                   isMain: isMain,
                 ),
               )
@@ -330,7 +334,9 @@ class UserStatRow extends StatelessWidget {
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/user_preview_list',
                     arguments: UserPreviewScreenArgs(
-                        listType: FOLLOWING_USERS, name: user.userName)),
+                        listType: FOLLOWING_USERS,
+                        name: user.username,
+                        id: user.userId)),
                 child: UserStat(
                   statLabel: "Following",
                   statCount: user.numFollowing,
@@ -340,7 +346,9 @@ class UserStatRow extends StatelessWidget {
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/user_preview_list',
                     arguments: UserPreviewScreenArgs(
-                        listType: FOLLOWERS_USERS, name: user.userName)),
+                        listType: FOLLOWERS_USERS,
+                        name: user.username,
+                        id: user.userId)),
                 child: UserStat(
                   statLabel: "Followers",
                   statCount: user.numFollowers,
@@ -365,11 +373,12 @@ class UserStatRow extends StatelessWidget {
                         onTap: () => Navigator.pushNamed(context, '/lists',
                             arguments: ListScreenArgs(
                                 listType: LIKED_LISTS,
-                                name: user.userName,
+                                name: user.username,
+                                userId: user.userId,
                                 token: token)),
                         child: UserStat(
                           statLabel: "Liked Lists",
-                          statCount: user.numLiked,
+                          statCount: user.likedLists.length,
                           isMain: isMain,
                         ))
                   ],
@@ -433,18 +442,13 @@ class BioWidget extends StatelessWidget {
         Text(
           "Bio",
           textAlign: TextAlign.start,
-          style: Theme
-              .of(context)
+          style: Theme.of(context)
               .textTheme
               .headline5
               .copyWith(color: getTitleColor(context)),
         ),
         Text(bio.isNotEmpty ? bio : "This person does not have a bio...",
-            style: Theme
-                .of(context)
-                .textTheme
-                .headline4
-                .copyWith(fontSize: 18))
+            style: Theme.of(context).textTheme.headline4.copyWith(fontSize: 18))
       ],
     );
   }
@@ -505,8 +509,7 @@ class _BioEditWidgetState extends State<BioEditWidget> {
           children: [
             Text(
               "Bio",
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .headline5
                   .copyWith(color: getTitleColor(context)),
@@ -521,11 +524,10 @@ class _BioEditWidgetState extends State<BioEditWidget> {
         _editing
             ? getBioEditField()
             : Text(_currBio,
-            style: Theme
-                .of(context)
-                .textTheme
-                .headline4
-                .copyWith(fontSize: 18))
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4
+                    .copyWith(fontSize: 18))
       ],
     );
   }
@@ -540,8 +542,7 @@ Widget getProfilePic(String uInitial, BuildContext context) {
         color: Utils.getRandomColor()),
     child: Center(
         child: Text((uInitial ?? "I").toUpperCase(),
-            style: Theme
-                .of(context)
+            style: Theme.of(context)
                 .textTheme
                 .headline2
                 .copyWith(color: Colors.black))),
@@ -549,7 +550,5 @@ Widget getProfilePic(String uInitial, BuildContext context) {
 }
 
 Color getTitleColor(BuildContext context) {
-  return Provider
-      .of<DarkThemeProvider>(context)
-      .isDark ? lavender : hanPurple;
+  return Provider.of<DarkThemeProvider>(context).isDark ? lavender : hanPurple;
 }

@@ -23,10 +23,10 @@ void launchRankListViewScreen({
   Navigator.pushNamed(context, '/ranked_list_view',
       arguments: RankedListViewScreenArgs(
           listTitle: listCard.title,
-          listId: listCard.id,
-          isMain: userProvider.userName == listCard.userName,
+          listId: listCard.listId,
+          isMain: userProvider.userId == listCard.userId,
           shouldPushInfo: shouldPushInfo,
-          profPic: listCard.profPic));
+          profPic: listCard.profilePic));
 }
 
 class RankedListCardWidget extends StatelessWidget {
@@ -40,7 +40,7 @@ class RankedListCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<MainUserProvider>(context, listen: false);
-    var isLiked = userProvider.mainUser.likedLists.contains(listCard.id);
+    var isLiked = userProvider.mainUser.likedLists.contains(listCard.listId);
 
     var hasThree = listCard.numItems > 3;
     var remainingLabel = "";
@@ -63,8 +63,9 @@ class RankedListCardWidget extends StatelessWidget {
           children: [
             CardHeader(
                 shouldPushInfo: shouldPushInfo,
-                userName: listCard.userName,
-                profPicUrl: listCard.profPic,
+                userId: listCard.userId,
+                userName: listCard.username,
+                profPicUrl: listCard.profilePic,
                 dateCreated: listCard.dateCreated),
             GestureDetector(
               onTap: () => launchRankListViewScreen(
@@ -85,39 +86,33 @@ class RankedListCardWidget extends StatelessWidget {
                     child: RankItemImage(imageUrl: listCard.picture))
                 : SizedBox(),
             GestureDetector(
-                onTap: () =>
-                    launchRankListViewScreen(
+                onTap: () => launchRankListViewScreen(
+                    context: context,
+                    listCard: listCard,
+                    shouldPushInfo: shouldPushInfo),
+                child: RankPreviewItems(previewItems: listCard.rankItems)),
+            hasThree
+                ? GestureDetector(
+                    onTap: () => launchRankListViewScreen(
                         context: context,
                         listCard: listCard,
                         shouldPushInfo: shouldPushInfo),
-                child: RankPreviewItems(previewItems: listCard.rankList)),
-            hasThree
-                ? GestureDetector(
-              onTap: () =>
-                  launchRankListViewScreen(
-                      context: context,
-                      listCard: listCard,
-                      shouldPushInfo: shouldPushInfo),
-              child: Text(remainingLabel,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.bold)),
-            )
+                    child: Text(remainingLabel,
+                        style: Theme.of(context).textTheme.headline6.copyWith(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold)),
+                  )
                 : SizedBox(),
             CardFooter(
                 numLikes: listCard.numLikes,
                 isLiked: isLiked,
-                id: listCard.id,
+                id: listCard.listId,
                 isList: true),
             listCard.commentPreview != null
                 ? CommentPreviewCard(
-                listId: listCard.id,
-                commentPreview: listCard.commentPreview,
-                numComments: listCard.numComments)
+                    listId: listCard.listId,
+                    commentPreview: listCard.commentPreview,
+                    numComments: listCard.numComments)
                 : SizedBox()
           ],
         ),
@@ -127,7 +122,7 @@ class RankedListCardWidget extends StatelessWidget {
 }
 
 class CardHeader extends StatelessWidget {
-  final int dateCreated;
+  final int dateCreated, userId;
   final String userName;
   final String profPicUrl;
   final bool shouldPushInfo;
@@ -136,29 +131,27 @@ class CardHeader extends StatelessWidget {
       {@required this.dateCreated,
       @required this.userName,
       @required this.profPicUrl,
+      @required this.userId,
       this.shouldPushInfo = true});
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider
-        .of<DarkThemeProvider>(context)
-        .isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context).isDark;
     var userProvider = Provider.of<MainUserProvider>(context, listen: false);
-    var textTheme = Theme
-        .of(context)
+    var textTheme = Theme.of(context)
         .textTheme
         .headline6
         .copyWith(color: isDark ? white : secondText);
     return GestureDetector(
       onTap: () {
-        if (userName == userProvider.mainUser.userName) {
+        if (userId == userProvider.mainUser.userId) {
           Scaffold.of(context).showSnackBar(Utils.getSB("That's you!"));
           return;
         }
 
         if (shouldPushInfo) {
           Navigator.pushNamed(context, '/user_info_screen',
-              arguments: UserInfoScreenArgs(name: userName));
+              arguments: UserInfoScreenArgs(name: userName, userId: userId));
         }
       },
       child: Padding(
@@ -196,28 +189,27 @@ class CircleImage extends StatelessWidget {
   Widget build(BuildContext context) {
     var profPic = profPicUrl.isEmpty
         ? Container(
-        width: size,
-        height: size,
-        child: Center(
-          child: Text(userName[0],
-              textAlign: TextAlign.center,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline5
-                  .copyWith(color: Colors.black, fontSize: textSize)),
-        ),
-        decoration: new BoxDecoration(
-          shape: BoxShape.circle,
-          color: Utils.getRandomColor(),
-        ))
+            width: size,
+            height: size,
+            child: Center(
+              child: Text(userName[0],
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      .copyWith(color: Colors.black, fontSize: textSize)),
+            ),
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              color: Utils.getRandomColor(),
+            ))
         : Container(
-        width: size,
-        height: size,
-        decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            image: new DecorationImage(
-                fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
+            width: size,
+            height: size,
+            decoration: new BoxDecoration(
+                shape: BoxShape.circle,
+                image: new DecorationImage(
+                    fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
 
     return profPic;
   }
@@ -232,20 +224,14 @@ class RankPreviewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Provider
-        .of<DarkThemeProvider>(context, listen: false)
-        .isDark;
+    var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     return Row(
       children: [
         RankCircle(rank: rank),
         const SizedBox(width: 10),
         Expanded(
             child: Text(rankItemTitle,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(
+                style: Theme.of(context).textTheme.headline5.copyWith(
                     fontSize: 26, color: isDark ? white : Colors.black)))
       ],
     );
@@ -255,7 +241,7 @@ class RankPreviewItem extends StatelessWidget {
 class CardFooter extends StatefulWidget {
   final int numLikes;
   final bool isLiked, isList;
-  final String id;
+  final int id;
 
   CardFooter({
     @required this.numLikes,
@@ -378,7 +364,9 @@ class RankPreviewItems extends StatelessWidget {
     var colChildren = List<Widget>();
     previewItems.forEach((item) {
       colChildren.add(RankPreviewItem(
-          rank: item.rank, rankItemTitle: item.itemName, key: ObjectKey(item)));
+          rank: item.ranking,
+          rankItemTitle: item.itemName,
+          key: ObjectKey(item)));
     });
 
     return Padding(
@@ -389,19 +377,17 @@ class RankPreviewItems extends StatelessWidget {
 
 class CommentPreviewCard extends StatelessWidget {
   final CommentPreview commentPreview;
-  final int numComments;
-  final String listId;
+  final int numComments, listId;
 
-  CommentPreviewCard({@required this.commentPreview,
-    @required this.numComments,
-    @required this.listId});
+  CommentPreviewCard(
+      {@required this.commentPreview,
+      @required this.numComments,
+      @required this.listId});
 
   @override
   Widget build(BuildContext context) {
     final isDark =
-        Provider
-            .of<DarkThemeProvider>(context, listen: false)
-            .isDark;
+        Provider.of<DarkThemeProvider>(context, listen: false).isDark;
 
     return Card(
         color: isDark ? hanPurple : palePurple,
@@ -409,45 +395,36 @@ class CommentPreviewCard extends StatelessWidget {
         margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CardHeader(
+                  userId: commentPreview.userId,
                   dateCreated: commentPreview.dateCreated,
-                  userName: commentPreview.userName,
-                  profPicUrl: commentPreview.profPic),
+                  userName: commentPreview.username,
+                  profPicUrl: commentPreview.profilePic),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 28),
                 child: Text(
                   commentPreview.comment,
                   textAlign: TextAlign.start,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline6,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
               const SizedBox(height: 10),
               numComments > 1
                   ? GestureDetector(
-                onTap: () =>
-                    showListComments(context: context, listId: listId),
-                child: Text("View all $numComments comments",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(
-                        fontSize: 14,
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.bold)),
-              )
+                      onTap: () =>
+                          showListComments(context: context, listId: listId),
+                      child: Text("View all $numComments comments",
+                          style: Theme.of(context).textTheme.headline6.copyWith(
+                              fontSize: 14,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold)),
+                    )
                   : SizedBox(),
               numComments > 1 ? SizedBox(height: 10) : SizedBox()
             ],

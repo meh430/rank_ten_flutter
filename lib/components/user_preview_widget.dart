@@ -8,12 +8,12 @@ import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
 
 class UserPreviewWidget extends StatefulWidget {
-  final int sort;
-  final String name, query, listType, emptyMessage;
+  final int sort, id;
+  final String query, listType, emptyMessage;
 
   const UserPreviewWidget(
       {this.sort = 0,
-      this.name = "",
+      this.id = 0,
       this.query = "",
       this.emptyMessage = 'No users found',
       @required this.listType,
@@ -33,10 +33,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
     super.initState();
     _userPreviewBloc = UserPreviewBloc(endpointBase: widget.listType);
     _userPreviewBloc.addEvent(UserPreviewEvent(
-        refresh: false,
-        sort: widget.sort,
-        name: widget.name,
-        query: widget.query));
+        refresh: false, sort: widget.sort, id: widget.id, query: widget.query));
     _scrollController = ScrollController()..addListener(_onScrollListener);
   }
 
@@ -54,7 +51,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
         _userPreviewBloc.addEvent(UserPreviewEvent(
             refresh: false,
             sort: widget.sort,
-            name: widget.name,
+            id: widget.id,
             query: widget.query));
       }
     }
@@ -77,7 +74,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
                 print("Refreshing list");
                 _userPreviewBloc.addEvent(UserPreviewEvent(
                     sort: widget.sort,
-                    name: widget.name,
+                    id: widget.id,
                     query: widget.query,
                     refresh: true));
               });

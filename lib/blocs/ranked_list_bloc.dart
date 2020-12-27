@@ -14,9 +14,9 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
   }
 
   void _updateParentProperties() {
-    for (var rankItem in model.rankList) {
+    for (var rankItem in model.rankItems) {
       rankItem.private = model.private;
-      rankItem.parentTitle = model.title;
+      rankItem.listTitle = model.title;
     }
   }
 
@@ -24,9 +24,9 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
   void eventToState(event) async {
     super.eventToState(event);
     if (event is GetRankedListEvent) {
-      model = event.listId != null && event.listId.isNotEmpty
+      model = event.listId != 0
           ? await _rankedListRepository.getRankedList(event.listId)
-          : RankedList(rankList: []);
+          : RankedList(rankItems: []);
       modelStateSink.add(model);
     } else if (event is RankedListTitleEvent) {
       model.title = event.title;
@@ -37,7 +37,7 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
       _updateParentProperties();
       modelStateSink.add(model);
     } else if (event is RankedListItemUpdateEvent) {
-      var rankItem = model.rankList[event.index];
+      var rankItem = model.rankItems[event.index];
       rankItem.itemName = event.itemName;
       rankItem.description = event.itemDescription;
       rankItem.picture = event.imageUrl;
@@ -51,10 +51,10 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
         newIndex -= 1;
       }
 
-      final RankItem rankItem = model.rankList.removeAt(oldIndex);
-      model.rankList.insert(newIndex, rankItem);
-      for (int i = 0; i < model.rankList.length; i++) {
-        model.rankList[i].rank = i + 1;
+      final RankItem rankItem = model.rankItems.removeAt(oldIndex);
+      model.rankItems.insert(newIndex, rankItem);
+      for (int i = 0; i < model.rankItems.length; i++) {
+        model.rankItems[i].ranking = i + 1;
       }
       _updateParentProperties();
 
@@ -62,19 +62,19 @@ class RankedListBloc extends Bloc<RankedList, RankedListEvent> {
     } else if (event is RankedListItemCreateEvent) {
       var rankItem = RankItem(
           private: model.private,
-          parentTitle: model.title,
+          listTitle: model.title,
           description: event.itemDescription,
           itemName: event.itemName,
           picture: event.imageUrl,
-          rank: model.rankList.length + 1);
+          ranking: model.rankItems.length + 1);
 
-      model.rankList.add(rankItem);
+      model.rankItems.add(rankItem);
       _updateParentProperties();
       modelStateSink.add(model);
     } else if (event is RankedListItemDeleteEvent) {
-      model.rankList.removeAt(event.index);
-      for (int i = 0; i < model.rankList.length; i++) {
-        model.rankList[i].rank = i + 1;
+      model.rankItems.removeAt(event.index);
+      for (int i = 0; i < model.rankItems.length; i++) {
+        model.rankItems[i].ranking = i + 1;
       }
       _updateParentProperties();
       modelStateSink.add(model);

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 abstract class CommentEvent {}
 
 class GetListCommentsEvent extends CommentEvent {
-  final String listId;
+  final int listId;
   final int sort;
   final bool refresh;
 
@@ -21,21 +21,24 @@ class GetUserCommentsEvent extends CommentEvent {
 }
 
 class AddCommentEvent extends CommentEvent {
-  final String token, listId, comment;
+  final String token, comment;
+  final int listId;
 
   AddCommentEvent(
       {@required this.token, @required this.listId, @required this.comment});
 }
 
 class UpdateCommentEvent extends CommentEvent {
-  final String token, commentId, comment;
+  final String token, comment;
+  final int commentId;
 
   UpdateCommentEvent(
       {@required this.token, @required this.commentId, @required this.comment});
 }
 
 class DeleteCommentEvent extends CommentEvent {
-  final String token, commentId;
+  final String token;
+  final int commentId;
 
   DeleteCommentEvent({@required this.token, @required this.commentId});
 }

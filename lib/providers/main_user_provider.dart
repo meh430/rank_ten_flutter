@@ -32,13 +32,19 @@ class MainUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<LikeResponse> likeComment(String commentId) async {
+  Future<LikeResponse> likeComment(int commentId) async {
     LikeResponse action = await UserRepository()
         .likeComment(commentId: commentId, token: jwtToken);
+
+    if (mainUser.likedComments.contains(commentId)) {
+      mainUser.likedComments.remove(commentId);
+    } else {
+      mainUser.likedComments.add(commentId);
+    }
     return action;
   }
 
-  Future<LikeResponse> likeList(String listId) async {
+  Future<LikeResponse> likeList(int listId) async {
     LikeResponse action =
         await UserRepository().likeList(listId: listId, token: jwtToken);
 
@@ -51,8 +57,9 @@ class MainUserProvider with ChangeNotifier {
     return action;
   }
 
-  Future<FollowResponse> followUser({String name, String userId}) async {
-    var action = await UserRepository().followUser(name: name, token: jwtToken);
+  Future<FollowResponse> followUser({@required int userId}) async {
+    var action =
+        await UserRepository().followUser(userId: userId, token: jwtToken);
     if (mainUser.following.contains(userId)) {
       mainUser.following.remove(userId);
     } else {

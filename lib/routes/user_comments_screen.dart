@@ -69,7 +69,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
             getSortAction(
                 context: context, sortCallback: _sortCallback, isDark: isDark)
           ],
-          title: Text("${_userProvider.mainUser.userName}'s Comments",
+          title: Text("${_userProvider.mainUser.username}'s Comments",
               style: Theme.of(context).primaryTextTheme.headline5),
         ),
         body: StreamBuilder<List<Comment>>(
@@ -121,18 +121,18 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
 
                       return GestureDetector(
                         onTap: () async {
-                          Map<String, String> listCard =
+                          Map<String, dynamic> listCard =
                               await CommentsRepository().getCommentParent(
-                                  commentId: snapshot.data[index].id);
+                                  commentId: snapshot.data[index].listId);
                           Navigator.pushNamed(context, '/ranked_list_view',
                               arguments: RankedListViewScreenArgs(
                                   listTitle: listCard['title'],
-                                  listId: listCard['_id'],
-                                  isMain: _userProvider.mainUser.userName ==
-                                      listCard['user_name'],
+                                  listId: listCard['listId'],
+                                  isMain: _userProvider.mainUser.userId ==
+                                      listCard['userId'],
                                   shouldPushInfo:
-                                      _userProvider.mainUser.userName ==
-                                          listCard['user_name'],
+                                      _userProvider.mainUser.userId ==
+                                          listCard['userId'],
                                   profPic: ""));
                         },
                         child: CommentCard(

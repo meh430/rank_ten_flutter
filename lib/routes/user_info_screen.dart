@@ -18,8 +18,9 @@ import 'package:rank_ten/routes/main_screen.dart';
 
 class UserInfoScreen extends StatefulWidget {
   final String name;
+  final int userId;
 
-  UserInfoScreen({this.name});
+  UserInfoScreen({@required this.name, @required this.userId});
 
   @override
   _UserInfoScreenState createState() => _UserInfoScreenState();
@@ -37,14 +38,15 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           title: Text(widget.name,
               style: Theme.of(context).primaryTextTheme.headline5),
         ),
-        body: UserInfoBuilder(name: widget.name));
+        body: UserInfoBuilder(name: widget.name, userId: widget.userId));
   }
 }
 
 class UserInfoBuilder extends StatefulWidget {
   final String name;
+  final int userId;
 
-  UserInfoBuilder({this.name});
+  UserInfoBuilder({@required this.name, @required this.userId});
 
   @override
   _UserInfoBuilderState createState() => _UserInfoBuilderState();
@@ -65,16 +67,16 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
       _sortOption = DATE_ASC;
     }
     _listsBloc.addEvent(RankedListPreviewEvent(
-        name: widget.name, refresh: true, sort: _sortOption));
+        userId: widget.userId, refresh: true, sort: _sortOption));
   }
 
   @override
   void initState() {
     super.initState();
-    _userBloc = UserBloc(name: widget.name);
+    _userBloc = UserBloc(userId: widget.userId);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
-    _listsBloc
-        .addEvent(RankedListPreviewEvent(name: widget.name, sort: _sortOption));
+    _listsBloc.addEvent(
+        RankedListPreviewEvent(userId: widget.userId, sort: _sortOption));
   }
 
   Widget builderFunction(
@@ -111,9 +113,9 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
-        _userBloc.userEventSink.add(GetUserEvent(widget.name));
+        _userBloc.userEventSink.add(GetUserEvent(widget.userId));
         _listsBloc.addEvent(RankedListPreviewEvent(
-            name: widget.name, sort: _sortOption, refresh: true));
+            userId: widget.userId, sort: _sortOption, refresh: true));
       }),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
@@ -176,6 +178,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
 
 class UserInfoScreenArgs {
   final String name;
+  final int userId;
 
-  UserInfoScreenArgs({@required this.name});
+  UserInfoScreenArgs({@required this.name, @required this.userId});
 }

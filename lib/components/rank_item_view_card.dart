@@ -35,7 +35,7 @@ class RankItemViewCard extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       right: 20, top: 20, left: 10, bottom: 10),
                   child: RankCircle(
-                    rank: rankItem.rank,
+                    rank: rankItem.ranking,
                     margin: 0,
                     size: 50,
                   ),

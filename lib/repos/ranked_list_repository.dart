@@ -5,7 +5,7 @@ import 'package:rank_ten/models/ranked_list.dart';
 class RankedListRepository {
   RankApi _api = RankApi();
 
-  Future<RankedList> getRankedList(String listId) async {
+  Future<RankedList> getRankedList(int listId) async {
     var response = await _api.get(endpoint: '/rankedlist/$listId');
     var rankedList = RankedList.fromJson(response);
 
@@ -22,7 +22,7 @@ class RankedListRepository {
 
   Future<dynamic> updateRankedList(
       {@required RankedList rankedList,
-      @required String listId,
+      @required int listId,
       @required String token}) async {
     var response = await _api.put(
         endpoint: '/rankedlist/$listId',
@@ -33,13 +33,13 @@ class RankedListRepository {
   }
 
   Future<dynamic> deleteRankedList(
-      {@required String listId, @required String token}) async {
+      {@required int listId, @required String token}) async {
     var response =
         await _api.delete(endpoint: '/rankedlist/$listId', bearerToken: token);
     return response;
   }
 
-  Future<bool> getPrivate({String listId, String token}) async {
+  Future<bool> getPrivate({int listId, String token}) async {
     var response =
         await _api.get(endpoint: '/is_private/$listId', bearerToken: token);
     return response;

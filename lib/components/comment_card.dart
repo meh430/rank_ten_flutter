@@ -40,8 +40,9 @@ class _CommentCardState extends State<CommentCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CardHeader(
-              profPicUrl: widget.comment.profPic,
-              userName: widget.comment.userName,
+              profPicUrl: widget.comment.profilePic,
+              userId: widget.comment.userId,
+              userName: widget.comment.username,
               dateCreated: widget.comment.dateCreated),
           GestureDetector(
             onTap: () {
@@ -59,9 +60,9 @@ class _CommentCardState extends State<CommentCard> {
           ),
           CardFooter(
               numLikes: widget.comment.numLikes,
-              id: widget.comment.id,
-              isLiked:
-                  widget.comment.likedUsers.contains(userProvider.mainUser.id),
+              id: widget.comment.commentId,
+              isLiked: userProvider.mainUser.likedComments
+                  .contains(widget.comment.commentId),
               isList: false)
         ],
       ),

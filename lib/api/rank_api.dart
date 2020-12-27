@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:rank_ten/api/rank_exceptions.dart';
 
 class RankApi {
-  final String _baseUrl = 'http://192.168.0.22:5000';
+  final String _baseUrl = 'http://192.168.0.22:3000';
+
   //final String _baseUrl = 'https://rank-ten-api.herokuapp.com';
 
   Future<bool> validateImage(String imageUrl) async {
@@ -16,6 +17,7 @@ class RankApi {
       final res = await http.get(imageUrl, headers: {'Accept': 'image/*'});
 
       isValid = res.statusCode == 200 &&
+          res.headers.containsKey('content-type') &&
           res.headers['content-type'].contains("image");
     } on SocketException {
       throw DefaultError('No network connection');

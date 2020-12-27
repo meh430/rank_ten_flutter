@@ -8,12 +8,12 @@ import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
 
 class GenericListPreviewWidget extends StatefulWidget {
-  final int sort;
-  final String name, token, query, listType, emptyMessage;
+  final int sort, userId;
+  final String token, query, listType, emptyMessage;
 
   const GenericListPreviewWidget(
       {this.sort = 0,
-      this.name = "",
+      this.userId = 0,
       this.token = "",
       this.query = "",
       this.emptyMessage = 'No lists found',
@@ -38,7 +38,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
     _sort = widget.sort;
     _listsBloc.addEvent(RankedListPreviewEvent(
         sort: _sort,
-        name: widget.name,
+        userId: widget.userId,
         token: widget.token,
         query: widget.query,
         refresh: false));
@@ -58,7 +58,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
       if (!_listsBloc.hitMax) {
         _listsBloc.addEvent(RankedListPreviewEvent(
             sort: _sort,
-            name: widget.name,
+            userId: widget.userId,
             token: widget.token,
             query: widget.query,
             refresh: false));
@@ -79,7 +79,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                 print("Refreshing list");
                 _listsBloc.addEvent(RankedListPreviewEvent(
                     sort: _sort,
-                    name: widget.name,
+                    userId: widget.userId,
                     token: widget.token,
                     query: widget.query,
                     refresh: true));
@@ -127,10 +127,7 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
           );
         } else if (snapshot.hasError) {
           return Text("Error retrieving items...",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
+              style: Theme.of(context).textTheme.headline6,
               textAlign: TextAlign.center);
         }
 

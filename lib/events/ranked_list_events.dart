@@ -4,7 +4,7 @@ import 'package:rank_ten/models/ranked_list.dart';
 abstract class RankedListEvent {}
 
 class GetRankedListEvent extends RankedListEvent {
-  final String listId;
+  final int listId;
 
   GetRankedListEvent(this.listId);
 }
@@ -42,9 +42,7 @@ class RankedListItemCreateEvent extends RankedListEvent {
   final String itemName, itemDescription, imageUrl;
 
   RankedListItemCreateEvent(
-      {@required this.itemName,
-      @required this.itemDescription,
-      this.imageUrl = ""});
+      {@required this.itemName, this.itemDescription = "", this.imageUrl = ""});
 }
 
 class RankedListReorderEvent extends RankedListEvent {
@@ -63,14 +61,16 @@ class CreateRankedListEvent extends RankedListEvent {
 
 class UpdateRankedListEvent extends RankedListEvent {
   final RankedList rankedList;
-  final String token, listId;
+  final String token;
+  final int listId;
 
   UpdateRankedListEvent(
       {@required this.rankedList, @required this.token, @required this.listId});
 }
 
 class DeleteRankedListEvent extends RankedListEvent {
-  final String token, listId;
+  final String token;
+  final int listId;
 
   DeleteRankedListEvent({@required this.token, @required this.listId});
 }

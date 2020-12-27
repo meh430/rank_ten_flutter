@@ -1,47 +1,44 @@
 class RankItem {
-  String id;
+  int itemId;
+  int listId;
+  String listTitle;
   bool private;
-  String belongsTo;
-  String parentTitle;
-  String description;
+  int ranking;
   String itemName;
+  String description;
   String picture;
-  int rank;
 
   RankItem(
-      {this.id,
-      this.belongsTo,
+      {this.itemId,
+      this.listId,
+      this.listTitle,
       this.private,
-      this.parentTitle,
-      this.description,
+      this.ranking,
       this.itemName,
-      this.picture,
-      this.rank});
+      this.description,
+      this.picture});
 
   RankItem.fromJson(Map<String, dynamic> json) {
-    id = json['_id'][r'$oid'];
-    belongsTo = json['belongs_to'][r'$oid'];
-    private = json['private'];
-    parentTitle = json['parent_title'];
-    description = json['description'];
-    itemName = json['item_name'];
-    picture = json['picture'];
-    rank = json['rank'];
+    itemId = json['itemId'];
+    listId = json['listId'];
+    listTitle = json['listTitle'];
+    private = json['private'] == 0 ? false : true;
+    ranking = json['ranking'];
+    itemName = json['itemName'];
+    description = json['description'] == null ? "" : json['description'];
+    picture = json['picture'] == null ? "" : json['picture'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    if (this.id != null) {
-      data['_id'] = this.id;
-    }
-
-    data['description'] = this.description;
-    data['item_name'] = this.itemName;
-    data['picture'] = this.picture;
-    data['rank'] = this.rank;
-    data['parent_title'] = this.parentTitle;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['itemId'] = this.itemId;
+    data['listId'] = this.listId;
+    data['listTitle'] = this.listTitle;
     data['private'] = this.private;
-
+    data['ranking'] = this.ranking;
+    data['itemName'] = this.itemName;
+    data['description'] = this.description;
+    data['picture'] = this.picture;
     return data;
   }
 }

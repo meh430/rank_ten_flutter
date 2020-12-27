@@ -1,75 +1,128 @@
 class RankedListCard {
-  String id;
-  String userName;
-  String profPic;
-  String title;
+  int listId;
+  int userId;
   int dateCreated;
+  String title;
+  bool private;
+  String username;
+  String profilePic;
   int numLikes;
-  int numItems;
   int numComments;
-  CommentPreview commentPreview;
-  List<RankItemPreview> rankList;
+  List<RankItemPreview> rankItems;
+  int numItems;
   String picture;
+  CommentPreview commentPreview;
 
   RankedListCard(
-      {this.id,
-      this.userName,
-      this.profPic,
-      this.title,
+      {this.listId,
+      this.userId,
       this.dateCreated,
+      this.title,
+      this.private,
+      this.username,
+      this.profilePic,
       this.numLikes,
-      this.numItems,
       this.numComments,
-      this.commentPreview,
-      this.rankList,
-      this.picture});
+      this.rankItems,
+      this.numItems,
+      this.picture,
+      this.commentPreview});
 
   RankedListCard.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    userName = json['user_name'];
-    profPic = json['prof_pic'];
+    listId = json['listId'];
+    userId = json['userId'];
+    dateCreated = json['dateCreated'];
     title = json['title'];
-    dateCreated = json['date_created'][r'$date'];
-    numLikes = json['num_likes'];
-    numItems = json['num_rank_items'];
-    numComments = json['num_comments'];
-    commentPreview = json['comment_preview'] != null
-        ? CommentPreview.fromJson(json['comment_preview'])
-        : null;
-    if (json['rank_list'] != null) {
-      rankList = List<RankItemPreview>();
-      json['rank_list'].forEach((v) {
-        rankList.add(RankItemPreview.fromJson(v));
+    private = json['private'] == 0 ? false : true;
+    username = json['username'];
+    profilePic = json['profilePic'] == null ? "" : json['profilePic'];
+    numLikes = json['numLikes'];
+    numComments = json['numComments'];
+    if (json['rankItems'] != null) {
+      rankItems = new List<RankItemPreview>();
+      json['rankItems'].forEach((v) {
+        rankItems.add(new RankItemPreview.fromJson(v));
       });
     }
-    picture = json['picture'];
+    numItems = json['numItems'];
+    picture = json['picture'] == null ? "" : json['picture'];
+    commentPreview =
+        json.containsKey('commentPreview') && json['commentPreview'] != null
+            ? new CommentPreview.fromJson(json['commentPreview'])
+            : null;
   }
-}
 
-class CommentPreview {
-  String comment;
-  String userName;
-  String profPic;
-  int dateCreated;
-
-  CommentPreview({this.comment, this.userName, this.dateCreated, this.profPic});
-
-  CommentPreview.fromJson(Map<String, dynamic> json) {
-    comment = json['comment'];
-    userName = json['user_name'];
-    dateCreated = json['date_created'];
-    profPic = json['prof_pic'];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['listId'] = this.listId;
+    data['userId'] = this.userId;
+    data['dateCreated'] = this.dateCreated;
+    data['title'] = this.title;
+    data['private'] = this.private;
+    data['username'] = this.username;
+    data['profilePic'] = this.profilePic;
+    data['numLikes'] = this.numLikes;
+    data['numComments'] = this.numComments;
+    if (this.rankItems != null) {
+      data['rankItems'] = this.rankItems.map((v) => v.toJson()).toList();
+    }
+    data['numItems'] = this.numItems;
+    data['picture'] = this.picture;
+    if (this.commentPreview != null) {
+      data['commentPreview'] = this.commentPreview.toJson();
+    }
+    return data;
   }
 }
 
 class RankItemPreview {
   String itemName;
-  int rank;
+  int ranking;
 
-  RankItemPreview({this.itemName, this.rank});
+  RankItemPreview({this.itemName, this.ranking});
 
   RankItemPreview.fromJson(Map<String, dynamic> json) {
-    itemName = json['item_name'];
-    rank = json['rank'];
+    itemName = json['itemName'];
+    ranking = json['ranking'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['itemName'] = this.itemName;
+    data['ranking'] = this.ranking;
+    return data;
+  }
+}
+
+class CommentPreview {
+  String comment;
+  String profilePic;
+  String username;
+  int userId;
+  int dateCreated;
+
+  CommentPreview(
+      {this.comment,
+      this.profilePic,
+      this.username,
+      this.userId,
+      this.dateCreated});
+
+  CommentPreview.fromJson(Map<String, dynamic> json) {
+    comment = json['comment'];
+    profilePic = json['profilePic'] == null ? "" : json['profilePic'];
+    username = json['username'];
+    userId = json['userId'];
+    dateCreated = json['dateCreated'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['comment'] = this.comment;
+    data['profilePic'] = this.profilePic;
+    data['username'] = this.username;
+    data['userId'] = this.userId;
+    data['dateCreated'] = this.dateCreated;
+    return data;
   }
 }

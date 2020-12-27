@@ -44,7 +44,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
       _sortOption = DATE_ASC;
     }
     _listsBloc.addEvent(RankedListPreviewEvent(
-        name: _userProvider.mainUser.userName,
+        userId: _userProvider.mainUser.userId,
         token: _userProvider.jwtToken,
         refresh: true,
         sort: _sortOption));
@@ -57,7 +57,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
 
     _listsBloc.addEvent(RankedListPreviewEvent(
-        name: _userProvider.mainUser.userName,
+        userId: _userProvider.mainUser.userId,
         token: _userProvider.jwtToken,
         sort: _sortOption));
   }
@@ -104,12 +104,12 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => Future.delayed(Duration(milliseconds: 0), () {
-        _userProvider.addUserEvent(GetUserEvent(_userProvider.mainUser.userName,
+        _userProvider.addUserEvent(GetUserEvent(_userProvider.mainUser.userId,
             token: _userProvider.jwtToken));
         _listsBloc.addEvent(RankedListPreviewEvent(
             token: _userProvider.jwtToken,
             sort: _sortOption,
-            name: _userProvider.mainUser.userName,
+            userId: _userProvider.mainUser.userId,
             refresh: true));
       }),
       child: SingleChildScrollView(
@@ -132,7 +132,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                             vertical: 10, horizontal: 20),
                         child: Row(
                           children: [
-                            Text("${_userProvider.mainUser.userName}'s Lists",
+                            Text("${_userProvider.mainUser.username}'s Lists",
                                 style: Theme.of(context).textTheme.headline4),
                             getSortAction(
                                 context: context,
@@ -146,7 +146,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                         )),
                     UserTopLists(
                         key: UniqueKey(),
-                        name: _userProvider.mainUser.userName,
+                        name: _userProvider.mainUser.username,
                         topLists: snapshot.data),
                   ],
                 );
@@ -181,14 +181,13 @@ class LogOutButton extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
             child: Text("Log Out",
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .headline4
                     .copyWith(color: white)),
           ),
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           onPressed: () {
             PreferencesStore().clearAll();
             Provider.of<MainUserProvider>(context, listen: false).logOut();
@@ -196,10 +195,11 @@ class LogOutButton extends StatelessWidget {
             Navigator.pushNamed(context, '/login_signup');
           }),
     );
-
-    return RaisedButton(
+  }
+}
+/*return RaisedButton(
       padding:
-      const EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
+          const EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),
       color: paraPink,
       onPressed: () {
         PreferencesStore().clearAll();
@@ -216,5 +216,4 @@ class LogOutButton extends StatelessWidget {
               .headline3
               .copyWith(color: palePurple)),
     );
-  }
-}
+* */

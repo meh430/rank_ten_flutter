@@ -1,104 +1,111 @@
 class User {
-  String id;
+  int userId;
   int dateCreated;
-  String userName;
+  String username;
+  String password;
   String bio;
-  String profPic;
-  int numFollowers;
-  int numFollowing;
+  String profilePic;
   int rankPoints;
+  int numLists;
   int numComments;
-  int numLiked;
-  int listNum;
+  int numFollowing;
+  int numFollowers;
+  Set<int> following;
+  Set<int> likedLists;
+  Set<int> likedComments;
   String jwtToken;
-  Set<String> followers;
-  Set<String> following;
-  Set<String> likedLists;
 
   User(
-      {this.id,
+      {this.userId,
       this.dateCreated,
-      this.userName,
+      this.username,
+      this.password,
       this.bio,
-      this.profPic,
-      this.numFollowers,
-      this.numFollowing,
+      this.profilePic,
       this.rankPoints,
+      this.numLists,
       this.numComments,
-      this.numLiked,
-      this.listNum,
-      this.jwtToken,
+      this.numFollowing,
+      this.numFollowers,
+      this.following,
       this.likedLists,
-      this.followers,
-      this.following});
+      this.likedComments,
+      this.jwtToken});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['_id'] != null ? json['_id'][r'$oid'] : null;
-    dateCreated =
-        json['date_created'] != null ? json['date_created'][r'$date'] : null;
-    userName = json['user_name'];
-    bio = json['bio'];
-    profPic = json['prof_pic'];
-    rankPoints = json['rank_points'];
-    numComments = json['num_comments'];
-    numFollowers = json['num_followers'];
-    numFollowing = json['num_following'];
-    numLiked = json['num_liked'];
-
+    userId = json['userId'];
+    dateCreated = json['dateCreated'];
+    username = json['username'];
+    password = json['password'];
+    bio = json['bio'] == null ? "" : json['bio'];
+    profilePic = json['profilePic'] == null ? "" : json['profilePic'];
+    rankPoints = json['rankPoints'];
+    numLists = json['numLists'];
+    numComments = json['numComments'];
+    numFollowing = json['numFollowing'];
+    numFollowers = json['numFollowers'];
     if (json['following'] != null) {
-      following = Set<String>();
-      json['following'].forEach((v) => following.add(v[r'$oid']));
+      following = new Set<int>();
+      json['following'].forEach((v) {
+        following.add(v);
+      });
     }
-
-    if (json['followers'] != null) {
-      followers = Set<String>();
-      json['followers'].forEach((v) => followers.add(v[r'$oid']));
+    if (json['likedLists'] != null) {
+      likedLists = new Set<int>();
+      json['likedLists'].forEach((v) {
+        likedLists.add(v);
+      });
     }
-
-    if(json['liked_lists'] != null) {
-      likedLists = Set<String>();
-      json['liked_lists'].forEach((v) => likedLists.add(v[r'$oid']));
+    if (json['likedComments'] != null) {
+      likedComments = new Set<int>();
+      json['likedComments'].forEach((v) {
+        likedComments.add(v);
+      });
     }
-
-    listNum = json['list_num'];
-    jwtToken = json['jwt_token'];
+    jwtToken = json['jwtToken'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-
-    //if (this.dateCreated != null) {
-    //data['date_created'][r'$date'] = dateCreated;
-    //}
-
-    //data['user_name'] = this.userName;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userId'] = this.userId;
+    data['dateCreated'] = this.dateCreated;
+    data['username'] = this.username;
+    data['password'] = this.password;
     data['bio'] = this.bio;
-    data['prof_pic'] = this.profPic;
-    //data['rank_points'] = this.rankPoints;
-    //data['num_comments'] = this.numComments;
-    //data['list_num'] = this.listNum;
-
+    data['profilePic'] = this.profilePic;
+    data['rankPoints'] = this.rankPoints;
+    data['numLists'] = this.numLists;
+    data['numComments'] = this.numComments;
+    data['numFollowing'] = this.numFollowing;
+    data['numFollowers'] = this.numFollowers;
+    if (this.following != null) {
+      data['following'] = this.following.map((v) => v).toList();
+    }
+    if (this.likedLists != null) {
+      data['likedLists'] = this.likedLists.map((v) => v).toList();
+    }
+    if (this.likedComments != null) {
+      data['likedComments'] = this.likedComments.map((v) => v).toList();
+    }
+    data['jwtToken'] = this.jwtToken;
     return data;
-  }
-
-  @override
-  String toString() {
-    return "Name: $userName";
   }
 }
 
 class UserPreview {
-  String userName;
-  String profPic;
+  String username;
+  String profilePic;
   String bio;
-  int rankPoints;
+  int rankPoints, userId;
 
-  UserPreview({this.userName, this.profPic, this.bio, this.rankPoints});
+  UserPreview(
+      {this.username, this.profilePic, this.bio, this.rankPoints, this.userId});
 
   UserPreview.fromJson(Map<String, dynamic> json) {
-    rankPoints = json['rank_points'];
-    userName = json['user_name'];
-    profPic = json['prof_pic'];
-    bio = json['bio'];
+    rankPoints = json['rankPoints'];
+    username = json['username'];
+    userId = json['userId'];
+    profilePic = json['profilePic'] == null ? "" : json['profilePic'];
+    bio = json['bio'] == null ? "" : json['bio'];
   }
 }

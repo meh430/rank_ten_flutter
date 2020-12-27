@@ -1,45 +1,44 @@
 class Comment {
-  String id;
-  String belongsTo;
-  String comment;
+  int commentId;
+  int userId;
+  int listId;
   int dateCreated;
-  bool edited;
-  Set<String> likedUsers;
+  String comment;
+  String username;
+  String profilePic;
   int numLikes;
-  String profPic;
-  String userName;
 
   Comment(
-      {this.id,
-      this.belongsTo,
-      this.comment,
+      {this.commentId,
+      this.userId,
+      this.listId,
       this.dateCreated,
-      this.edited,
-      this.likedUsers,
-      this.numLikes,
-      this.profPic,
-      this.userName});
+      this.comment,
+      this.username,
+      this.profilePic,
+      this.numLikes});
 
   Comment.fromJson(Map<String, dynamic> json) {
-    id = json['_id'][r'$oid'];
-    belongsTo = json['belongs_to'][r'$oid'];
-    comment = json['comment'];
-    dateCreated = json['date_created'][r'$date'];
-    edited = json['edited'];
-    if (json['liked_users'] != null) {
-      likedUsers = new Set<String>();
-      json['liked_users'].forEach((v) {
-        likedUsers.add(v[r'$oid']);
-      });
-    }
-    numLikes = json['num_likes'];
-    profPic = json['prof_pic'];
-    userName = json['user_name'];
+    commentId = json['commentId'];
+    userId = json['userId'];
+    listId = json['listId'];
+    dateCreated = json['dateCreated'];
+    comment = json['comment'] == null ? "" : json['comment'];
+    username = json['username'];
+    profilePic = json['profilePic'] == null ? "" : json['profilePic'];
+    numLikes = json['numLikes'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['commentId'] = this.commentId;
+    data['userId'] = this.userId;
+    data['listId'] = this.listId;
+    data['dateCreated'] = this.dateCreated;
     data['comment'] = this.comment;
+    data['username'] = this.username;
+    data['profilePic'] = this.profilePic;
+    data['numLikes'] = this.numLikes;
     return data;
   }
 }

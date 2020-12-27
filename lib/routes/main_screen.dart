@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen>
     super.initState();
     _appBarTitles.add(Provider.of<MainUserProvider>(context, listen: false)
         .mainUser
-        .userName);
+        .username);
     _searchTabController = TabController(length: 2, vsync: this);
   }
 
@@ -191,7 +191,7 @@ class _MainAppBarState extends State<MainAppBar> {
               widget.index == 3
                   ? Provider.of<MainUserProvider>(context, listen: false)
                       .mainUser
-                      .userName
+                      .username
                   : _appBarTitles[widget.index],
               style: Theme.of(context).primaryTextTheme.headline3)),
     );
@@ -241,17 +241,13 @@ class _SearchAppBarState extends State<SearchAppBar> {
         ),
         title: TextField(
           controller: _searchController,
-          style: Theme
-              .of(context)
-              .textTheme
-              .headline6,
+          style: Theme.of(context).textTheme.headline6,
           textInputAction: TextInputAction.search,
           decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: secondText)),
               hintText: "Search...",
-              hintStyle: Theme
-                  .of(context)
+              hintStyle: Theme.of(context)
                   .textTheme
                   .headline6
                   .copyWith(color: secondText)),
@@ -260,9 +256,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 }
 
-Widget getSortAction({@required BuildContext context,
-  @required bool isDark,
-  @required dynamic sortCallback}) {
+Widget getSortAction(
+    {@required BuildContext context,
+    @required bool isDark,
+    @required dynamic sortCallback}) {
   return IconButton(
     icon: Icon(Icons.sort, color: isDark ? lavender : darkSienna),
     onPressed: () {
@@ -301,12 +298,9 @@ Widget getSortOption(
     {BuildContext context, String title, dynamic sortCallback}) {
   return GestureDetector(
     child: ListTile(
-      title: Text(title, style: Theme
-          .of(context)
-          .textTheme
-          .headline5),
+      title: Text(title, style: Theme.of(context).textTheme.headline5),
       contentPadding:
-      const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 10),
+          const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 10),
     ),
     onTap: () {
       sortCallback(title);

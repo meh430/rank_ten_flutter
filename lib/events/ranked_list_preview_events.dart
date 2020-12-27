@@ -1,13 +1,12 @@
 class RankedListPreviewEvent {
-  final int sort;
-  final String name;
+  final int sort, userId;
   final String token;
   final String query;
   final bool refresh;
 
   RankedListPreviewEvent(
       {this.sort = 0,
-      this.name = "",
+      this.userId = 0,
       this.token = "",
       this.query = "",
       this.refresh = false});

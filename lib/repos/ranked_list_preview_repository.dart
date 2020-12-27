@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:rank_ten/api/rank_api.dart';
-import 'package:rank_ten/api/rank_exceptions.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 
 //page, sort
@@ -21,9 +20,9 @@ const SEARCH_LISTS = 'search_lists';
 class RankedListPreviewRepository {
   RankApi _api = RankApi();
 
-  Future<List<RankedListCard>> getRankedListPreview(
+  Future<Map<String, dynamic>> getRankedListPreview(
       {@required String endpointBase,
-      String name,
+      int userId,
       int page,
       int sort,
       String token = "",
@@ -42,14 +41,14 @@ class RankedListPreviewRepository {
         endpoint += '/$page/$sort';
         break;
       case USER_LISTS:
-        endpoint += '/$name/$page/$sort';
+        endpoint += '/$userId/$page/$sort';
         break;
       case USER_LISTS_ALL:
         endpoint += '/$page/$sort';
         break;
       case USER_TOP_LISTS:
         endpoint =
-            '/rankedlists${token.isNotEmpty ? 'p' : ''}/${token.isEmpty ? name + '/' : ''}1/$sort';
+            '/rankedlists${token.isNotEmpty ? 'p' : ''}/${token.isEmpty ? '$userId/' : ''}0/$sort';
         break;
       case SEARCH_LISTS:
         query = query.replaceAll(" ", "+");
@@ -65,21 +64,17 @@ class RankedListPreviewRepository {
       }
     }
 
-
-
     final response = await _api.get(endpoint: endpoint, bearerToken: token);
-    var listPreviews = List<RankedListCard>();
-    if(response[0] is String && response[0].contains("page")) {
-      return [];
-    }
 
-    response
+    var listPreviews = List<RankedListCard>();
+
+    response["items"]
         .forEach((rList) => listPreviews.add(RankedListCard.fromJson(rList)));
 
     if (endpointBase == USER_TOP_LISTS && listPreviews.length >= 5) {
-      return listPreviews.sublist(0, 5);
+      return {"items": listPreviews.sublist(0, 5), "lastPage": 0};
     }
-
-    return listPreviews;
+    response["items"] = listPreviews;
+    return response;
   }
 }

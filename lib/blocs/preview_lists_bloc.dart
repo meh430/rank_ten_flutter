@@ -20,18 +20,16 @@ class PreviewListsBloc
   Future<void> eventToState(event) async {
     super.eventToState(event);
     if (event is RankedListPreviewEvent) {
-      paginate(
-          (pageNum) {
-            return _previewRepository.getRankedListPreview(
-                endpointBase: endpointBase,
-                name: event.name,
-                page: pageNum,
-                sort: event.sort,
-                token: event.token,
-                query: event.query,
-                refresh: event.refresh);
-          },
-          event);
+      paginate((pageNum) {
+        return _previewRepository.getRankedListPreview(
+            endpointBase: endpointBase,
+            userId: event.userId,
+            page: pageNum,
+            sort: event.sort,
+            token: event.token,
+            query: event.query,
+            refresh: event.refresh);
+      }, event);
     }
   }
 }

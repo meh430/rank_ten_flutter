@@ -15,11 +15,12 @@ import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/repos/ranked_list_repository.dart';
 
 class RankedListEditScreen extends StatefulWidget {
-  final String listId, listTitle;
+  final String listTitle;
+  final int listId;
   final bool isNew;
 
   const RankedListEditScreen(
-      {Key key, this.listId = "", this.listTitle = "Title", this.isNew = false})
+      {Key key, this.listId = 0, this.listTitle = "Title", this.isNew = false})
       : super(key: key);
 
   @override
@@ -89,7 +90,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
               context: context, error: "Title cannot be empty");
         }
 
-        if (_rankedListBloc.model.rankList.length < 1) {
+        if (_rankedListBloc.model.rankItems.length < 1) {
           return showErrorDialog(
               context: context, error: "List should have at least 1 items");
         }
@@ -108,7 +109,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
               builder: (context) => ListFutureDialog(
                     listFuture: RankedListRepository().updateRankedList(
                         rankedList: _rankedListBloc.model,
-                        listId: _rankedListBloc.model.id,
+                        listId: _rankedListBloc.model.listId,
                         token: userProvider.jwtToken),
                   ));
         }
@@ -146,10 +147,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                   })
             ],
             title: TextField(
-              style: Theme
-                  .of(context)
-                  .primaryTextTheme
-                  .headline5,
+              style: Theme.of(context).primaryTextTheme.headline5,
               controller: _titleController,
               textInputAction: TextInputAction.done,
               onSubmitted: (value) =>
@@ -162,8 +160,8 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                   (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
                 if (snapshot.hasData) {
                   List<Widget> listChildren = [];
-                  for (int i = 0; i < snapshot.data.rankList.length; i++) {
-                    var rItem = snapshot.data.rankList[i];
+                  for (int i = 0; i < snapshot.data.rankItems.length; i++) {
+                    var rItem = snapshot.data.rankItems[i];
                     listChildren.add(Dismissible(
                       onDismissed: (direction) {
                         _rankedListBloc.addEvent(RankedListItemDeleteEvent(i));
@@ -171,13 +169,12 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                       key: ObjectKey(rItem),
                       background: Container(color: Colors.red),
                       child: RankItemViewCard(
-                        onTap: () =>
-                            showRankItemEditDialog(
-                                isNew: false,
-                                context: context,
-                                index: i,
-                                rankedListBloc: _rankedListBloc,
-                                rankItem: rItem),
+                        onTap: () => showRankItemEditDialog(
+                            isNew: false,
+                            context: context,
+                            index: i,
+                            rankedListBloc: _rankedListBloc,
+                            rankItem: rItem),
                         rankItem: rItem,
                       ),
                     ));
@@ -192,10 +189,12 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                               child: widget.isNew
                                   ? SizedBox()
                                   : CardHeader(
-                                  shouldPushInfo: false,
-                                  userName: snapshot.data.userName,
-                                  profPicUrl: userProvider.mainUser.profPic,
-                                  dateCreated: snapshot.data.dateCreated),
+                                      userId: snapshot.data.userId,
+                                      shouldPushInfo: false,
+                                      userName: snapshot.data.username,
+                                      profPicUrl:
+                                          userProvider.mainUser.profilePic,
+                                      dateCreated: snapshot.data.dateCreated),
                             ),
                             onReorder: (int oldIndex, int newIndex) {
                               _rankedListBloc.addEvent(RankedListReorderEvent(
@@ -211,12 +210,11 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0)),
                           color: paraPink,
-                          onPressed: () =>
-                              showRankItemEditDialog(
-                                isNew: true,
-                                context: context,
-                                rankedListBloc: _rankedListBloc,
-                              ),
+                          onPressed: () => showRankItemEditDialog(
+                            isNew: true,
+                            context: context,
+                            rankedListBloc: _rankedListBloc,
+                          ),
                           child: Icon(Icons.add, color: palePurple),
                         ),
                       )
@@ -230,24 +228,26 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
   }
 }
 
-void showRankItemEditDialog({@required BuildContext context,
-  @required RankedListBloc rankedListBloc,
-  int index,
-  RankItem rankItem,
-  @required bool isNew}) {
+void showRankItemEditDialog(
+    {@required BuildContext context,
+    @required RankedListBloc rankedListBloc,
+    int index,
+    RankItem rankItem,
+    @required bool isNew}) {
   showDialog(
       context: context,
-      builder: (context) =>
-          RankItemEditDialog(
-              rankItem: rankItem,
-              isNew: isNew,
-              rankedListBloc: rankedListBloc,
-              index: index));
+      builder: (context) => RankItemEditDialog(
+          rankItem: rankItem,
+          isNew: isNew,
+          rankedListBloc: rankedListBloc,
+          index: index));
 }
 
 class RankedListEditScreenArgs {
-  final String listId, listTitle;
+  final String listTitle;
   final bool isNew;
+  final int listId;
 
-  RankedListEditScreenArgs({this.listId, this.listTitle = "Title", this.isNew});
+  RankedListEditScreenArgs(
+      {this.listId = 0, this.listTitle = "Title", this.isNew});
 }

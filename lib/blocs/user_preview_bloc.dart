@@ -22,11 +22,11 @@ class UserPreviewBloc extends Bloc<List<UserPreview>, UserPreviewEvent> {
           (pageNum) {
             return _userPreviewRepository.getUserPreview(
                 endpointBase: endpointBase,
-                name: event.name,
-                page: pageNum,
-                sort: event.sort,
-                query: event.query,
-                refresh: event.refresh);
+            id: event.userId,
+            page: pageNum,
+            sort: event.sort,
+            query: event.query,
+            refresh: event.refresh);
           },
           event,
           endpointBase: endpointBase);

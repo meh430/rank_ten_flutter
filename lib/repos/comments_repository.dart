@@ -4,8 +4,8 @@ import 'package:rank_ten/models/comment.dart';
 class CommentsRepository {
   RankApi _api = RankApi();
 
-  Future<List<Comment>> getListComments(
-      {String listId, int page, int sort, bool refresh = false}) async {
+  Future<Map<String, dynamic>> getListComments(
+      {int listId, int page, int sort, bool refresh = false}) async {
     var endpoint = '/comments/$listId/$page/$sort';
     if (refresh) {
       endpoint += '?re=True';
@@ -14,11 +14,12 @@ class CommentsRepository {
     var response = await _api.get(endpoint: endpoint);
     var comments = List<Comment>();
     try {
-      response.forEach((c) => comments.add(Comment.fromJson(c)));
+      response["items"].forEach((c) => comments.add(Comment.fromJson(c)));
     } catch (e) {
-      return [];
+      return response;
     }
-    return comments;
+    response["items"] = comments;
+    return response;
   }
 
   Future<List<Comment>> getUserComments(
@@ -31,15 +32,15 @@ class CommentsRepository {
 
     var userComments = List<Comment>();
     try {
-      response.forEach((c) => userComments.add(Comment.fromJson(c)));
-    } catch(e) {
+      response["items"].forEach((c) => userComments.add(Comment.fromJson(c)));
+    } catch (e) {
       return [];
     }
-    return userComments;
+    response["items"] = userComments;
+    return response;
   }
 
-  Future<Comment> addComment(
-      {String listId, String token, String comment}) async {
+  Future<Comment> addComment({int listId, String token, String comment}) async {
     var response = await _api.post(
         endpoint: '/comment/$listId',
         data: {'comment': comment},
@@ -47,14 +48,14 @@ class CommentsRepository {
     return Comment.fromJson(response);
   }
 
-  Future<dynamic> deleteComment({String commentId, String token}) async {
+  Future<dynamic> deleteComment({int commentId, String token}) async {
     var response =
         await _api.delete(endpoint: '/comment/$commentId', bearerToken: token);
     return response;
   }
 
   Future<Comment> updateComment(
-      {String commentId, String comment, String token}) async {
+      {int commentId, String comment, String token}) async {
     var response = await _api.put(
         endpoint: '/comment/$commentId',
         data: {'comment': comment},
@@ -63,13 +64,14 @@ class CommentsRepository {
     return Comment.fromJson(response);
   }
 
-  Future<Map<String, String>> getCommentParent({String commentId}) async {
+  Future<Map<String, dynamic>> getCommentParent({int commentId}) async {
     var response = await _api.get(endpoint: '/comment/$commentId');
 
     return {
-      '_id': response['_id'][r'$oid'],
+      'listId': response['listId'],
       'title': response['title'],
-      'user_name': response['user_name']
+      'username': response['username'],
+      'userId': response['userId']
     };
   }
 }

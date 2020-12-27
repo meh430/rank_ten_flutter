@@ -7,14 +7,14 @@ class UpdateBioEvent extends UserEvent {
 }
 
 class UpdateProfilePicEvent extends UserEvent {
-  final String profPic, token;
+  final String profilePic, token;
 
-  UpdateProfilePicEvent({this.profPic, this.token});
+  UpdateProfilePicEvent({this.profilePic, this.token});
 }
 
 class GetUserEvent extends UserEvent {
-  final String name;
+  final int userId;
   final String token;
 
-  GetUserEvent(this.name, {this.token = ""});
+  GetUserEvent(this.userId, {this.token = ""});
 }

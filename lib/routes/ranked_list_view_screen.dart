@@ -16,8 +16,9 @@ import 'package:rank_ten/repos/user_repository.dart';
 import 'package:rank_ten/routes/ranked_list_edit_screen.dart';
 
 class RankedListViewScreen extends StatefulWidget {
-  final String listId, listTitle, profPic;
+  final String listTitle, profPic;
   final bool isMain, shouldPushInfo;
+  final int listId;
 
   RankedListViewScreen(
       {Key key,
@@ -76,12 +77,13 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                 listChildren.add(Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: CardHeader(
+                      userId: snapshot.data.userId,
                       shouldPushInfo: widget.shouldPushInfo,
-                      userName: snapshot.data.userName,
+                      userName: snapshot.data.username,
                       profPicUrl: widget.profPic,
                       dateCreated: snapshot.data.dateCreated),
                 ));
-                snapshot.data.rankList
+                snapshot.data.rankItems
                     .forEach((rItem) => listChildren.add(RankItemViewCard(
                           rankItem: rItem,
                         )));
@@ -153,12 +155,12 @@ class RankListBottomBar extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.message),
-                  onPressed: () =>
-                      showListComments(context: context, listId: rankedList.id),
+                  onPressed: () => showListComments(
+                      context: context, listId: rankedList.listId),
                 ),
                 GestureDetector(
-                  onTap: () =>
-                      showListComments(context: context, listId: rankedList.id),
+                  onTap: () => showListComments(
+                      context: context, listId: rankedList.listId),
                   child: Text(
                     "${rankedList.numComments} comments",
                     style: Theme.of(context).textTheme.headline5,
@@ -195,7 +197,8 @@ class _LikeWidgetState extends State<LikeWidget> {
     _numLikes = widget.rankedList.numLikes;
     _likeFuture =
         Future.delayed(Duration(milliseconds: 5), () => LikeResponse.init);
-    _isLiked = _userProvider.mainUser.likedLists.contains(widget.rankedList.id);
+    _isLiked =
+        _userProvider.mainUser.likedLists.contains(widget.rankedList.listId);
     _error = false;
   }
 
@@ -247,19 +250,16 @@ class _LikeWidgetState extends State<LikeWidget> {
                   onPressed: () {
                     setState(() {
                       _likeFuture =
-                          _userProvider.likeList(widget.rankedList.id);
+                          _userProvider.likeList(widget.rankedList.listId);
                     });
                   },
                 ),
                 GestureDetector(
                   onTap: () => showLikedUsers(
-                      context: context, listId: widget.rankedList.id),
+                      context: context, listId: widget.rankedList.listId),
                   child: Text(
                     _error ? "Try Again" : "$_numLikes likes",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 )
               ],
@@ -272,8 +272,9 @@ class _LikeWidgetState extends State<LikeWidget> {
 }
 
 class RankedListViewScreenArgs {
-  final String listId, listTitle, profPic;
+  final String listTitle, profPic;
   final bool isMain, shouldPushInfo;
+  final int listId;
 
   RankedListViewScreenArgs(
       {@required this.profPic,
@@ -283,7 +284,7 @@ class RankedListViewScreenArgs {
       this.isMain = false});
 }
 
-void showLikedUsers({BuildContext context, String listId}) {
+void showLikedUsers({BuildContext context, int listId}) {
   showModalBottomSheet<void>(
     isDismissible: true,
     shape: RoundedRectangleBorder(
@@ -299,22 +300,18 @@ void showLikedUsers({BuildContext context, String listId}) {
             children: [
               Padding(
                   padding:
-                  EdgeInsets.only(bottom: 16, top: 8, left: 18, right: 16),
+                      EdgeInsets.only(bottom: 16, top: 8, left: 18, right: 16),
                   child: Text("Liked By",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .headline4)),
+                      style: Theme.of(context).textTheme.headline4)),
               Expanded(
-                  child:
-                  UserPreviewWidget(listType: LIKED_USERS, name: listId)),
+                  child: UserPreviewWidget(listType: LIKED_USERS, id: listId)),
             ],
           ));
     },
   );
 }
 
-void showListComments({BuildContext context, String listId}) {
+void showListComments({BuildContext context, int listId}) {
   showModalBottomSheet<void>(
       isDismissible: true,
       shape: RoundedRectangleBorder(

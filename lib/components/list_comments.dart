@@ -12,7 +12,7 @@ import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/routes/main_screen.dart';
 
 class ListComments extends StatefulWidget {
-  final String listId;
+  final int listId;
 
   ListComments({Key key, @required this.listId}) : super(key: key);
 
@@ -160,8 +160,7 @@ class _ListCommentsState extends State<ListComments> {
                                       padding: const EdgeInsets.all(20),
                                       child: Text(
                                         "No comments",
-                                        style: Theme
-                                            .of(context)
+                                        style: Theme.of(context)
                                             .textTheme
                                             .headline4,
                                         textAlign: TextAlign.center,
@@ -183,35 +182,36 @@ class _ListCommentsState extends State<ListComments> {
                               return SizedBox();
                             }
 
-                            var isMain = snapshot.data[index].userName ==
-                                userProvider.mainUser.userName;
+                            var isMain = snapshot.data[index].userId ==
+                                userProvider.mainUser.userId;
                             return isMain
                                 ? Dismissible(
-                              background: Container(color: Colors.red),
-                              key: ObjectKey(snapshot.data[index]),
-                              onDismissed: (direction) {
-                                _commentBloc.addEvent(DeleteCommentEvent(
-                                    token: userProvider.jwtToken,
-                                    commentId: snapshot.data[index].id));
-                              },
-                              child: CommentCard(
-                                  editCallback: (value) {
-                                    if (value.isNotEmpty) {
-                                      _commentBloc.addEvent(
-                                          UpdateCommentEvent(
-                                              commentId:
-                                              snapshot.data[index].id,
-                                              comment: value,
-                                              token:
-                                              userProvider.jwtToken));
-                                    }
-                                  },
-                                  comment: snapshot.data[index],
-                                  isMain: true),
-                            )
+                                    background: Container(color: Colors.red),
+                                    key: ObjectKey(snapshot.data[index]),
+                                    onDismissed: (direction) {
+                                      _commentBloc.addEvent(DeleteCommentEvent(
+                                          token: userProvider.jwtToken,
+                                          commentId:
+                                              snapshot.data[index].commentId));
+                                    },
+                                    child: CommentCard(
+                                        editCallback: (value) {
+                                          if (value.isNotEmpty) {
+                                            _commentBloc.addEvent(
+                                                UpdateCommentEvent(
+                                                    commentId: snapshot
+                                                        .data[index].commentId,
+                                                    comment: value,
+                                                    token:
+                                                        userProvider.jwtToken));
+                                          }
+                                        },
+                                        comment: snapshot.data[index],
+                                        isMain: true),
+                                  )
                                 : CommentCard(
-                                comment: snapshot.data[index],
-                                isMain: false);
+                                    comment: snapshot.data[index],
+                                    isMain: false);
                           }),
                     );
                   } else if (snapshot.hasError) {

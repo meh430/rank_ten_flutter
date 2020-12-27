@@ -9,8 +9,8 @@ enum FollowResponse { followed, unfollowed, init, error }
 class UserRepository {
   RankApi _api = RankApi();
 
-  Future<User> getUser(String name) async {
-    final response = await _api.get(endpoint: '/users/$name');
+  Future<User> getUser(int userId) async {
+    final response = await _api.get(endpoint: '/users/$userId');
     return User.fromJson(response);
   }
 
@@ -26,10 +26,11 @@ class UserRepository {
     return response;
   }
 
-  Future<FollowResponse> followUser({String name, String token}) async {
+  Future<FollowResponse> followUser({int userId, String token}) async {
     dynamic response;
     try {
-      response = await _api.post(endpoint: '/follow/$name', bearerToken: token);
+      response =
+          await _api.post(endpoint: '/follow/$userId', bearerToken: token);
     } catch (e) {
       return FollowResponse.error;
     }
@@ -41,7 +42,7 @@ class UserRepository {
     }
   }
 
-  Future<LikeResponse> likeList({String listId, String token}) async {
+  Future<LikeResponse> likeList({int listId, String token}) async {
     dynamic response;
 
     try {
@@ -57,7 +58,7 @@ class UserRepository {
     }
   }
 
-  Future<LikeResponse> likeComment({String commentId, String token}) async {
+  Future<LikeResponse> likeComment({int commentId, String token}) async {
     dynamic response;
 
     try {
@@ -72,12 +73,5 @@ class UserRepository {
     } else {
       return LikeResponse.liked;
     }
-  }
-
-  Future<Set<String>> getLikedListIds({String name, String token}) async {
-    final response =
-        await _api.get(endpoint: '/likes/1/0?ids=True', bearerToken: token);
-    return Set.from(
-        List.generate(response.length, (index) => response[index].toString()));
   }
 }

@@ -34,20 +34,24 @@ class RouteGenerator {
             centerAlignment: Alignment.center,
             maxRadius: 1000,
             page: ListScreen(
-                listType: args.listType, name: args.name, token: args.token));
+                listType: args.listType,
+                name: args.name,
+                token: args.token,
+                userId: args.userId));
       case '/user_preview_list':
         final UserPreviewScreenArgs args = settings.arguments;
         return CircularReveal(
           centerAlignment: Alignment.center,
           maxRadius: 1000,
-          page: UserPreviewScreen(listType: args.listType, name: args.name),
+          page: UserPreviewScreen(
+              listType: args.listType, name: args.name, id: args.id),
         );
       case '/user_info_screen':
         final UserInfoScreenArgs args = settings.arguments;
         return CircularReveal(
             centerAlignment: Alignment.center,
             maxRadius: 1000,
-            page: UserInfoScreen(name: args.name));
+            page: UserInfoScreen(name: args.name, userId: args.userId));
       case '/ranked_list_view':
         final RankedListViewScreenArgs args = settings.arguments;
         return CircularReveal(

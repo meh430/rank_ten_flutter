@@ -17,8 +17,7 @@ class Authorization {
   static Future<User> loginUser(
       {@required String userName, @required String password}) async {
     var response = await _api.post(
-        endpoint: '/login',
-        data: {'user_name': userName, 'password': password});
+        endpoint: '/login', data: {'username': userName, 'password': password});
     var user = User.fromJson(response);
     _store.saveCred(user.jwtToken, userName, password);
     return user;
@@ -30,7 +29,7 @@ class Authorization {
       @required String bio}) async {
     var response = await _api.post(
         endpoint: '/signup',
-        data: {'user_name': userName, 'password': password, 'bio': bio});
+        data: {'username': userName, 'password': password, 'bio': bio});
 
     var user = User.fromJson(response);
     _store.saveCred(user.jwtToken, userName, password);

@@ -17,7 +17,7 @@ abstract class Bloc<M, E> {
 
   StreamSink<E> get modelEventSink => modelEventController.sink;
 
-  int currentPage = 0;
+  int currentPage = -1;
   bool hitMax = false;
 
   void eventToState(dynamic event) async {}
@@ -27,6 +27,7 @@ abstract class Bloc<M, E> {
     modelEventController = StreamController<E>();
   }
 
+  // query is the network callback
   void paginate(dynamic query, dynamic event,
       {String endpointBase = ""}) async {
     if (hitMax && !event.refresh) {
@@ -36,35 +37,28 @@ abstract class Bloc<M, E> {
     try {
       print(event.refresh);
       if (event.refresh) {
-        currentPage = 1;
+        currentPage = 0;
         (model as List).clear();
       } else {
         currentPage += 1;
       }
-
+      print(currentPage);
+      // {items, itemCount}
       var pageContent = await query(currentPage);
 
-      if (event is UserPreviewEvent && endpointBase == SEARCH_USERS) {
-        if(pageContent.length < 100) {
-          hitMax = true;
-        } else if(pageContent.length == 100) {
-          var nextPage = await query(currentPage+1);
-          hitMax = nextPage.length == 0;
-        }
-      } else if(event is UserPreviewEvent) {
+      if ((event is UserPreviewEvent &&
+              endpointBase == SEARCH_USERS &&
+              pageContent["lastPage"] == currentPage) ||
+          (event is UserPreviewEvent) ||
+          (pageContent["lastPage"] == currentPage)) {
         hitMax = true;
-      } else if (pageContent.length < 10) {
-        hitMax = true;
-      } else if (pageContent.length == 10) {
-        var nextPage = await query(currentPage+1);
-        hitMax = nextPage.length == 0;
       }
 
-      (model as List).addAll(pageContent);
+      (model as List).addAll(pageContent["items"]);
       updateState();
     } on InvalidPageError {
       hitMax = true;
-      currentPage = (currentPage <= 1) ? 1 : (currentPage - 1);
+      currentPage = (currentPage < 0) ? -1 : (currentPage - 1);
       modelStateSink.add(model);
     }
   }

@@ -18,8 +18,8 @@ class UserPreviewCard extends StatelessWidget {
     Widget profPic = Padding(
       padding: const EdgeInsets.all(10),
       child: CircleImage(
-        profPicUrl: userPreview.profPic,
-        userName: userPreview.userName,
+        profPicUrl: userPreview.profilePic,
+        userName: userPreview.username,
         size: 80,
         textSize: 40,
       ),
@@ -27,12 +27,13 @@ class UserPreviewCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/user_info_screen',
-          arguments: UserInfoScreenArgs(name: userPreview.userName)),
+          arguments: UserInfoScreenArgs(
+              name: userPreview.username, userId: userPreview.userId)),
       child: Card(
           elevation: 4,
           margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Column(
             children: [
               Row(
@@ -47,7 +48,7 @@ class UserPreviewCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        userPreview.userName,
+                        userPreview.username,
                         style: Theme.of(context).textTheme.headline4,
                         textAlign: TextAlign.start,
                       ),
@@ -60,15 +61,11 @@ class UserPreviewCard extends StatelessWidget {
               ),
               userPreview.bio.isNotEmpty
                   ? Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(userPreview.bio,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5
-                        .copyWith(
-                        color: isDark ? Colors.white : secondText)),
-              )
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(userPreview.bio,
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                              color: isDark ? Colors.white : secondText)),
+                    )
                   : SizedBox()
             ],
           )),

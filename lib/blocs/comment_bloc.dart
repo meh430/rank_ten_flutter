@@ -17,25 +17,21 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
   void eventToState(event) async {
     super.eventToState(event);
     if (event is GetListCommentsEvent) {
-      paginate(
-          (pageNum) {
-            return _commentsRepository.getListComments(
-                listId: event.listId,
-                page: pageNum,
-                sort: event.sort,
-                refresh: event.refresh);
-          },
-          event);
+      paginate((pageNum) {
+        return _commentsRepository.getListComments(
+            listId: event.listId,
+            page: pageNum,
+            sort: event.sort,
+            refresh: event.refresh);
+      }, event);
     } else if (event is GetUserCommentsEvent) {
-      paginate(
-          (pageNum) {
-            return _commentsRepository.getUserComments(
-                token: event.token,
-                page: currentPage,
-                sort: event.sort,
-                refresh: event.refresh);
-          },
-          event);
+      paginate((pageNum) {
+        return _commentsRepository.getUserComments(
+            token: event.token,
+            page: currentPage,
+            sort: event.sort,
+            refresh: event.refresh);
+      }, event);
     } else if (event is AddCommentEvent) {
       var newComment = await _commentsRepository.addComment(
           listId: event.listId, token: event.token, comment: event.comment);
@@ -47,7 +43,7 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
           comment: event.comment,
           token: event.token);
       for (int i = 0; i < model.length; i++) {
-        if (model[i].id == event.commentId) {
+        if (model[i].commentId == event.commentId) {
           model[i] = updatedComment;
           break;
         }
@@ -58,7 +54,7 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
       await _commentsRepository.deleteComment(
           commentId: event.commentId, token: event.token);
       for (int i = 0; i < model.length; i++) {
-        if (model[i].id == event.commentId) {
+        if (model[i].commentId == event.commentId) {
           model.removeAt(i);
           break;
         }

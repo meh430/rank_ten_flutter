@@ -8,8 +8,10 @@ import 'package:rank_ten/routes/main_screen.dart';
 
 class ListScreen extends StatefulWidget {
   final String listType, name, token;
+  final int userId;
 
-  ListScreen({Key key, @required this.listType, this.name, this.token})
+  ListScreen(
+      {Key key, @required this.listType, this.name, this.userId, this.token})
       : super(key: key);
 
   @override
@@ -58,7 +60,7 @@ class _ListScreenState extends State<ListScreen> {
       body: GenericListPreviewWidget(
           key: UniqueKey(),
           listType: widget.listType,
-          name: widget.name,
+          userId: widget.userId,
           token: widget.token,
           sort: _sortOption),
     );
@@ -67,6 +69,11 @@ class _ListScreenState extends State<ListScreen> {
 
 class ListScreenArgs {
   final String listType, name, token;
+  final int userId;
 
-  ListScreenArgs({@required this.listType, this.name = "", this.token = ""});
+  ListScreenArgs(
+      {@required this.listType,
+      this.userId = 0,
+      this.name = "",
+      this.token = ""});
 }
