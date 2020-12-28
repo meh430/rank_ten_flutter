@@ -122,7 +122,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                       return GestureDetector(
                         onTap: () async {
                           Map<String, dynamic> listCard =
-                          await _commentsRepository.getCommentParent(
+                              await _commentsRepository.getCommentParent(
                                   commentId: snapshot.data[index].listId);
                           Navigator.pushNamed(context, '/ranked_list_view',
                               arguments: RankedListViewScreenArgs(
@@ -143,7 +143,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                       );
                     }),
               );
-            } else if (snapshot.hasError || snapshot.data == null) {
+            } else if (snapshot.hasError) {
               WidgetsBinding.instance.addPostFrameCallback(
                   (_) => Utils.showSB("Error getting user comments", context));
               return Utils.getErrorImage();

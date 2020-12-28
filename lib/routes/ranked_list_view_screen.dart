@@ -73,7 +73,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
             stream: _rankedListBloc.modelStateStream,
             builder:
                 (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
-                  if (snapshot.hasData && snapshot.data != null) {
+              if (snapshot.hasData && snapshot.data != null) {
                 List<Widget> listChildren = [];
                 listChildren.add(Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -109,7 +109,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                     )
                   ],
                 );
-              } else if (snapshot.hasError || snapshot.data == null) {
+              } else if (snapshot.hasError) {
                 WidgetsBinding.instance.addPostFrameCallback(
                     (_) => Utils.showSB("Error getting list", context));
                 return Utils.getErrorImage();

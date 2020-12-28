@@ -8,6 +8,7 @@ import 'package:rank_ten/components/rank_item_view_card.dart';
 import 'package:rank_ten/components/ranked_list_card_widget.dart';
 import 'package:rank_ten/events/ranked_list_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/rank_item.dart';
 import 'package:rank_ten/models/ranked_list.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
@@ -215,6 +216,10 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                       )
                     ],
                   );
+                } else if (snapshot.hasError) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => Utils.showSB("Error getting list", context));
+                  return Utils.getErrorImage();
                 }
 
                 return const SpinKitRipple(size: 50, color: hanPurple);

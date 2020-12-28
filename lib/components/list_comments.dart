@@ -111,6 +111,8 @@ class _ListCommentsState extends State<ListComments> {
                     }
                   },
                   decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: secondText)),
                       hintStyle: Theme.of(context)
                           .textTheme
                           .headline6

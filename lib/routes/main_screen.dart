@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
@@ -21,7 +22,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   int _currIndex = 0;
-  int _sortOption = LIKES_DESC;
+  int _sortOption = PreferencesStore.currentSort;
   String _query = "";
 
   TabController _searchTabController;
@@ -41,15 +42,10 @@ class _MainScreenState extends State<MainScreen>
     });
   }
 
-  void _sortCallback(String option) {
+  void _sortCallback(int option) {
+    PreferencesStore.saveSort(option);
     setState(() {
-      if (option.contains("like")) {
-        _sortOption = LIKES_DESC;
-      } else if (option.contains("newest")) {
-        _sortOption = DATE_DESC;
-      } else if (option.contains("oldest")) {
-        _sortOption = DATE_ASC;
-      }
+      _sortOption = option;
     });
   }
 
@@ -169,6 +165,7 @@ class _MainAppBarState extends State<MainAppBar> {
       action = getSortAction(
           context: context, isDark: isDark, sortCallback: widget.sortCallback);
     } else if (widget.index == 3) {
+      // TODO: settings dialog
       action = IconButton(
         icon: Icon(themeChange.isDark ? Icons.brightness_5 : Icons.brightness_2,
             color: themeChange.isDark ? lavender : Colors.yellow),
@@ -192,7 +189,7 @@ class _MainAppBarState extends State<MainAppBar> {
                       .mainUser
                       .username
                   : _appBarTitles[widget.index],
-              style: Theme.of(context).primaryTextTheme.headline3)),
+              style: Theme.of(context).primaryTextTheme.headline5)),
     );
   }
 }
@@ -222,6 +219,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
           getSortAction(
               context: context,
               isDark: isDark,
+              isUser: widget.tabController.index == 1,
               sortCallback: widget.sortCallback)
         ],
         leading: Icon(Icons.search, color: isDark ? lavender : darkSienna),
@@ -258,7 +256,8 @@ class _SearchAppBarState extends State<SearchAppBar> {
 Widget getSortAction(
     {@required BuildContext context,
     @required bool isDark,
-    @required dynamic sortCallback}) {
+    @required dynamic sortCallback,
+    bool isUser = false}) {
   return IconButton(
     icon: Icon(Icons.sort, color: isDark ? lavender : darkSienna),
     onPressed: () {
@@ -276,7 +275,7 @@ Widget getSortAction(
               children: [
                 getSortOption(
                     context: context,
-                    title: "Sort by likes",
+                    title: isUser ? "Sort by points" : "Sort by likes",
                     sortCallback: sortCallback),
                 getSortOption(
                     context: context,

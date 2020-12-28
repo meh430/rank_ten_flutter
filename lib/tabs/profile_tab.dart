@@ -140,7 +140,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                         topLists: snapshot.data),
                   ],
                 );
-              } else if (snapshot.hasError || snapshot.data == null) {
+              } else if (snapshot.hasError) {
                 WidgetsBinding.instance.addPostFrameCallback(
                     (_) => Utils.showSB("Error getting top lists", context));
                 return Utils.getErrorImage();
