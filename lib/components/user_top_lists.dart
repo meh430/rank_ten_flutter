@@ -14,7 +14,7 @@ class UserTopLists extends StatelessWidget {
       return Center(
           child: Text(
         "$name has not made any lists",
-        style: Theme.of(context).textTheme.headline4,
+        style: Theme.of(context).textTheme.headline5,
         textAlign: TextAlign.center,
       ));
     }

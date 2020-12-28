@@ -74,7 +74,7 @@ class _MainScreenState extends State<MainScreen>
                   tabController: _searchTabController),
             )
           : PreferredSize(
-              preferredSize: Size.fromHeight(70),
+              preferredSize: Size.fromHeight(55),
               child: MainAppBar(
                 sortCallback: _sortCallback,
                 index: _currIndex,

@@ -78,7 +78,7 @@ class UserInfo extends StatelessWidget {
         ),
         FollowButton(
             isFollowing: userProvider.mainUser.following.contains(user.userId),
-            name: user.username,
+            username: user.username,
             userId: user.userId)
       ]);
     }
@@ -95,13 +95,13 @@ class UserInfo extends StatelessWidget {
 
 class FollowButton extends StatefulWidget {
   final bool isFollowing;
-  final String name;
+  final String username;
   final int userId;
 
   FollowButton(
       {Key key,
       @required this.isFollowing,
-      @required this.name,
+      @required this.username,
       @required this.userId})
       : super(key: key);
 
@@ -160,7 +160,7 @@ class _FollowButtonState extends State<FollowButton> {
                   child: Text(buttonText,
                       style: Theme.of(context)
                           .textTheme
-                          .headline4
+                          .headline5
                           .copyWith(color: white)),
                 ),
                 shape: RoundedRectangleBorder(
@@ -230,9 +230,10 @@ class RoundedImage extends StatelessWidget {
   Widget build(BuildContext context) {
     var image = imageUrl != ""
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image.network(
-              imageUrl,
+        borderRadius: BorderRadius.circular(8.0),
+            child: FadeInImage.assetNetwork(
+              placeholder: "assets/loading.gif",
+              image: imageUrl,
               height: 130,
               width: 130,
               fit: BoxFit.cover,

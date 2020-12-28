@@ -18,10 +18,8 @@ class MainUserProvider with ChangeNotifier {
     mainUserBloc = UserBloc(isMain: true, mainUser: user);
     mainUser = user;
     _userRepository = UserRepository();
-    //mainUser.likedLists = await UserRepository()
-    //    .getLikedListIds(name: mainUser.userName, token: jwtToken);
 
-    mainUserState.listen((Response response) {
+    mainUserState.listen((Response<User> response) {
       if (response.status == Status.COMPLETED) {
         mainUser = response.value;
         notifyListeners();

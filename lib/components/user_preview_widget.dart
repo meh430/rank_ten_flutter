@@ -4,6 +4,7 @@ import 'package:rank_ten/blocs/user_preview_bloc.dart';
 import 'package:rank_ten/components/user_preview_card.dart';
 import 'package:rank_ten/events/user_preview_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/user.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
 
@@ -91,7 +92,7 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
                             padding: const EdgeInsets.all(20),
                             child: Text(
                               widget.emptyMessage,
-                              style: Theme.of(context).textTheme.headline4,
+                              style: Theme.of(context).textTheme.headline5,
                               textAlign: TextAlign.center,
                             )));
                   }
@@ -117,7 +118,9 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
                 }),
           );
         } else if (snapshot.hasError) {
-          return Text("Error retrieving items...");
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => Utils.showSB("Unable to get users", context));
+          return Utils.getErrorImage();
         }
 
         return const SpinKitRipple(size: 50, color: hanPurple);

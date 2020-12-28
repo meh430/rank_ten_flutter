@@ -49,11 +49,11 @@ class UserPreviewCard extends StatelessWidget {
                     children: [
                       Text(
                         userPreview.username,
-                        style: Theme.of(context).textTheme.headline4,
+                        style: Theme.of(context).textTheme.headline5,
                         textAlign: TextAlign.start,
                       ),
                       Text("Rank Points: ${userPreview.rankPoints}",
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headline6,
                           textAlign: TextAlign.start)
                     ],
                   )
@@ -61,9 +61,10 @@ class UserPreviewCard extends StatelessWidget {
               ),
               userPreview.bio.isNotEmpty
                   ? Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, top: 3, bottom: 12),
                       child: Text(userPreview.bio,
-                          style: Theme.of(context).textTheme.headline5.copyWith(
+                          style: Theme.of(context).textTheme.headline6.copyWith(
                               color: isDark ? Colors.white : secondText)),
                     )
                   : SizedBox()

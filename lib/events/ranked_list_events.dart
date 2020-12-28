@@ -23,13 +23,13 @@ class RankedListPrivateEvent extends RankedListEvent {
 
 class RankedListItemUpdateEvent extends RankedListEvent {
   final int index;
-  final String itemName, itemDescription, imageUrl;
+  final String itemName, description, picture;
 
   RankedListItemUpdateEvent(
       {@required this.index,
       @required this.itemName,
-      @required this.itemDescription,
-      @required this.imageUrl});
+      @required this.description,
+      @required this.picture});
 }
 
 class RankedListItemDeleteEvent extends RankedListEvent {

@@ -143,8 +143,8 @@ class _RankItemEditDialogState extends State<RankItemEditDialog> {
                             widget.rankedListBloc.addEvent(
                                 RankedListItemUpdateEvent(
                                     itemName: itemName,
-                                    itemDescription: description,
-                                    imageUrl: _validImage ? _imageUrl : "",
+                                    description: description,
+                                    picture: _validImage ? _imageUrl : "",
                                     index: widget.index));
                           }
                           Navigator.pop(context);
