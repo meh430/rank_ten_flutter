@@ -80,8 +80,8 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                   child: CardHeader(
                       userId: snapshot.data.userId,
                       shouldPushInfo: widget.shouldPushInfo,
-                      userName: snapshot.data.username,
-                      profPicUrl: widget.profilePic,
+                      username: snapshot.data.username,
+                      profilePic: widget.profilePic,
                       dateCreated: snapshot.data.dateCreated),
                 ));
                 snapshot.data.rankItems

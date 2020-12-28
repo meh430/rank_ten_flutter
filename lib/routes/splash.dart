@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> {
   void startUpFlow() async {
     final MainUserProvider mainUserProvider =
         Provider.of<MainUserProvider>(context, listen: false);
-    //store.clearAll();
+    //PreferencesStore.clearAll();
     var token = await PreferencesStore.getToken();
     //check if token present
     print("Checking if token present...");

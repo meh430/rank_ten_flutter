@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/blocs/preview_lists_bloc.dart';
 import 'package:rank_ten/components/ranked_list_card_widget.dart';
 import 'package:rank_ten/events/ranked_list_preview_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list_card.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
 
@@ -29,7 +31,7 @@ class GenericListPreviewWidget extends StatefulWidget {
 class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
   PreviewListsBloc _listsBloc;
   ScrollController _scrollController;
-  int _sort;
+  int _sort = PreferencesStore.currentSort;
 
   @override
   void initState() {
@@ -125,9 +127,9 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
                 }),
           );
         } else if (snapshot.hasError) {
-          return Text("Error retrieving items...",
-              style: Theme.of(context).textTheme.headline6,
-              textAlign: TextAlign.center);
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => Utils.showSB("Error getting lists", context));
+          return Utils.getErrorImage();
         }
 
         return const SpinKitRipple(size: 50, color: hanPurple);

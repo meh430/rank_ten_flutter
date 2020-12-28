@@ -40,9 +40,9 @@ class _CommentCardState extends State<CommentCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CardHeader(
-              profPicUrl: widget.comment.profilePic,
+              profilePic: widget.comment.profilePic,
               userId: widget.comment.userId,
-              userName: widget.comment.username,
+              username: widget.comment.username,
               dateCreated: widget.comment.dateCreated),
           GestureDetector(
             onTap: () {
@@ -106,8 +106,7 @@ void editCommentDialog(
                       decoration: InputDecoration(
                           labelText: 'Comment',
                           contentPadding: const EdgeInsets.all(20.0),
-                          labelStyle: Theme
-                              .of(context)
+                          labelStyle: Theme.of(context)
                               .textTheme
                               .headline6
                               .copyWith(fontSize: 16),

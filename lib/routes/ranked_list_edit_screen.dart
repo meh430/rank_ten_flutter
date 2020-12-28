@@ -187,8 +187,8 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                                   : CardHeader(
                                       userId: snapshot.data.userId,
                                       shouldPushInfo: false,
-                                      userName: snapshot.data.username,
-                                      profPicUrl:
+                                      username: snapshot.data.username,
+                                      profilePic:
                                           userProvider.mainUser.profilePic,
                                       dateCreated: snapshot.data.dateCreated),
                             ),

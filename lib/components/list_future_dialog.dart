@@ -29,7 +29,7 @@ class ListFuture extends StatelessWidget {
                       'Error modifying list',
                       style: Theme.of(context)
                           .textTheme
-                          .headline4
+                          .headline5
                           .copyWith(color: Colors.red),
                     ),
                     Padding(
@@ -47,8 +47,9 @@ class ListFuture extends StatelessWidget {
             }
 
             return Column(mainAxisSize: MainAxisSize.min, children: [
+              SizedBox(height: 6),
               Text("Saving. Please wait...",
-                  style: Theme.of(context).textTheme.headline4),
+                  style: Theme.of(context).textTheme.headline5),
               Container(
                   height: 200,
                   child: const SpinKitWave(size: 50, color: hanPurple))

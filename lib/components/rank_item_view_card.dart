@@ -47,7 +47,7 @@ class RankItemViewCard extends StatelessWidget {
                       rankItem.itemName,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.headline4,
+                      style: textTheme.headline5,
                     ),
                   ),
                 ),
@@ -61,13 +61,13 @@ class RankItemViewCard extends StatelessWidget {
                 : SizedBox(),
             rankItem.description.isNotEmpty
                 ? Padding(
-              padding:
-              const EdgeInsets.only(left: 20, right: 10, top: 10),
-              child: Text(rankItem.description,
-                  textAlign: TextAlign.center,
-                  style: textTheme.headline6
-                      .copyWith(color: isDark ? lightCard : secondText)),
-            )
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 10, top: 10),
+                    child: Text(rankItem.description,
+                        textAlign: TextAlign.center,
+                        style: textTheme.headline6
+                            .copyWith(color: isDark ? lightCard : secondText)),
+                  )
                 : SizedBox()
           ],
         ),

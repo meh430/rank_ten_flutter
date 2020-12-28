@@ -130,7 +130,8 @@ class RankItemImage extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
-        child: Image.network(imageUrl, fit: fit),
+        child: FadeInImage.assetNetwork(
+            placeholder: "assets/loading.gif", image: imageUrl, fit: fit),
       ),
     );
   }

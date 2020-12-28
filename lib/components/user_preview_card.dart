@@ -18,8 +18,8 @@ class UserPreviewCard extends StatelessWidget {
     Widget profPic = Padding(
       padding: const EdgeInsets.all(10),
       child: CircleImage(
-        profPicUrl: userPreview.profilePic,
-        userName: userPreview.username,
+        profilePic: userPreview.profilePic,
+        username: userPreview.username,
         size: 80,
         textSize: 40,
       ),

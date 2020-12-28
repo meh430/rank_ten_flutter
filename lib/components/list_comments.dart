@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/blocs/comment_bloc.dart';
 import 'package:rank_ten/components/comment_card.dart';
 import 'package:rank_ten/events/comments_event.dart';
@@ -24,14 +25,15 @@ class _ListCommentsState extends State<ListComments> {
   CommentBloc _commentBloc;
   ScrollController _scrollController;
   TextEditingController _commentController;
-  int _sortOption = 0;
+  int _sortOption = PreferencesStore.currentSort;
 
   @override
   void initState() {
     super.initState();
     _commentBloc = CommentBloc();
     _commentController = TextEditingController();
-    _commentBloc.addEvent(GetListCommentsEvent(listId: widget.listId));
+    _commentBloc.addEvent(
+        GetListCommentsEvent(listId: widget.listId, sort: _sortOption));
     _scrollController = ScrollController()..addListener(_onScrollListener);
   }
 
@@ -52,17 +54,12 @@ class _ListCommentsState extends State<ListComments> {
     _scrollController.dispose();
   }
 
-  void _sortCallback(String option) {
-    if (option.contains("like")) {
-      _sortOption = LIKES_DESC;
-    } else if (option.contains("newest")) {
-      _sortOption = DATE_DESC;
-    } else if (option.contains("oldest")) {
-      _sortOption = DATE_ASC;
-    }
-
-    _commentBloc.addEvent(GetListCommentsEvent(
-        listId: widget.listId, sort: _sortOption, refresh: true));
+  void _sortCallback(int option) {
+    _sortOption = option;
+    PreferencesStore.saveSort(option);
+    _commentBloc.resetPage();
+    _commentBloc.addEvent(
+        GetListCommentsEvent(listId: widget.listId, sort: _sortOption));
   }
 
   @override
@@ -82,7 +79,7 @@ class _ListCommentsState extends State<ListComments> {
                   padding:
                       EdgeInsets.only(bottom: 10, top: 14, left: 18, right: 16),
                   child: Text("Comments",
-                      style: Theme.of(context).textTheme.headline4)),
+                      style: Theme.of(context).textTheme.headline5)),
               getSortAction(
                   context: context, isDark: isDark, sortCallback: _sortCallback)
             ],
@@ -162,7 +159,7 @@ class _ListCommentsState extends State<ListComments> {
                                         "No comments",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline4,
+                                            .headline6,
                                         textAlign: TextAlign.center,
                                       )));
                             }
@@ -215,7 +212,9 @@ class _ListCommentsState extends State<ListComments> {
                           }),
                     );
                   } else if (snapshot.hasError) {
-                    return Text("Error retrieving items...");
+                    WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => Utils.showSB("Error getting comments", context));
+                    return Utils.getErrorImage();
                   }
 
                   return const SpinKitRipple(size: 50, color: hanPurple);

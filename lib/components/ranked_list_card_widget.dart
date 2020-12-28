@@ -64,8 +64,8 @@ class RankedListCardWidget extends StatelessWidget {
             CardHeader(
                 shouldPushInfo: shouldPushInfo,
                 userId: listCard.userId,
-                userName: listCard.username,
-                profPicUrl: listCard.profilePic,
+                username: listCard.username,
+                profilePic: listCard.profilePic,
                 dateCreated: listCard.dateCreated),
             GestureDetector(
               onTap: () => launchRankListViewScreen(
@@ -73,7 +73,10 @@ class RankedListCardWidget extends StatelessWidget {
                   listCard: listCard,
                   shouldPushInfo: shouldPushInfo),
               child: Text(listCard.title,
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      .copyWith(fontSize: 30),
                   textAlign: TextAlign.center),
             ),
             const SizedBox(height: 10),
@@ -99,6 +102,7 @@ class RankedListCardWidget extends StatelessWidget {
                         shouldPushInfo: shouldPushInfo),
                     child: Text(remainingLabel,
                         style: Theme.of(context).textTheme.headline6.copyWith(
+                            fontSize: 16,
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.bold)),
                   )
@@ -123,14 +127,14 @@ class RankedListCardWidget extends StatelessWidget {
 
 class CardHeader extends StatelessWidget {
   final int dateCreated, userId;
-  final String userName;
-  final String profPicUrl;
+  final String username;
+  final String profilePic;
   final bool shouldPushInfo;
 
   CardHeader(
       {@required this.dateCreated,
-      @required this.userName,
-      @required this.profPicUrl,
+      @required this.username,
+      @required this.profilePic,
       @required this.userId,
       this.shouldPushInfo = true});
 
@@ -152,7 +156,7 @@ class CardHeader extends StatelessWidget {
         if (shouldPushInfo) {
           Navigator.pushNamed(context, '/user_info_screen',
               arguments:
-                  UserInfoScreenArgs(username: userName, userId: userId));
+                  UserInfoScreenArgs(username: username, userId: userId));
         }
       },
       child: Padding(
@@ -163,9 +167,9 @@ class CardHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Row(children: [
-              CircleImage(profPicUrl: profPicUrl, userName: userName),
-              const SizedBox(width: 8),
-              Text(userName, style: textTheme)
+              CircleImage(profilePic: profilePic, username: username),
+              const SizedBox(width: 12),
+              Text(username, style: textTheme)
             ]),
             Text(Utils.getTimeDiff(dateCreated), style: textTheme)
           ],
@@ -176,24 +180,24 @@ class CardHeader extends StatelessWidget {
 }
 
 class CircleImage extends StatelessWidget {
-  final String profPicUrl;
-  final String userName;
+  final String profilePic;
+  final String username;
   final double size, textSize;
 
   CircleImage(
-      {@required this.profPicUrl,
-      @required this.userName,
+      {@required this.profilePic,
+      @required this.username,
       this.size = 60.0,
       this.textSize = 26});
 
   @override
   Widget build(BuildContext context) {
-    var profPic = profPicUrl.isEmpty
+    var profPic = profilePic.isEmpty
         ? Container(
             width: size,
             height: size,
             child: Center(
-              child: Text(userName[0],
+              child: Text(username[0],
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
@@ -210,7 +214,7 @@ class CircleImage extends StatelessWidget {
             decoration: new BoxDecoration(
                 shape: BoxShape.circle,
                 image: new DecorationImage(
-                    fit: BoxFit.fill, image: new NetworkImage(profPicUrl))));
+                    fit: BoxFit.fill, image: new NetworkImage(profilePic))));
 
     return profPic;
   }
@@ -228,7 +232,7 @@ class RankPreviewItem extends StatelessWidget {
     var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     return Row(
       children: [
-        RankCircle(rank: rank),
+        RankCircle(rank: rank, size: 60),
         const SizedBox(width: 10),
         Expanded(
             child: Text(rankItemTitle,
@@ -275,7 +279,7 @@ class _CardFooterState extends State<CardFooter> {
   Widget build(BuildContext context) {
     var loading = Padding(
         padding: const EdgeInsets.all(15),
-        child: const SpinKitFoldingCube(size: 30, color: hanPurple));
+        child: const SpinKitSquareCircle(size: 30, color: hanPurple));
     var userProvider = Provider.of<MainUserProvider>(context, listen: false);
 
     return FutureBuilder<LikeResponse>(
@@ -307,7 +311,7 @@ class _CardFooterState extends State<CardFooter> {
             }
 
             return Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
+              padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
               child: Column(
                 children: [
                   Row(
@@ -320,7 +324,7 @@ class _CardFooterState extends State<CardFooter> {
                         icon: Icon(
                             liked ? Icons.favorite : Icons.favorite_border,
                             color: Colors.red),
-                        iconSize: 55,
+                        iconSize: 40,
                         onPressed: () {
                           setState(() {
                             _error = false;
@@ -339,7 +343,7 @@ class _CardFooterState extends State<CardFooter> {
                               context: context, listId: widget.id),
                           child: Text(
                             _error ? "Try Again" : "$_numLikes likes",
-                            style: Theme.of(context).textTheme.headline5,
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         )
                       ])
@@ -405,8 +409,8 @@ class CommentPreviewCard extends StatelessWidget {
               CardHeader(
                   userId: commentPreview.userId,
                   dateCreated: commentPreview.dateCreated,
-                  userName: commentPreview.username,
-                  profPicUrl: commentPreview.profilePic),
+                  username: commentPreview.username,
+                  profilePic: commentPreview.profilePic),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 28),
                 child: Text(
