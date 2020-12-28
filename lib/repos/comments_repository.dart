@@ -71,7 +71,8 @@ class CommentsRepository {
       'listId': response['listId'],
       'title': response['title'],
       'username': response['username'],
-      'userId': response['userId']
+      'userId': response['userId'],
+      'profilePic': response['profilePic']
     };
   }
 }

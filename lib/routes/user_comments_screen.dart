@@ -6,6 +6,7 @@ import 'package:rank_ten/blocs/comment_bloc.dart';
 import 'package:rank_ten/components/comment_card.dart';
 import 'package:rank_ten/events/comments_event.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/comment.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
@@ -24,6 +25,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
   CommentBloc _commentBloc;
   MainUserProvider _userProvider;
   ScrollController _scrollController;
+  CommentsRepository _commentsRepository = CommentsRepository();
 
   void _sortCallback(int option) {
     PreferencesStore.saveSort(option);
@@ -97,7 +99,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                                 padding: const EdgeInsets.all(20),
                                 child: Text(
                                   "You have not made any comments",
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context).textTheme.headline5,
                                   textAlign: TextAlign.center,
                                 )));
                       }
@@ -120,7 +122,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                       return GestureDetector(
                         onTap: () async {
                           Map<String, dynamic> listCard =
-                              await CommentsRepository().getCommentParent(
+                          await _commentsRepository.getCommentParent(
                                   commentId: snapshot.data[index].listId);
                           Navigator.pushNamed(context, '/ranked_list_view',
                               arguments: RankedListViewScreenArgs(
@@ -131,7 +133,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                                   shouldPushInfo:
                                       _userProvider.mainUser.userId ==
                                           listCard['userId'],
-                                  profPic: ""));
+                                  profilePic: listCard['profilePic']));
                         },
                         child: CommentCard(
                           isMain: false,
@@ -141,8 +143,10 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                       );
                     }),
               );
-            } else if (snapshot.hasError) {
-              return Text("Error retrieving items...");
+            } else if (snapshot.hasError || snapshot.data == null) {
+              WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => Utils.showSB("Error getting user comments", context));
+              return Utils.getErrorImage();
             }
 
             return SpinKitRipple(size: 50, color: hanPurple);

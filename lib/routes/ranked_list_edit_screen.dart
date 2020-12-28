@@ -29,7 +29,7 @@ class RankedListEditScreen extends StatefulWidget {
 
 Future<bool> showErrorDialog(
     {@required BuildContext context, @required String error}) {
-  return showDialog(
+  return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (context) {
@@ -153,10 +153,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
               stream: _rankedListBloc.modelStateStream,
               builder:
                   (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
-                if (snapshot.hasData) {
-                  //setState(() {
-                  //  _isPrivate = snapshot.data.private;
-                  //});
+                    if (snapshot.hasData && snapshot.data != null) {
                   List<Widget> listChildren = [];
                   for (int i = 0; i < snapshot.data.rankItems.length; i++) {
                     var rItem = snapshot.data.rankItems[i];

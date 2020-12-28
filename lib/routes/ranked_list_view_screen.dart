@@ -8,6 +8,7 @@ import 'package:rank_ten/components/ranked_list_card_widget.dart';
 import 'package:rank_ten/components/user_preview_widget.dart';
 import 'package:rank_ten/events/ranked_list_events.dart';
 import 'package:rank_ten/misc/app_theme.dart';
+import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/ranked_list.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
@@ -16,7 +17,7 @@ import 'package:rank_ten/repos/user_repository.dart';
 import 'package:rank_ten/routes/ranked_list_edit_screen.dart';
 
 class RankedListViewScreen extends StatefulWidget {
-  final String listTitle, profPic;
+  final String listTitle, profilePic;
   final bool isMain, shouldPushInfo;
   final int listId;
 
@@ -26,7 +27,7 @@ class RankedListViewScreen extends StatefulWidget {
       @required this.listTitle,
       @required this.isMain,
       @required this.shouldPushInfo,
-      @required this.profPic})
+      @required this.profilePic})
       : super(key: key);
 
   @override
@@ -72,7 +73,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
             stream: _rankedListBloc.modelStateStream,
             builder:
                 (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
-              if (snapshot.hasData) {
+                  if (snapshot.hasData && snapshot.data != null) {
                 List<Widget> listChildren = [];
                 listChildren.add(Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -80,7 +81,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                       userId: snapshot.data.userId,
                       shouldPushInfo: widget.shouldPushInfo,
                       userName: snapshot.data.username,
-                      profPicUrl: widget.profPic,
+                      profPicUrl: widget.profilePic,
                       dateCreated: snapshot.data.dateCreated),
                 ));
                 snapshot.data.rankItems
@@ -108,6 +109,10 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                     )
                   ],
                 );
+              } else if (snapshot.hasError || snapshot.data == null) {
+                WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => Utils.showSB("Error getting list", context));
+                return Utils.getErrorImage();
               }
 
               return const SpinKitRipple(size: 50, color: hanPurple);
@@ -272,12 +277,12 @@ class _LikeWidgetState extends State<LikeWidget> {
 }
 
 class RankedListViewScreenArgs {
-  final String listTitle, profPic;
+  final String listTitle, profilePic;
   final bool isMain, shouldPushInfo;
   final int listId;
 
   RankedListViewScreenArgs(
-      {@required this.profPic,
+      {@required this.profilePic,
       @required this.shouldPushInfo,
       @required this.listId,
       @required this.listTitle,
@@ -302,7 +307,7 @@ void showLikedUsers({BuildContext context, int listId}) {
                   padding:
                       EdgeInsets.only(bottom: 16, top: 8, left: 18, right: 16),
                   child: Text("Liked By",
-                      style: Theme.of(context).textTheme.headline4)),
+                      style: Theme.of(context).textTheme.headline5)),
               Expanded(
                   child: UserPreviewWidget(listType: LIKED_USERS, id: listId)),
             ],

@@ -5,10 +5,10 @@ import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/repos/user_preview_repository.dart';
 
 class UserPreviewScreen extends StatefulWidget {
-  final String listType, name;
+  final String listType, username;
   final int id;
 
-  UserPreviewScreen({Key key, @required this.listType, this.name, this.id})
+  UserPreviewScreen({Key key, @required this.listType, this.username, this.id})
       : super(key: key);
 
   @override
@@ -22,7 +22,7 @@ class _UserPreviewScreenState extends State<UserPreviewScreen> {
   void initState() {
     super.initState();
     appBarTitle =
-        "${widget.name}'s ${widget.listType == FOLLOWING_USERS ? 'following' : 'followers'}";
+        "${widget.username}'s ${widget.listType == FOLLOWING_USERS ? 'following' : 'followers'}";
   }
 
   @override
@@ -43,8 +43,8 @@ class _UserPreviewScreenState extends State<UserPreviewScreen> {
 }
 
 class UserPreviewScreenArgs {
-  final String listType, name;
+  final String listType, username;
   final int id;
 
-  UserPreviewScreenArgs({@required this.listType, this.name = "", this.id});
+  UserPreviewScreenArgs({@required this.listType, this.username = "", this.id});
 }

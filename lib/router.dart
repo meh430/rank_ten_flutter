@@ -46,14 +46,14 @@ class RouteGenerator {
           centerAlignment: Alignment.center,
           maxRadius: maxRadius,
           page: UserPreviewScreen(
-              listType: args.listType, name: args.name, id: args.id),
+              listType: args.listType, username: args.username, id: args.id),
         );
       case '/user_info_screen':
         final UserInfoScreenArgs args = settings.arguments;
         return CircularReveal(
             centerAlignment: Alignment.center,
             maxRadius: maxRadius,
-            page: UserInfoScreen(name: args.name, userId: args.userId));
+            page: UserInfoScreen(username: args.username, userId: args.userId));
       case '/ranked_list_view':
         final RankedListViewScreenArgs args = settings.arguments;
         return CircularReveal(
@@ -64,7 +64,7 @@ class RouteGenerator {
               listTitle: args.listTitle,
               isMain: args.isMain,
               shouldPushInfo: args.shouldPushInfo,
-              profPic: args.profPic,
+              profilePic: args.profilePic,
             ));
       case '/ranked_list_edit':
         final RankedListEditScreenArgs args = settings.arguments;

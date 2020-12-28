@@ -26,7 +26,7 @@ void launchRankListViewScreen({
           listId: listCard.listId,
           isMain: userProvider.userId == listCard.userId,
           shouldPushInfo: shouldPushInfo,
-          profPic: listCard.profilePic));
+          profilePic: listCard.profilePic));
 }
 
 class RankedListCardWidget extends StatelessWidget {
@@ -151,7 +151,8 @@ class CardHeader extends StatelessWidget {
 
         if (shouldPushInfo) {
           Navigator.pushNamed(context, '/user_info_screen',
-              arguments: UserInfoScreenArgs(name: userName, userId: userId));
+              arguments:
+                  UserInfoScreenArgs(username: userName, userId: userId));
         }
       },
       child: Padding(

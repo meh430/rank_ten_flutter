@@ -28,7 +28,7 @@ class UserPreviewCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/user_info_screen',
           arguments: UserInfoScreenArgs(
-              name: userPreview.username, userId: userPreview.userId)),
+              username: userPreview.username, userId: userPreview.userId)),
       child: Card(
           elevation: 4,
           margin: const EdgeInsets.only(left: 10, right: 10, bottom: 12),

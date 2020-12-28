@@ -115,7 +115,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
           StreamBuilder<List<RankedListCard>>(
             stream: _listsBloc.modelStateStream,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.hasData && snapshot.data != null) {
                 return Column(
                   children: [
                     Padding(
@@ -140,7 +140,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                         topLists: snapshot.data),
                   ],
                 );
-              } else if (snapshot.hasError) {
+              } else if (snapshot.hasError || snapshot.data == null) {
                 WidgetsBinding.instance.addPostFrameCallback(
                     (_) => Utils.showSB("Error getting top lists", context));
                 return Utils.getErrorImage();

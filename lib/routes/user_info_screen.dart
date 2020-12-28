@@ -18,10 +18,10 @@ import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
 import 'package:rank_ten/routes/main_screen.dart';
 
 class UserInfoScreen extends StatefulWidget {
-  final String name;
+  final String username;
   final int userId;
 
-  UserInfoScreen({@required this.name, @required this.userId});
+  UserInfoScreen({@required this.username, @required this.userId});
 
   @override
   _UserInfoScreenState createState() => _UserInfoScreenState();
@@ -36,18 +36,19 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           elevation: 0.0,
           brightness: isDark ? Brightness.dark : Brightness.light,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          title: Text(widget.name,
+          title: Text(widget.username,
               style: Theme.of(context).primaryTextTheme.headline5),
         ),
-        body: UserInfoBuilder(name: widget.name, userId: widget.userId));
+        body:
+            UserInfoBuilder(username: widget.username, userId: widget.userId));
   }
 }
 
 class UserInfoBuilder extends StatefulWidget {
-  final String name;
+  final String username;
   final int userId;
 
-  UserInfoBuilder({@required this.name, @required this.userId});
+  UserInfoBuilder({@required this.username, @required this.userId});
 
   @override
   _UserInfoBuilderState createState() => _UserInfoBuilderState();
@@ -122,7 +123,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
           StreamBuilder<List<RankedListCard>>(
             stream: _listsBloc.modelStateStream,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.hasData && snapshot.data != null) {
                 return Column(
                   children: [
                     Padding(
@@ -130,7 +131,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
                             vertical: 10, horizontal: 20),
                         child: Row(
                           children: [
-                            Text("${widget.name}'s Lists",
+                            Text("${widget.username}'s Lists",
                                 style: Theme.of(context).textTheme.headline5),
                             getSortAction(
                                 context: context,
@@ -144,11 +145,11 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
                         )),
                     UserTopLists(
                         key: UniqueKey(),
-                        name: widget.name,
+                        name: widget.username,
                         topLists: snapshot.data),
                   ],
                 );
-              } else if (snapshot.hasError) {
+              } else if (snapshot.hasError || snapshot.data == null) {
                 WidgetsBinding.instance.addPostFrameCallback(
                     (_) => Utils.showSB("Error getting top lists", context));
                 return Utils.getErrorImage();
@@ -174,8 +175,8 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
 }
 
 class UserInfoScreenArgs {
-  final String name;
+  final String username;
   final int userId;
 
-  UserInfoScreenArgs({@required this.name, @required this.userId});
+  UserInfoScreenArgs({@required this.username, @required this.userId});
 }

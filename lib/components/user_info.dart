@@ -335,7 +335,7 @@ class UserStatRow extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(context, '/user_preview_list',
                     arguments: UserPreviewScreenArgs(
                         listType: FOLLOWING_USERS,
-                        name: user.username,
+                        username: user.username,
                         id: user.userId)),
                 child: UserStat(
                   statLabel: "Following",
@@ -347,7 +347,7 @@ class UserStatRow extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(context, '/user_preview_list',
                     arguments: UserPreviewScreenArgs(
                         listType: FOLLOWERS_USERS,
-                        name: user.username,
+                        username: user.username,
                         id: user.userId)),
                 child: UserStat(
                   statLabel: "Followers",
