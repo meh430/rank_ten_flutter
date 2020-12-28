@@ -60,9 +60,7 @@ class UserBloc {
         _userStateSink.add(Response.completed(_user));
       } else if (event is UpdateBioEvent) {
         _userStateSink.add(Response.loading("Updating bio"));
-
         await _userRepository.updateBio(bio: event.bio, token: event.token);
-
         _user.bio = event.bio;
         _userStateSink.add(Response.completed(_user));
       } else if (event is UpdateProfilePicEvent) {
