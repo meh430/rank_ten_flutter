@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/components/generic_list_preview_widget.dart';
-import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/repos/ranked_list_preview_repository.dart';
 import 'package:rank_ten/routes/main_screen.dart';
 
 class ListScreen extends StatefulWidget {
-  final String listType, name, token;
+  final String listType, username, token;
   final int userId;
 
   ListScreen(
-      {Key key, @required this.listType, this.name, this.userId, this.token})
+      {Key key,
+      @required this.listType,
+      this.username,
+      this.userId,
+      this.token})
       : super(key: key);
 
   @override
@@ -19,7 +23,7 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  int _sortOption = LIKES_DESC;
+  int _sortOption = PreferencesStore.currentSort;
   String appBarTitle = "Lists";
 
   @override
@@ -27,18 +31,12 @@ class _ListScreenState extends State<ListScreen> {
     super.initState();
     appBarTitle = widget.listType == LIKED_LISTS
         ? 'Liked Lists'
-        : "${widget.name}'s lists";
+        : "${widget.username}'s lists";
   }
 
-  void _sortCallback(String option) {
+  void _sortCallback(int option) {
     setState(() {
-      if (option.contains('like')) {
-        _sortOption = LIKES_DESC;
-      } else if (option.contains('newest')) {
-        _sortOption = DATE_DESC;
-      } else if (option.contains('oldest')) {
-        _sortOption = DATE_ASC;
-      }
+      _sortOption = option;
     });
   }
 
@@ -68,12 +66,12 @@ class _ListScreenState extends State<ListScreen> {
 }
 
 class ListScreenArgs {
-  final String listType, name, token;
+  final String listType, username, token;
   final int userId;
 
   ListScreenArgs(
       {@required this.listType,
       this.userId = 0,
-      this.name = "",
+      this.username = "",
       this.token = ""});
 }

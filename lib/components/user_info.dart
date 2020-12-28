@@ -311,13 +311,13 @@ class UserStatRow extends StatelessWidget {
                             listType: USER_LISTS_ALL,
                             token: token,
                             userId: user.userId,
-                            name: user.username));
+                            username: user.username));
                   } else {
                     //public
                     Navigator.pushNamed(context, '/lists',
                         arguments: ListScreenArgs(
                             listType: USER_LISTS,
-                            name: user.username,
+                            username: user.username,
                             userId: user.userId));
                   }
                 },
@@ -373,7 +373,7 @@ class UserStatRow extends StatelessWidget {
                         onTap: () => Navigator.pushNamed(context, '/lists',
                             arguments: ListScreenArgs(
                                 listType: LIKED_LISTS,
-                                name: user.username,
+                                username: user.username,
                                 userId: user.userId,
                                 token: token)),
                         child: UserStat(

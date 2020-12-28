@@ -18,8 +18,6 @@ const FEED_LISTS = 'feed';
 const SEARCH_LISTS = 'search_lists';
 
 class RankedListPreviewRepository {
-  RankApi _api = RankApi();
-
   Future<Map<String, dynamic>> getRankedListPreview(
       {@required String endpointBase,
       int userId,
@@ -64,7 +62,7 @@ class RankedListPreviewRepository {
       }
     }
 
-    final response = await _api.get(endpoint: endpoint, bearerToken: token);
+    final response = await RankApi.get(endpoint: endpoint, bearerToken: token);
 
     var listPreviews = List<RankedListCard>();
 

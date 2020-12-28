@@ -12,8 +12,6 @@ const FOLLOWING_USERS = 'following';
 const FOLLOWERS_USERS = 'followers';
 
 class UserPreviewRepository {
-  RankApi _api = RankApi();
-
   Future<dynamic> getUserPreview(
       {@required String endpointBase,
       int id,
@@ -38,13 +36,14 @@ class UserPreviewRepository {
         endpoint += '/$page/$sort?q=$query';
         break;
     }
+
     if (refresh && endpointBase == SEARCH_USERS) {
       endpoint += '&re=True';
     } else if (refresh) {
       endpoint += '?re=True';
     }
 
-    final response = await _api.get(endpoint: endpoint);
+    final response = await RankApi.get(endpoint: endpoint);
     var userPreviews = List<UserPreview>();
     if (endpointBase == SEARCH_USERS) {
       response["items"].forEach(

@@ -7,22 +7,20 @@ enum LikeResponse { liked, unliked, init, error }
 enum FollowResponse { followed, unfollowed, init, error }
 
 class UserRepository {
-  RankApi _api = RankApi();
-
   Future<User> getUser(int userId) async {
-    final response = await _api.get(endpoint: '/users/$userId');
+    final response = await RankApi.get(endpoint: '/users/$userId');
     return User.fromJson(response);
   }
 
   Future<dynamic> updateBio({String bio, String token}) async {
-    final response = await _api.put(
+    final response = await RankApi.put(
         endpoint: '/users', data: {'bio': bio}, bearerToken: token);
     return response;
   }
 
-  Future<dynamic> updateProfilePic({String profPic, String token}) async {
-    final response = await _api.put(
-        endpoint: '/users', data: {'prof_pic': profPic}, bearerToken: token);
+  Future<dynamic> updateProfilePic({String profilePic, String token}) async {
+    final response = await RankApi.put(
+        endpoint: '/users', data: {'prof_pic': profilePic}, bearerToken: token);
     return response;
   }
 
@@ -30,7 +28,7 @@ class UserRepository {
     dynamic response;
     try {
       response =
-          await _api.post(endpoint: '/follow/$userId', bearerToken: token);
+          await RankApi.post(endpoint: '/follow/$userId', bearerToken: token);
     } catch (e) {
       return FollowResponse.error;
     }
@@ -46,7 +44,8 @@ class UserRepository {
     dynamic response;
 
     try {
-      response = await _api.post(endpoint: '/like/$listId', bearerToken: token);
+      response =
+          await RankApi.post(endpoint: '/like/$listId', bearerToken: token);
     } catch (e) {
       return LikeResponse.error;
     }
@@ -62,7 +61,7 @@ class UserRepository {
     dynamic response;
 
     try {
-      response = await _api.post(
+      response = await RankApi.post(
           endpoint: '/like_comment/$commentId', bearerToken: token);
     } catch (e) {
       return LikeResponse.error;

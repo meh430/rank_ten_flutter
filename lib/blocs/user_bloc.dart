@@ -69,7 +69,7 @@ class UserBloc {
         _userStateSink.add(Response.loading("Updating profile pic"));
 
         await _userRepository.updateProfilePic(
-            profPic: event.profilePic, token: event.token);
+            profilePic: event.profilePic, token: event.token);
 
         _user.profilePic = event.profilePic;
         _userStateSink.add(Response.completed(_user));

@@ -37,7 +37,7 @@ class RouteGenerator {
             maxRadius: maxRadius,
             page: ListScreen(
                 listType: args.listType,
-                name: args.name,
+                username: args.username,
                 token: args.token,
                 userId: args.userId));
       case '/user_preview_list':

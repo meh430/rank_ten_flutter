@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 import 'package:rank_ten/api/rank_exceptions.dart';
 
 class RankApi {
-  final String _baseUrl = 'http://192.168.0.22:3000';
+  static final String _baseUrl = 'http://192.168.0.22:3000';
 
   //final String _baseUrl = 'https://rank-ten-api.herokuapp.com';
 
-  Future<bool> validateImage(String imageUrl) async {
+  static Future<bool> validateImage(String imageUrl) async {
     var isValid = false;
     try {
       final res = await http.get(imageUrl, headers: {'Accept': 'image/*'});
@@ -26,7 +26,7 @@ class RankApi {
     return isValid;
   }
 
-  Future<dynamic> get(
+  static Future<dynamic> get(
       {@required String endpoint, String bearerToken = ""}) async {
     var jsonResponse;
 
@@ -41,7 +41,7 @@ class RankApi {
     return jsonResponse;
   }
 
-  Future<dynamic> post(
+  static Future<dynamic> post(
       {@required String endpoint,
       Map<String, dynamic> data,
       String bearerToken = ""}) async {
@@ -62,7 +62,7 @@ class RankApi {
     return jsonResponse;
   }
 
-  Future<dynamic> put(
+  static Future<dynamic> put(
       {@required String endpoint,
       Map<String, dynamic> data,
       String bearerToken = ""}) async {
@@ -84,7 +84,7 @@ class RankApi {
     return jsonResponse;
   }
 
-  Future<dynamic> delete(
+  static Future<dynamic> delete(
       {@required String endpoint, String bearerToken = ""}) async {
     var jsonResponse;
 
@@ -99,7 +99,7 @@ class RankApi {
     return jsonResponse;
   }
 
-  Map<String, dynamic> _getHeaders({String bearerToken}) {
+  static Map<String, dynamic> _getHeaders({String bearerToken}) {
     return bearerToken == ""
         ? <String, String>{
             'Accept': 'application/json',
@@ -112,7 +112,7 @@ class RankApi {
           };
   }
 
-  _parseResponse(http.Response res) {
+  static _parseResponse(http.Response res) {
     switch (res.statusCode) {
       case 200:
         return json.decode(res.body.toString());

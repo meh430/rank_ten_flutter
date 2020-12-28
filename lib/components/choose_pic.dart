@@ -151,8 +151,6 @@ class PreviewImage extends StatefulWidget {
 }
 
 class _PreviewImageState extends State<PreviewImage> {
-  final RankApi _api = RankApi();
-
   @override
   Widget build(BuildContext context) {
     var inValid = Padding(
@@ -164,7 +162,7 @@ class _PreviewImageState extends State<PreviewImage> {
       padding: const EdgeInsets.all(12),
     );
     return FutureBuilder(
-      future: _api.validateImage(widget.imageUrl),
+      future: RankApi.validateImage(widget.imageUrl),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data) {
