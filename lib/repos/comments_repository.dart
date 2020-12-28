@@ -22,7 +22,7 @@ class CommentsRepository {
     return response;
   }
 
-  Future<List<Comment>> getUserComments(
+  Future<dynamic> getUserComments(
       {String token, int page, int sort, bool refresh = false}) async {
     var endpoint = '/user_comments/$page/$sort';
     if (refresh) {

@@ -55,7 +55,6 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
     super.initState();
     _userProvider = Provider.of<MainUserProvider>(context, listen: false);
     _listsBloc = PreviewListsBloc(endpointBase: USER_TOP_LISTS);
-
     _listsBloc.addEvent(RankedListPreviewEvent(
         userId: _userProvider.mainUser.userId,
         token: _userProvider.jwtToken,
@@ -122,7 +121,6 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
               builder: builderFunction),
           StreamBuilder<List<RankedListCard>>(
             stream: _listsBloc.modelStateStream,
-            key: UniqueKey(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(
@@ -145,7 +143,6 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         )),
                     UserTopLists(
-                        key: UniqueKey(),
                         name: _userProvider.mainUser.username,
                         topLists: snapshot.data),
                   ],

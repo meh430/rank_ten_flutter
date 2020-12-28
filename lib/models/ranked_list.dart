@@ -44,15 +44,15 @@ class RankedList {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['listId'] = this.listId;
-    data['userId'] = this.userId;
-    data['dateCreated'] = this.dateCreated;
+    //data['listId'] = this.listId;
+    //data['userId'] = this.userId;
+    //data['dateCreated'] = this.dateCreated;
     data['title'] = this.title;
     data['private'] = this.private;
-    data['username'] = this.username;
-    data['profilePic'] = this.profilePic;
-    data['numLikes'] = this.numLikes;
-    data['numComments'] = this.numComments;
+    //data['username'] = this.username;
+    //data['profilePic'] = this.profilePic;
+    //data['numLikes'] = this.numLikes;
+    //data['numComments'] = this.numComments;
     if (this.rankItems != null) {
       data['rankItems'] = this.rankItems.map((v) => v.toJson()).toList();
     }

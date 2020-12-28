@@ -3,10 +3,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rank_ten/components/choose_pic.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 
-class ListFutureDialog extends StatelessWidget {
+class ListFuture extends StatelessWidget {
   final Future<dynamic> listFuture;
 
-  ListFutureDialog({Key key, @required this.listFuture}) : super(key: key);
+  ListFuture({Key key, @required this.listFuture}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +46,13 @@ class ListFutureDialog extends StatelessWidget {
               );
             }
 
-            return Container(
-                height: 200,
-                child: const SpinKitWave(size: 50, color: hanPurple));
+            return Column(mainAxisSize: MainAxisSize.min, children: [
+              Text("Saving. Please wait...",
+                  style: Theme.of(context).textTheme.headline4),
+              Container(
+                  height: 200,
+                  child: const SpinKitWave(size: 50, color: hanPurple))
+            ]);
           },
         ));
   }

@@ -7,6 +7,7 @@ class PreferencesStore {
   static const JWT_TOKEN = "JWTTOKEN";
   static const USER_NAME_KEY = "USERNAME";
   static const PASSWORD_KEY = "PASSWORD";
+  static const SAVED_SORT = "SAVEDSORT";
 
   saveDarkTheme(bool val) async {
     var prefs = await SharedPreferences.getInstance();
@@ -18,6 +19,14 @@ class PreferencesStore {
     prefs.setString(JWT_TOKEN, token);
     prefs.setString(USER_NAME_KEY, un);
     prefs.setString(PASSWORD_KEY, pwd);
+  }
+
+  void saveSort(int sort) async {
+    (await SharedPreferences.getInstance()).setInt(SAVED_SORT, sort);
+  }
+
+  Future<int> getSavedSort() async {
+    return (await SharedPreferences.getInstance()).getInt(SAVED_SORT) ?? 0;
   }
 
   Future<bool> isDark() async {

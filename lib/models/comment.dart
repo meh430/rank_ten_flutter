@@ -31,14 +31,14 @@ class Comment {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['commentId'] = this.commentId;
-    data['userId'] = this.userId;
-    data['listId'] = this.listId;
-    data['dateCreated'] = this.dateCreated;
+    //data['commentId'] = this.commentId;
+    //data['userId'] = this.userId;
+    //data['listId'] = this.listId;
+    //data['dateCreated'] = this.dateCreated;
     data['comment'] = this.comment;
-    data['username'] = this.username;
-    data['profilePic'] = this.profilePic;
-    data['numLikes'] = this.numLikes;
+    //data['username'] = this.username;
+    //data['profilePic'] = this.profilePic;
+    //data['numLikes'] = this.numLikes;
     return data;
   }
 }

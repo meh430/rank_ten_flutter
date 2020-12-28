@@ -6,6 +6,7 @@ import 'package:rank_ten/repos/user_preview_repository.dart';
 
 abstract class Bloc<M, E> {
   M model;
+  bool _isDisposed = false;
 
   StreamController modelStateController;
 
@@ -23,6 +24,7 @@ abstract class Bloc<M, E> {
   void eventToState(dynamic event) async {}
 
   Bloc() {
+    _isDisposed = false;
     modelStateController = StreamController<M>();
     modelEventController = StreamController<E>();
   }
@@ -54,7 +56,10 @@ abstract class Bloc<M, E> {
         hitMax = true;
       }
 
-      (model as List).addAll(pageContent["items"]);
+      (model as List).addAll(
+          (event is UserPreviewEvent && endpointBase != SEARCH_USERS)
+              ? pageContent
+              : pageContent["items"]);
       updateState();
     } on InvalidPageError {
       hitMax = true;
@@ -68,18 +73,26 @@ abstract class Bloc<M, E> {
   }
 
   void addEvent(E event) {
+    if (_isDisposed) {
+      return;
+    }
     modelEventSink.add(event);
   }
 
   void updateState() {
+    if (_isDisposed) {
+      return;
+    }
     try {
       modelStateSink.add(model);
     } catch (e) {
+      print(e);
       print("Sink may have been disposed");
     }
   }
 
   void dispose() {
+    _isDisposed = true;
     modelStateController.close();
     modelEventController.close();
   }

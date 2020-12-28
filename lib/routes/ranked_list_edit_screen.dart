@@ -63,20 +63,44 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
   void initState() {
     super.initState();
     userProvider = Provider.of<MainUserProvider>(context, listen: false);
-    initPrivate();
     _rankedListBloc = RankedListBloc();
     _rankedListBloc.addEvent(GetRankedListEvent(widget.listId));
     _listTitle = widget.listTitle;
     _titleController = TextEditingController(text: _listTitle);
   }
 
-  void initPrivate() async {
-    if (!widget.isNew) {
-      var val = await RankedListRepository()
-          .getPrivate(listId: widget.listId, token: userProvider.jwtToken);
-      setState(() {
-        _isPrivate = val;
-      });
+  Future<bool> _saveList() async {
+    if (_titleController.text.isEmpty) {
+      return (await showErrorDialog(
+              context: context, error: "Title cannot be empty")) ??
+          false;
+    }
+
+    if (_rankedListBloc.model.rankItems.length < 1) {
+      return (await showErrorDialog(
+              context: context, error: "List should have at least 1 items")) ??
+          false;
+    }
+
+    if (widget.isNew) {
+      return (await showDialog(
+              context: context,
+              builder: (context) => ListFuture(
+                    listFuture: RankedListRepository().createRankedList(
+                        rankedList: _rankedListBloc.model,
+                        token: userProvider.jwtToken),
+                  ))) ??
+          false;
+    } else {
+      return (await showDialog<bool>(
+              context: context,
+              builder: (context) => ListFuture(
+                    listFuture: RankedListRepository().updateRankedList(
+                        rankedList: _rankedListBloc.model,
+                        listId: _rankedListBloc.model.listId,
+                        token: userProvider.jwtToken),
+                  ))) ??
+          false;
     }
   }
 
@@ -84,36 +108,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
   Widget build(BuildContext context) {
     var isDark = Provider.of<DarkThemeProvider>(context, listen: false).isDark;
     return WillPopScope(
-      onWillPop: () {
-        if (_titleController.text.isEmpty) {
-          return showErrorDialog(
-              context: context, error: "Title cannot be empty");
-        }
-
-        if (_rankedListBloc.model.rankItems.length < 1) {
-          return showErrorDialog(
-              context: context, error: "List should have at least 1 items");
-        }
-
-        if (widget.isNew) {
-          return showDialog(
-              context: context,
-              builder: (context) => ListFutureDialog(
-                    listFuture: RankedListRepository().createRankedList(
-                        rankedList: _rankedListBloc.model,
-                        token: userProvider.jwtToken),
-                  ));
-        } else {
-          return showDialog(
-              context: context,
-              builder: (context) => ListFutureDialog(
-                    listFuture: RankedListRepository().updateRankedList(
-                        rankedList: _rankedListBloc.model,
-                        listId: _rankedListBloc.model.listId,
-                        token: userProvider.jwtToken),
-                  ));
-        }
-      },
+      onWillPop: _saveList,
       child: Scaffold(
           appBar: AppBar(
             elevation: 0.0,
@@ -135,7 +130,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                       Navigator.pop(context);
                       showDialog(
                           context: context,
-                          builder: (context) => ListFutureDialog(
+                          builder: (context) => ListFuture(
                                 listFuture: RankedListRepository()
                                     .deleteRankedList(
                                         listId: widget.listId,
@@ -159,6 +154,9 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
               builder:
                   (BuildContext context, AsyncSnapshot<RankedList> snapshot) {
                 if (snapshot.hasData) {
+                  //setState(() {
+                  //  _isPrivate = snapshot.data.private;
+                  //});
                   List<Widget> listChildren = [];
                   for (int i = 0; i < snapshot.data.rankItems.length; i++) {
                     var rItem = snapshot.data.rankItems[i];
