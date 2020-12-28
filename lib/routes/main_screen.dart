@@ -42,7 +42,6 @@ class _MainScreenState extends State<MainScreen>
   }
 
   void _sortCallback(String option) {
-    print(option);
     setState(() {
       if (option.contains("like")) {
         _sortOption = LIKES_DESC;
@@ -303,7 +302,15 @@ Widget getSortOption(
           const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 10),
     ),
     onTap: () {
-      sortCallback(title);
+      var chosenSort = 0;
+      if (title.contains("like")) {
+        chosenSort = LIKES_DESC;
+      } else if (title.contains("newest")) {
+        chosenSort = DATE_DESC;
+      } else if (title.contains("oldest")) {
+        chosenSort = DATE_ASC;
+      }
+      sortCallback(chosenSort);
       Navigator.pop(context);
     },
   );

@@ -33,34 +33,46 @@ class CommentBloc extends Bloc<List<Comment>, CommentEvent> {
             refresh: event.refresh);
       }, event);
     } else if (event is AddCommentEvent) {
-      var newComment = await _commentsRepository.addComment(
-          listId: event.listId, token: event.token, comment: event.comment);
-      model.add(newComment);
-      updateState();
+      try {
+        var newComment = await _commentsRepository.addComment(
+            listId: event.listId, token: event.token, comment: event.comment);
+        model.add(newComment);
+        updateState();
+      } catch (e) {
+        modelStateSink.addError(Exception('Error adding comment'));
+      }
     } else if (event is UpdateCommentEvent) {
-      var updatedComment = await _commentsRepository.updateComment(
-          commentId: event.commentId,
-          comment: event.comment,
-          token: event.token);
-      for (int i = 0; i < model.length; i++) {
-        if (model[i].commentId == event.commentId) {
-          model[i] = updatedComment;
-          break;
+      try {
+        var updatedComment = await _commentsRepository.updateComment(
+            commentId: event.commentId,
+            comment: event.comment,
+            token: event.token);
+        for (int i = 0; i < model.length; i++) {
+          if (model[i].commentId == event.commentId) {
+            model[i] = updatedComment;
+            break;
+          }
         }
-      }
 
-      updateState();
+        updateState();
+      } catch (e) {
+        modelStateSink.addError(Exception('Error updating comment'));
+      }
     } else if (event is DeleteCommentEvent) {
-      await _commentsRepository.deleteComment(
-          commentId: event.commentId, token: event.token);
-      for (int i = 0; i < model.length; i++) {
-        if (model[i].commentId == event.commentId) {
-          model.removeAt(i);
-          break;
+      try {
+        await _commentsRepository.deleteComment(
+            commentId: event.commentId, token: event.token);
+        for (int i = 0; i < model.length; i++) {
+          if (model[i].commentId == event.commentId) {
+            model.removeAt(i);
+            break;
+          }
         }
-      }
 
-      updateState();
+        updateState();
+      } catch (e) {
+        modelStateSink.addError(Exception('Error deleting comment'));
+      }
     }
   }
 }

@@ -5,7 +5,6 @@ import 'package:rank_ten/models/user.dart';
 
 class Authorization {
   static RankApi _api = RankApi();
-  static PreferencesStore _store = PreferencesStore();
 
   static Future<dynamic> tokenValid(String token) async {
     var response =
@@ -19,7 +18,7 @@ class Authorization {
     var response = await _api.post(
         endpoint: '/login', data: {'username': userName, 'password': password});
     var user = User.fromJson(response);
-    _store.saveCred(user.jwtToken, userName, password);
+    PreferencesStore.saveCred(user.jwtToken, userName, password);
     return user;
   }
 
@@ -32,7 +31,7 @@ class Authorization {
         data: {'username': userName, 'password': password, 'bio': bio});
 
     var user = User.fromJson(response);
-    _store.saveCred(user.jwtToken, userName, password);
+    PreferencesStore.saveCred(user.jwtToken, userName, password);
     return user;
   }
 }

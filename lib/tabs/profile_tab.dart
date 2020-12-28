@@ -32,17 +32,11 @@ class MainUserInfoBuilder extends StatefulWidget {
 class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
   MainUserProvider _userProvider;
   PreviewListsBloc _listsBloc;
-  var _sortOption = LIKES_DESC;
+  var _sortOption = PreferencesStore.currentSort;
 
-  void _sortCallback(String option) {
-    print(option);
-    if (option.contains("like")) {
-      _sortOption = LIKES_DESC;
-    } else if (option.contains("newest")) {
-      _sortOption = DATE_DESC;
-    } else if (option.contains("oldest")) {
-      _sortOption = DATE_ASC;
-    }
+  void _sortCallback(int option) {
+    _sortOption = option;
+    PreferencesStore.saveSort(_sortOption);
     _listsBloc.addEvent(RankedListPreviewEvent(
         userId: _userProvider.mainUser.userId,
         token: _userProvider.jwtToken,
@@ -78,10 +72,9 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
           );
           break;
         case Status.ERROR:
-          return Text('Error getting user data',
-              style: Theme.of(context).primaryTextTheme.headline3);
-          //Scaffold.of(context)
-          //    .showSnackBar(Utils.getSB('Error getting user data'));
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => Utils.showSB("Error getting user data", context));
+          return Utils.getErrorImage();
           break;
         case Status.COMPLETED:
           return Column(
@@ -114,7 +107,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
             parent: const AlwaysScrollableScrollPhysics()),
-        child: Column(children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           StreamBuilder<Response<User>>(
               stream: _userProvider.mainUserBloc.userStateStream,
               initialData: Response.completed(_userProvider.mainUser),
@@ -148,8 +141,9 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                   ],
                 );
               } else if (snapshot.hasError) {
-                return Text("Error getting top lists",
-                    style: Theme.of(context).textTheme.headline5);
+                WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => Utils.showSB("Error getting top lists", context));
+                return Utils.getErrorImage();
               }
 
               return Padding(
@@ -186,7 +180,7 @@ class LogOutButton extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           onPressed: () {
-            PreferencesStore().clearAll();
+            PreferencesStore.clearAll();
             Provider.of<MainUserProvider>(context, listen: false).logOut();
             Navigator.pop(context);
             Navigator.pushNamed(context, '/login_signup');

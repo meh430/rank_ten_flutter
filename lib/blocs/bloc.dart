@@ -37,14 +37,12 @@ abstract class Bloc<M, E> {
     }
 
     try {
-      print(event.refresh);
       if (event.refresh) {
         currentPage = 0;
         (model as List).clear();
       } else {
         currentPage += 1;
       }
-      print(currentPage);
       // {items, itemCount}
       var pageContent = await query(currentPage);
 
@@ -65,6 +63,8 @@ abstract class Bloc<M, E> {
       hitMax = true;
       currentPage = (currentPage < 0) ? -1 : (currentPage - 1);
       modelStateSink.add(model);
+    } catch (e) {
+      modelStateSink.addError(e);
     }
   }
 
@@ -87,7 +87,6 @@ abstract class Bloc<M, E> {
       modelStateSink.add(model);
     } catch (e) {
       print(e);
-      print("Sink may have been disposed");
     }
   }
 

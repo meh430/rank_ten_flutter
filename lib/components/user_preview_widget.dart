@@ -71,7 +71,6 @@ class _UserPreviewWidgetState extends State<UserPreviewWidget> {
           return RefreshIndicator(
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
-                print("Refreshing list");
                 _userPreviewBloc.addEvent(UserPreviewEvent(
                     sort: widget.sort,
                     id: widget.id,

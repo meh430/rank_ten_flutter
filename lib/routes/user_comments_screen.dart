@@ -79,7 +79,6 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
               return RefreshIndicator(
                 onRefresh: () {
                   return Future.delayed(Duration(milliseconds: 0), () {
-                    print("Refreshing list");
                     _commentBloc.addEvent(GetUserCommentsEvent(
                         sort: _sortOption,
                         token: _userProvider.jwtToken,

@@ -8,48 +8,50 @@ class PreferencesStore {
   static const USER_NAME_KEY = "USERNAME";
   static const PASSWORD_KEY = "PASSWORD";
   static const SAVED_SORT = "SAVEDSORT";
+  static int currentSort = 0;
 
-  saveDarkTheme(bool val) async {
+  static void saveDarkTheme(bool val) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool(DARK_THEME, val);
   }
 
-  void saveCred(String token, String un, String pwd) async {
+  static void saveCred(String token, String un, String pwd) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString(JWT_TOKEN, token);
     prefs.setString(USER_NAME_KEY, un);
     prefs.setString(PASSWORD_KEY, pwd);
   }
 
-  void saveSort(int sort) async {
+  static void saveSort(int sort) async {
+    currentSort = sort;
     (await SharedPreferences.getInstance()).setInt(SAVED_SORT, sort);
   }
 
-  Future<int> getSavedSort() async {
+  static Future<int> getSavedSort() async {
     return (await SharedPreferences.getInstance()).getInt(SAVED_SORT) ?? 0;
   }
 
-  Future<bool> isDark() async {
+  static Future<bool> isDark() async {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getBool(DARK_THEME) ?? false;
   }
 
-  Future<String> getToken() async {
+  static Future<String> getToken() async {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getString(JWT_TOKEN) ?? "";
   }
 
-  Future<String> getUserName() async {
+  static Future<String> getUserName() async {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getString(USER_NAME_KEY) ?? "";
   }
 
-  Future<String> getPwd() async {
+  static Future<String> getPwd() async {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getString(PASSWORD_KEY) ?? "";
   }
 
-  void clearAll() async {
+  static void clearAll() async {
     var prefs = await SharedPreferences.getInstance();
     await Future.wait([
       prefs.remove(JWT_TOKEN),

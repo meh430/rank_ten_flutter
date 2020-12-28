@@ -25,9 +25,8 @@ class _SplashState extends State<Splash> {
   void startUpFlow() async {
     final MainUserProvider mainUserProvider =
         Provider.of<MainUserProvider>(context, listen: false);
-    var store = PreferencesStore();
     //store.clearAll();
-    var token = await store.getToken();
+    var token = await PreferencesStore.getToken();
     //check if token present
     print("Checking if token present...");
     if (token != "") {
@@ -42,19 +41,18 @@ class _SplashState extends State<Splash> {
         Navigator.pushNamed(context, '/main');
       } catch (e) {
         print("Token invalid...");
-        checkForPwd(store, mainUserProvider);
+        checkForPwd(mainUserProvider);
       }
     } else {
       print("Token not present...");
-      checkForPwd(store, mainUserProvider);
+      checkForPwd(mainUserProvider);
     }
   }
 
-  void checkForPwd(
-      PreferencesStore store, MainUserProvider userProvider) async {
+  void checkForPwd(MainUserProvider userProvider) async {
     print("Checking if credentials present...");
-    var userName = await store.getUserName();
-    var password = await store.getPwd();
+    var userName = await PreferencesStore.getUserName();
+    var password = await PreferencesStore.getPwd();
 
     //check if credentials present
     if (userName != "" && password != "") {

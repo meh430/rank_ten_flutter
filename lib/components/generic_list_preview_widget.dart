@@ -76,7 +76,6 @@ class _GenericListPreviewWidgetState extends State<GenericListPreviewWidget> {
           return RefreshIndicator(
             onRefresh: () {
               return Future.delayed(Duration(milliseconds: 0), () {
-                print("Refreshing list");
                 _listsBloc.addEvent(RankedListPreviewEvent(
                     sort: _sort,
                     userId: widget.userId,

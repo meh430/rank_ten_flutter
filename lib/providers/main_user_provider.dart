@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/blocs/user_bloc.dart';
 import 'package:rank_ten/events/user_events.dart';
@@ -9,12 +10,14 @@ class MainUserProvider with ChangeNotifier {
   User mainUser;
   UserBloc mainUserBloc;
   String jwtToken;
+  UserRepository _userRepository;
 
   Stream<Response<User>> get mainUserState => mainUserBloc.userStateStream;
 
   Future<void> initMainUser(User user) async {
     mainUserBloc = UserBloc(isMain: true, mainUser: user);
     mainUser = user;
+    _userRepository = UserRepository();
     //mainUser.likedLists = await UserRepository()
     //    .getLikedListIds(name: mainUser.userName, token: jwtToken);
 
@@ -33,8 +36,8 @@ class MainUserProvider with ChangeNotifier {
   }
 
   Future<LikeResponse> likeComment(int commentId) async {
-    LikeResponse action = await UserRepository()
-        .likeComment(commentId: commentId, token: jwtToken);
+    LikeResponse action = await _userRepository.likeComment(
+        commentId: commentId, token: jwtToken);
 
     if (mainUser.likedComments.contains(commentId)) {
       mainUser.likedComments.remove(commentId);
@@ -46,7 +49,7 @@ class MainUserProvider with ChangeNotifier {
 
   Future<LikeResponse> likeList(int listId) async {
     LikeResponse action =
-        await UserRepository().likeList(listId: listId, token: jwtToken);
+        await _userRepository.likeList(listId: listId, token: jwtToken);
 
     if (mainUser.likedLists.contains(listId)) {
       mainUser.likedLists.remove(listId);
@@ -70,6 +73,7 @@ class MainUserProvider with ChangeNotifier {
 
   void logOut() {
     mainUserBloc.dispose();
+    PreferencesStore.clearAll();
     mainUser = null;
     jwtToken = null;
   }

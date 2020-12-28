@@ -4,6 +4,7 @@ import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
 import 'package:rank_ten/router.dart';
 
+import 'api/preferences_store.dart';
 import 'misc/app_theme.dart';
 
 class App extends StatefulWidget {
@@ -22,7 +23,7 @@ class _AppState extends State<App> {
   }
 
   void getCurrentTheme() async {
-    themeProvider.isDark = await themeProvider.store.isDark();
+    themeProvider.isDark = await PreferencesStore.isDark();
   }
 
   @override

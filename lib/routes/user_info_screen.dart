@@ -58,7 +58,6 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
   var _sortOption = LIKES_DESC;
 
   void _sortCallback(String option) {
-    print(option);
     if (option.contains("like")) {
       _sortOption = LIKES_DESC;
     } else if (option.contains("newest")) {

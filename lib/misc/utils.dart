@@ -65,4 +65,15 @@ class Utils {
   static Color getRandomColor() {
     return colors[Random().nextInt(colors.length)];
   }
+
+  static void showSB(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(getSB(text));
+  }
+
+  static Row getErrorImage() {
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Image.asset("assets/error_triangle.png", scale: 2)]);
+  }
 }

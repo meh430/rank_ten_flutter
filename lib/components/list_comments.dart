@@ -53,7 +53,6 @@ class _ListCommentsState extends State<ListComments> {
   }
 
   void _sortCallback(String option) {
-    print(option);
     if (option.contains("like")) {
       _sortOption = LIKES_DESC;
     } else if (option.contains("newest")) {
@@ -140,7 +139,6 @@ class _ListCommentsState extends State<ListComments> {
                     return RefreshIndicator(
                       onRefresh: () {
                         return Future.delayed(Duration(milliseconds: 0), () {
-                          print("Refreshing list");
                           _commentBloc.addEvent(GetListCommentsEvent(
                               listId: widget.listId,
                               refresh: true,
