@@ -71,9 +71,10 @@ class RankedListPreviewRepository {
     response["items"]
         .forEach((rList) => listPreviews.add(RankedListCard.fromJson(rList)));
 
-    if (endpointBase == USER_TOP_LISTS && listPreviews.length >= 5) {
+    /*if (endpointBase == USER_TOP_LISTS && listPreviews.length >= 5) {
       return {"items": listPreviews.sublist(0, 5), "lastPage": 0};
-    }
+    }*/
+
     response["items"] = listPreviews;
     return response;
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/blocs/comment_bloc.dart';
 import 'package:rank_ten/components/comment_card.dart';
 import 'package:rank_ten/events/comments_event.dart';
 import 'package:rank_ten/misc/app_theme.dart';
-import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/models/comment.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
 import 'package:rank_ten/providers/main_user_provider.dart';
@@ -20,19 +20,18 @@ class UserCommentsScreen extends StatefulWidget {
 }
 
 class _UserCommentsScreenState extends State<UserCommentsScreen> {
-  int _sortOption = 0;
+  int _sortOption = PreferencesStore.currentSort;
   CommentBloc _commentBloc;
   MainUserProvider _userProvider;
   ScrollController _scrollController;
 
-  void _sortCallback(String option) {
-    if (option.contains('like')) {
-      _sortOption = LIKES_DESC;
-    } else if (option.contains('newest')) {
-      _sortOption = DATE_DESC;
-    } else if (option.contains('oldest')) {
-      _sortOption = DATE_ASC;
-    }
+  void _sortCallback(int option) {
+    PreferencesStore.saveSort(option);
+    _sortOption = option;
+    print(option);
+    _commentBloc.resetPage();
+    _commentBloc.addEvent(
+        GetUserCommentsEvent(sort: option, token: _userProvider.jwtToken));
   }
 
   void _onScrollListener() {

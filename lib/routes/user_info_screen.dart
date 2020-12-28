@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:rank_ten/api/preferences_store.dart';
 import 'package:rank_ten/api/response.dart';
 import 'package:rank_ten/blocs/preview_lists_bloc.dart';
 import 'package:rank_ten/blocs/user_bloc.dart';
@@ -55,18 +56,14 @@ class UserInfoBuilder extends StatefulWidget {
 class _UserInfoBuilderState extends State<UserInfoBuilder> {
   UserBloc _userBloc;
   PreviewListsBloc _listsBloc;
-  var _sortOption = LIKES_DESC;
+  var _sortOption = PreferencesStore.currentSort;
 
-  void _sortCallback(String option) {
-    if (option.contains("like")) {
-      _sortOption = LIKES_DESC;
-    } else if (option.contains("newest")) {
-      _sortOption = DATE_DESC;
-    } else if (option.contains("oldest")) {
-      _sortOption = DATE_ASC;
-    }
-    _listsBloc.addEvent(RankedListPreviewEvent(
-        userId: widget.userId, refresh: true, sort: _sortOption));
+  void _sortCallback(int option) {
+    _sortOption = option;
+    PreferencesStore.saveSort(option);
+    _listsBloc.resetPage();
+    _listsBloc.addEvent(
+        RankedListPreviewEvent(userId: widget.userId, sort: _sortOption));
   }
 
   @override
@@ -89,9 +86,9 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
           );
           break;
         case Status.ERROR:
-          return Text('Error getting user data',
-              style: Theme.of(context).primaryTextTheme.headline3);
-          break;
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => Utils.showSB("Error getting user info", context));
+          return Utils.getErrorImage();
         case Status.COMPLETED:
           return Column(
             mainAxisSize: MainAxisSize.max,
@@ -134,7 +131,7 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
                         child: Row(
                           children: [
                             Text("${widget.name}'s Lists",
-                                style: Theme.of(context).textTheme.headline4),
+                                style: Theme.of(context).textTheme.headline5),
                             getSortAction(
                                 context: context,
                                 isDark: Provider.of<DarkThemeProvider>(context,
@@ -152,8 +149,9 @@ class _UserInfoBuilderState extends State<UserInfoBuilder> {
                   ],
                 );
               } else if (snapshot.hasError) {
-                return Text("Error getting top lists",
-                    style: Theme.of(context).textTheme.headline5);
+                WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => Utils.showSB("Error getting top lists", context));
+                return Utils.getErrorImage();
               }
 
               return Padding(

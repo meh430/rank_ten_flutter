@@ -310,6 +310,7 @@ Widget getSortOption(
       } else if (title.contains("oldest")) {
         chosenSort = DATE_ASC;
       }
+
       sortCallback(chosenSort);
       Navigator.pop(context);
     },

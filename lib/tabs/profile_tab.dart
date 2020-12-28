@@ -37,10 +37,10 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
   void _sortCallback(int option) {
     _sortOption = option;
     PreferencesStore.saveSort(_sortOption);
+    _listsBloc.resetPage();
     _listsBloc.addEvent(RankedListPreviewEvent(
         userId: _userProvider.mainUser.userId,
         token: _userProvider.jwtToken,
-        refresh: true,
         sort: _sortOption));
   }
 
@@ -124,7 +124,7 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
                         child: Row(
                           children: [
                             Text("${_userProvider.mainUser.username}'s Lists",
-                                style: Theme.of(context).textTheme.headline4),
+                                style: Theme.of(context).textTheme.headline5),
                             getSortAction(
                                 context: context,
                                 isDark: Provider.of<DarkThemeProvider>(context,
@@ -152,7 +152,6 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
               );
             },
           ),
-          LogOutButton(),
           SizedBox(
             height: 100,
           )

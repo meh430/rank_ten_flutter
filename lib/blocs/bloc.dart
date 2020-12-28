@@ -29,6 +29,12 @@ abstract class Bloc<M, E> {
     modelEventController = StreamController<E>();
   }
 
+  void resetPage() {
+    currentPage = -1;
+    hitMax = false;
+    (model as List).clear();
+  }
+
   // query is the network callback
   void paginate(dynamic query, dynamic event,
       {String endpointBase = ""}) async {
