@@ -126,6 +126,7 @@ class _UserCommentsScreenState extends State<UserCommentsScreen> {
                                   commentId: snapshot.data[index].listId);
                           Navigator.pushNamed(context, '/ranked_list_view',
                               arguments: RankedListViewScreenArgs(
+                                  private: listCard['private'],
                                   listTitle: listCard['title'],
                                   listId: listCard['listId'],
                                   isMain: _userProvider.mainUser.userId ==

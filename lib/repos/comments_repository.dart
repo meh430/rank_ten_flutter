@@ -63,7 +63,8 @@ class CommentsRepository {
       'title': response['title'],
       'username': response['username'],
       'userId': response['userId'],
-      'profilePic': response['profilePic']
+      'profilePic': response['profilePic'],
+      'private': response['private']
     };
   }
 }

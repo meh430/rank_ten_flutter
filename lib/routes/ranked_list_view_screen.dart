@@ -18,7 +18,7 @@ import 'package:rank_ten/routes/ranked_list_edit_screen.dart';
 
 class RankedListViewScreen extends StatefulWidget {
   final String listTitle, profilePic;
-  final bool isMain, shouldPushInfo;
+  final bool isMain, shouldPushInfo, private;
   final int listId;
 
   RankedListViewScreen(
@@ -27,7 +27,8 @@ class RankedListViewScreen extends StatefulWidget {
       @required this.listTitle,
       @required this.isMain,
       @required this.shouldPushInfo,
-      @required this.profilePic})
+      @required this.profilePic,
+      this.private = false})
       : super(key: key);
 
   @override
@@ -61,6 +62,7 @@ class _RankedListViewScreenState extends State<RankedListViewScreen> {
                           arguments: RankedListEditScreenArgs(
                               listId: widget.listId,
                               listTitle: widget.listTitle,
+                              private: widget.private,
                               isNew: false));
                     },
                     icon: Icon(Icons.edit))
@@ -278,7 +280,7 @@ class _LikeWidgetState extends State<LikeWidget> {
 
 class RankedListViewScreenArgs {
   final String listTitle, profilePic;
-  final bool isMain, shouldPushInfo;
+  final bool isMain, shouldPushInfo, private;
   final int listId;
 
   RankedListViewScreenArgs(
@@ -286,6 +288,7 @@ class RankedListViewScreenArgs {
       @required this.shouldPushInfo,
       @required this.listId,
       @required this.listTitle,
+      this.private = false,
       this.isMain = false});
 }
 

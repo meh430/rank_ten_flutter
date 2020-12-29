@@ -20,7 +20,9 @@ class UserRepository {
 
   Future<dynamic> updateProfilePic({String profilePic, String token}) async {
     final response = await RankApi.put(
-        endpoint: '/users', data: {'prof_pic': profilePic}, bearerToken: token);
+        endpoint: '/users',
+        data: {'profilePic': profilePic},
+        bearerToken: token);
     return response;
   }
 
@@ -72,5 +74,9 @@ class UserRepository {
     } else {
       return LikeResponse.liked;
     }
+  }
+
+  Future<dynamic> deleteUser(String jwtToken) async {
+    return (await RankApi.delete(endpoint: '/users', bearerToken: jwtToken));
   }
 }

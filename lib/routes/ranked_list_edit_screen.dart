@@ -18,10 +18,14 @@ import 'package:rank_ten/repos/ranked_list_repository.dart';
 class RankedListEditScreen extends StatefulWidget {
   final String listTitle;
   final int listId;
-  final bool isNew;
+  final bool isNew, private;
 
   const RankedListEditScreen(
-      {Key key, this.listId = 0, this.listTitle = "Title", this.isNew = false})
+      {Key key,
+      this.listId = 0,
+      this.listTitle = "Title",
+      this.isNew = false,
+      this.private = false})
       : super(key: key);
 
   @override
@@ -67,6 +71,7 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
     _rankedListBloc = RankedListBloc();
     _rankedListBloc.addEvent(GetRankedListEvent(widget.listId));
     _listTitle = widget.listTitle;
+    _isPrivate = widget.private;
     _titleController = TextEditingController(text: _listTitle);
   }
 
@@ -177,27 +182,39 @@ class _RankedListEditScreenState extends State<RankedListEditScreen> {
                   }
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: ReorderableListView(
-                            header: Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: widget.isNew
-                                  ? SizedBox()
-                                  : CardHeader(
-                                      userId: snapshot.data.userId,
-                                      shouldPushInfo: false,
-                                      username: snapshot.data.username,
-                                      profilePic:
-                                          userProvider.mainUser.profilePic,
-                                      dateCreated: snapshot.data.dateCreated),
-                            ),
-                            onReorder: (int oldIndex, int newIndex) {
-                              _rankedListBloc.addEvent(RankedListReorderEvent(
-                                  previousPosition: oldIndex,
-                                  newPosition: newIndex));
-                            },
-                            children: listChildren),
+                        child: listChildren.length <= 0
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                    "No items. Add some by pressing the '+' button below",
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.headline5),
+                              )
+                            : ReorderableListView(
+                                header: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: widget.isNew
+                                      ? SizedBox()
+                                      : CardHeader(
+                                          userId: snapshot.data.userId,
+                                          shouldPushInfo: false,
+                                          username: snapshot.data.username,
+                                          profilePic:
+                                              userProvider.mainUser.profilePic,
+                                          dateCreated:
+                                              snapshot.data.dateCreated),
+                                ),
+                                onReorder: (int oldIndex, int newIndex) {
+                                  _rankedListBloc.addEvent(
+                                      RankedListReorderEvent(
+                                          previousPosition: oldIndex,
+                                          newPosition: newIndex));
+                                },
+                                children: listChildren),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 2),
@@ -245,9 +262,12 @@ void showRankItemEditDialog(
 
 class RankedListEditScreenArgs {
   final String listTitle;
-  final bool isNew;
+  final bool isNew, private;
   final int listId;
 
   RankedListEditScreenArgs(
-      {this.listId = 0, this.listTitle = "Title", this.isNew});
+      {this.listId = 0,
+      this.listTitle = "Title",
+      this.isNew = false,
+      this.private = false});
 }

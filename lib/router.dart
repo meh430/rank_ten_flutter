@@ -60,18 +60,19 @@ class RouteGenerator {
             centerAlignment: Alignment.center,
             maxRadius: maxRadius,
             page: RankedListViewScreen(
-              listId: args.listId,
-              listTitle: args.listTitle,
-              isMain: args.isMain,
-              shouldPushInfo: args.shouldPushInfo,
-              profilePic: args.profilePic,
-            ));
+                listId: args.listId,
+                listTitle: args.listTitle,
+                isMain: args.isMain,
+                shouldPushInfo: args.shouldPushInfo,
+                profilePic: args.profilePic,
+                private: args.private));
       case '/ranked_list_edit':
         final RankedListEditScreenArgs args = settings.arguments;
         return CircularReveal(
             centerAlignment: Alignment.center,
             maxRadius: maxRadius,
             page: RankedListEditScreen(
+                private: args.private,
                 listId: args.listId,
                 isNew: args.isNew,
                 listTitle: args.listTitle));

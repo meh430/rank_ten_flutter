@@ -22,6 +22,7 @@ void launchRankListViewScreen({
       Provider.of<MainUserProvider>(context, listen: false).mainUser;
   Navigator.pushNamed(context, '/ranked_list_view',
       arguments: RankedListViewScreenArgs(
+          private: listCard.private,
           listTitle: listCard.title,
           listId: listCard.listId,
           isMain: userProvider.userId == listCard.userId,

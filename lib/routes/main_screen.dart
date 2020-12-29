@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rank_ten/api/preferences_store.dart';
+import 'package:rank_ten/components/settings.dart';
 import 'package:rank_ten/misc/app_theme.dart';
 import 'package:rank_ten/misc/utils.dart';
 import 'package:rank_ten/providers/dark_theme_provider.dart';
@@ -166,11 +167,18 @@ class _MainAppBarState extends State<MainAppBar> {
           context: context, isDark: isDark, sortCallback: widget.sortCallback);
     } else if (widget.index == 3) {
       // TODO: settings dialog
-      action = IconButton(
+      /*action = IconButton(
         icon: Icon(themeChange.isDark ? Icons.brightness_5 : Icons.brightness_2,
             color: themeChange.isDark ? lavender : Colors.yellow),
         onPressed: () {
           setState(() => themeChange.isDark = !themeChange.isDark);
+        },
+      );*/
+      action = IconButton(
+        icon: Icon(Icons.settings,
+            color: themeChange.isDark ? Colors.white : Colors.black),
+        onPressed: () {
+          showSettings(context);
         },
       );
     }

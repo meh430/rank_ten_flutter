@@ -160,33 +160,6 @@ class _MainUserInfoBuilderState extends State<MainUserInfoBuilder> {
     );
   }
 }
-
-class LogOutButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: RaisedButton(
-          color: hanPurple,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-            child: Text("Log Out",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4
-                    .copyWith(color: white)),
-          ),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          onPressed: () {
-            PreferencesStore.clearAll();
-            Provider.of<MainUserProvider>(context, listen: false).logOut();
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/login_signup');
-          }),
-    );
-  }
-}
 /*return RaisedButton(
       padding:
           const EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0, bottom: 8.0),

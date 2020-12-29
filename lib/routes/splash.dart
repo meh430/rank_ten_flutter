@@ -40,6 +40,7 @@ class _SplashState extends State<Splash> {
         Navigator.pop(context);
         Navigator.pushNamed(context, '/main');
       } catch (e) {
+        print(e);
         print("Token invalid...");
         checkForPwd(mainUserProvider);
       }

@@ -76,10 +76,11 @@ class Login extends StatelessWidget {
   final pController;
   final _fKey = GlobalKey<FormState>();
 
-  Login({@required this.submitLogin,
-    @required this.isLoading,
-    @required this.uController,
-    @required this.pController});
+  Login(
+      {@required this.submitLogin,
+      @required this.isLoading,
+      @required this.uController,
+      @required this.pController});
 
   submitForm(BuildContext context) {
     if (_fKey.currentState.validate()) {
@@ -92,11 +93,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelStyle =
-    Theme
-        .of(context)
-        .textTheme
-        .headline6
-        .copyWith(fontSize: 16);
+        Theme.of(context).textTheme.headline6.copyWith(fontSize: 16);
 
     final textFields = Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -129,10 +126,11 @@ class PasswordField extends StatefulWidget {
   final fieldValidator;
   final bool confirm;
 
-  PasswordField({@required this.pController,
-    @required this.labelStyle,
-    @required this.fieldValidator,
-    this.confirm = false});
+  PasswordField(
+      {@required this.pController,
+      @required this.labelStyle,
+      @required this.fieldValidator,
+      this.confirm = false});
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -160,7 +158,7 @@ class _PasswordFieldState extends State<PasswordField> {
               child: Icon(obscureText ? Icons.visibility : Icons.visibility_off,
                   color: themeChange.isDark ? palePurple : Colors.black,
                   semanticLabel:
-                  obscureText ? 'Show password' : 'Hide password'),
+                      obscureText ? 'Show password' : 'Hide password'),
             ),
             contentPadding: const EdgeInsets.all(20.0),
             labelText: widget.confirm ? 'Confirm Password' : 'Password',
@@ -179,9 +177,7 @@ class NameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Provider
-        .of<DarkThemeProvider>(context)
-        .isDark;
+    final isDark = Provider.of<DarkThemeProvider>(context).isDark;
     return TextFormField(
         controller: uController,
         style: TextStyle(color: isDark ? white : Colors.black),
