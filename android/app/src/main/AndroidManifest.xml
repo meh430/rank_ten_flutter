@@ -11,7 +11,7 @@
         android:name="io.flutter.app.FlutterApplication"
 
         android:icon="@mipmap/ic_launcher"
-        android:label="rank_ten"
+        android:label="Rank 10"
         android:networkSecurityConfig="@xml/network_security_config">
         <meta-data
             android:name="io.flutter.network-policy"

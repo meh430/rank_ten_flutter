@@ -7,9 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:rank_ten/api/rank_exceptions.dart';
 
 class RankApi {
-  static final String _baseUrl = 'http://192.168.0.22:3000';
 
-  //final String _baseUrl = 'https://rank-ten-api.herokuapp.com';
+  static final String _baseUrl = 'http://192.168.0.77:3000';
 
   static Future<bool> validateImage(String imageUrl) async {
     var isValid = false;

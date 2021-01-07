@@ -51,19 +51,18 @@ class SubmitButton extends StatelessWidget {
 }
 
 String validatePwd(String value) {
-  final pwdPattern = RegExp(
-      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$');
+  final pwdPattern = RegExp(r'^[a-zA-Z0-9_#?!@$ %^&*-]{6,}$');
   if (!pwdPattern.hasMatch(value)) {
-    return "Password needs an uppercase letter, a number, and a character";
+    return "Password needs at least 6 characters";
   }
 
   return null;
 }
 
 String validateUsername(String value) {
-  final namePattern = RegExp(r'^[a-z0-9_-]{3,15}$');
+  final namePattern = RegExp(r'^[a-zA-Z0-9_#?!@$ %^&*-]{3,}$');
   if (!namePattern.hasMatch(value)) {
-    return "Invalid username";
+    return "Username needs at least 3 characters";
   }
 
   return null;
